@@ -18,12 +18,16 @@ async function buildRouteRegistrationSnippet(routeDefinition: RouteDefinition, i
         throw new Error(`No default export found in route at ${routeDefinition.filePath}`);
     }
 
+    if (!moduleExports.includes('routePermission')) {
+        throw new Error(`No routePermission found in route at ${routeDefinition.filePath}`);
+    }
+
     const importAlias = `route${index}`;
     importStatements.push(`import * as ${importAlias} from '${routeDefinition.filePath}';`);
     const methodConstName = getOrCreateConstName(routeDefinition.method);
     const pathConstName = getOrCreateConstName(routeDefinition.path);
     // eslint-disable-next-line style/max-len
-    let registration = `registerRoute(${methodConstName}, ${pathConstName}, normalizeRouteHandlers(${importAlias}.default),`;
+    let registration = `registerRoute(${methodConstName}, ${pathConstName}, normalizeRouteHandlers(${importAlias}.default), ${importAlias}.routePermission,`;
     if (moduleExports.includes('routeHandlerOptions')) registration += ` ${importAlias}.routeHandlerOptions,`;
 
     return `${registration.replace(/,\s*$/, '')});`;

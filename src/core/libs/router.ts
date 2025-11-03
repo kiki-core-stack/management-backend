@@ -2,6 +2,8 @@ import { glob } from 'node:fs/promises';
 
 import type { WritableDeep } from 'type-fest';
 
+import { allAdminPermissions } from '@/constants/admin';
+
 import { honoApp } from '../app';
 import { routesDirPath } from '../constants/paths';
 import {
@@ -56,8 +58,23 @@ export function registerRoute(
     method: RouteHttpMethod,
     path: string,
     handlers: any[],
+    permission: 'ignore' | (string & {}),
     handlerOptions?: RouteHandlerOptions,
 ) {
+    let permissionKey: 'ignore' | (string & {}) | undefined = 'ignore';
+    let systemType;
+    if (permission !== 'ignore') {
+        [systemType, permissionKey] = permission.split(/\s+/);
+        if (!permissionKey) throw new Error(`Permission parsing failed at path ${path}: missing permission key`);
+        switch (systemType) {
+            case 'admin':
+                if (!allAdminPermissions.has(permissionKey)) allAdminPermissions.add(permissionKey);
+                else logger.warn(`Duplicate admin permission ${permissionKey} at path ${path}`);
+                break;
+            default: throw new Error(`Unsupported system type ${systemType} at path ${path}`);
+        }
+    }
+
     const latestHandler = handlers[handlers.length - 1];
 
     Object.defineProperty(
@@ -70,7 +87,13 @@ export function registerRoute(
         },
     );
 
-    Object.assign(latestHandler, handlerOptions?.properties);
+    Object.assign(
+        latestHandler,
+        {
+            ...handlerOptions?.properties,
+            permission: permissionKey,
+        },
+    );
 
     honoApp.on(method, path, ...handlers);
     (allRoutes as WritableDeep<typeof allRoutes>)[method][path] = { handlerProperties: handlerOptions?.properties };

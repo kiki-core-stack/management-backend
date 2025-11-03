@@ -1,17 +1,13 @@
-import { apiZValidator } from '@kiki-core-stack/pack/hono-backend/libs/api/zod-validator';
-import * as z from '@kiki-core-stack/pack/libs/zod';
 import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
 import { isEqual } from 'es-toolkit';
 
-import { defaultHonoFactory } from '@/core/constants/hono';
-import { assertNotModifiedAndStripData } from '@/libs';
 import { clearAllAdminPermissionCache } from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
 
 export const routePermission = 'admin admin.role.update';
 
-export default defaultHonoFactory.createHandlers(
+export default defineRouteHandlers(
     apiZValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
         const adminRole = await AdminRoleModel.findByRouteIdOrThrowNotFoundError(ctx);

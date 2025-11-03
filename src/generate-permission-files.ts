@@ -1,29 +1,26 @@
 import { join } from 'node:path';
 
-// eslint-disable-next-line style/max-len
-import { writeManagementSystemPermissionTypesFile } from '@kiki-core-stack/pack/libs/management-system/permission-types-file';
-import type { ManagementSystemType } from '@kiki-core-stack/pack/types';
+import { writeManagementPermissionTypesFile } from '@kiki-core-stack/pack/libs/management/permission-types-file';
+import type { ManagementType } from '@kiki-core-stack/pack/types';
 import { capitalize } from 'es-toolkit';
-
-import { logger } from '@/core/utils/logger';
 
 const baseGeneratedStaticTypesDirPath = join(
     (await import('@/core/constants/paths')).projectSrcDirPath,
     'generated/static/types',
 );
 
-const managementSystemTypes: ManagementSystemType[] = ['admin'];
+const managementTypes: ManagementType[] = ['admin'];
 await Promise.all(
-    managementSystemTypes.map(async (managementSystemType) => {
-        logger.info(`Generating ${managementSystemType} permission types...`);
-        const module = await await import(`@/constants/${managementSystemType}`);
-        const allPermissions: Set<string> = module[`all${capitalize(managementSystemType)}Permissions`];
-        await writeManagementSystemPermissionTypesFile(
-            managementSystemType,
+    managementTypes.map(async (managementType) => {
+        logger.info(`Generating ${managementType} permission types...`);
+        const module = await await import(`@/constants/${managementType}`);
+        const allPermissions: Set<string> = module[`all${capitalize(managementType)}Permissions`];
+        await writeManagementPermissionTypesFile(
+            managementType,
             [...allPermissions],
-            join(baseGeneratedStaticTypesDirPath, managementSystemType, 'permission.ts'),
+            join(baseGeneratedStaticTypesDirPath, managementType, 'permission.ts'),
         );
 
-        logger.success(`Generated ${managementSystemType} permission types`);
+        logger.success(`Generated ${managementType} permission types`);
     }),
 );

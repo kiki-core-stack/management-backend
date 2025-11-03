@@ -32,6 +32,7 @@ for (const routeEntry of loadedRouteModules.filter((loadedRouteModule) => loaded
         routeEntry.method,
         routeEntry.path,
         handlers,
+        routeEntry.module.routePermission,
         routeEntry.module.routeHandlerOptions,
     );
 

@@ -1,14 +1,6 @@
 import { unflatten } from 'flat';
 
-import {
-    adminPermissionToLabelMap,
-    allAdminPermissions,
-} from '@/constants/admin';
-import { defaultHonoFactory } from '@/core/constants/hono';
-import type {
-    AdminPermission,
-    AdminPermissionGroup,
-} from '@/generated/static/types/admin/permission';
+import { allAdminPermissions } from '@/constants/admin';
 
 interface TreeNode {
     children?: TreeNode[];
@@ -23,11 +15,11 @@ function convertToTreeNode(object: any, prefix: string): TreeNode {
         children: Object.entries(object).map(([key, value]) => {
             if (typeof value === 'object') return convertToTreeNode(value, `${prefix}.${key}`);
             return {
-                label: adminPermissionToLabelMap[`${prefix}.${key}` as AdminPermission | AdminPermissionGroup],
+                label: `${prefix}.${key}`,
                 value: `${prefix}.${key}`,
             };
         }),
-        label: adminPermissionToLabelMap[prefix as AdminPermission | AdminPermissionGroup],
+        label: prefix,
         value: prefix,
     };
 }
@@ -47,7 +39,7 @@ function sortTreeNodes(treeNodes: TreeNode[]): TreeNode[] {
         });
 }
 
-export default defaultHonoFactory.createHandlers((ctx) => {
+export default defineRouteHandlers((ctx) => {
     const nestedPermissions: any = unflatten(
         Object.fromEntries([...allAdminPermissions].sort().map((permission) => [
             permission,

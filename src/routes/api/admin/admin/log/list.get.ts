@@ -1,11 +1,8 @@
 import { AdminLogModel } from '@kiki-core-stack/pack/models/admin/log';
 
-import { defaultHonoFactory } from '@/core/constants/hono';
-import { paginateModelDataWithApiResponse } from '@/libs/response';
-
 export const routePermission = 'admin admin.log.list';
 
-export default defaultHonoFactory.createHandlers((ctx) => {
+export default defineRouteHandlers((ctx) => {
     return paginateModelDataWithApiResponse(
         ctx,
         AdminLogModel,

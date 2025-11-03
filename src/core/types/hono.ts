@@ -4,6 +4,6 @@ import type { RouteHandlerProperties } from './route';
 
 declare module 'hono' {
     interface Context {
-        routeHandler?: H & RouteHandlerProperties;
+        routeHandler?: H & RouteHandlerProperties & { permission: 'ignore' | (string & {}) };
     }
 }

@@ -1,13 +1,9 @@
-import { throwApiError } from '@kiki-core-stack/pack/hono-backend/libs/api';
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
 
-import { defaultHonoFactory } from '@/core/constants/hono';
-import { getModelDocumentByRouteIdAndDelete } from '@/libs/model';
-
 export const routePermission = 'admin admin.role.delete';
 
-export default defaultHonoFactory.createHandlers(async (ctx) => {
+export default defineRouteHandlers(async (ctx) => {
     await getModelDocumentByRouteIdAndDelete(
         ctx,
         AdminRoleModel,

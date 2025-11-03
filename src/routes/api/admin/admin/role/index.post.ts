@@ -1,11 +1,8 @@
-import { apiZValidator } from '@kiki-core-stack/pack/hono-backend/libs/api/zod-validator';
-import * as z from '@kiki-core-stack/pack/libs/zod';
 import type { AdminRole } from '@kiki-core-stack/pack/models/admin/role';
 import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 
 import { allAdminPermissions } from '@/constants/admin';
-import { defaultHonoFactory } from '@/core/constants/hono';
 import { micromatch } from '@/utils/micromatch';
 
 export const jsonSchema = z.object({
@@ -20,7 +17,7 @@ export const jsonSchema = z.object({
 
 export const routePermission = 'admin admin.role.create';
 
-export default defaultHonoFactory.createHandlers(
+export default defineRouteHandlers(
     apiZValidator('json', jsonSchema),
     async (ctx) => {
         return ctx.createApiSuccessResponse(

@@ -28,6 +28,9 @@ await import('@/middlewares');
 // Load routes
 await import(`@/core/loaders/routes/${process.env.NODE_ENV}`);
 
+// Generate permission files
+if (process.env.NODE_ENV === 'development') await import('@/generate-permission-files');
+
 // Start server
 logger.info('Starting server...');
 server = Bun.serve({
