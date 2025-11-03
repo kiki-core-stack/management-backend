@@ -6,7 +6,9 @@ export type AdminPermission =
   | 'admin.role.create'
   | 'admin.role.delete'
   | 'admin.role.list'
+  | 'admin.role.update'
   | 'admin.toggle'
+  | 'admin.update'
   | 'home.dashboard.view';
 
 export type AdminPermissionGroup =
