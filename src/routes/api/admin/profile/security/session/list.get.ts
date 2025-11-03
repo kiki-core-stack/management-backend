@@ -1,11 +1,10 @@
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 
-import { defaultHonoFactory } from '@/core/constants/hono';
 import { getAuthToken } from '@/libs/auth';
 
 export const routePermission = 'ignore';
 
-export default defaultHonoFactory.createHandlers(async (ctx) => {
+export default defineRouteHandlers(async (ctx) => {
     const adminSessions = await AdminSessionModel.find({ admin: ctx.adminId }).sort({ lastActiveAt: -1 });
     const token = getAuthToken(ctx);
     const adminSessionList = [];

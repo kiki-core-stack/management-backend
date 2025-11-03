@@ -1,12 +1,10 @@
-import { throwApiError } from '@kiki-core-stack/pack/hono-backend/libs/api';
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 
-import { defaultHonoFactory } from '@/core/constants/hono';
 import { getAuthToken } from '@/libs/auth';
 
 export const routePermission = 'ignore';
 
-export default defaultHonoFactory.createHandlers(async (ctx) => {
+export default defineRouteHandlers(async (ctx) => {
     const adminSession = await AdminSessionModel.findByRouteIdOrThrowNotFoundError(ctx, { admin: ctx.adminId });
     if (adminSession.token === getAuthToken(ctx)) throwApiError(400);
     await adminSession.deleteOne();

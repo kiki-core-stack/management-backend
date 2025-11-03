@@ -1,17 +1,15 @@
+import { redisClient } from '@kiki-core-stack/pack/constants/redis';
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { AdminRoleDocument } from '@kiki-core-stack/pack/models/admin/role';
-import { enhancedRedisStorage } from '@kiki-core-stack/pack/storages/enhanced/redis';
-import * as enhancedRedisStore from '@kiki-core-stack/pack/stores/enhanced/redis';
 import { toObjectIdHexString } from '@kikiutils/mongoose/helpers';
 import type { Types } from 'mongoose';
 
 export async function clearAllAdminPermissionCache() {
-    const keys = await enhancedRedisStorage.instance.keys('adminPermission:*');
-    await enhancedRedisStorage.instance.del(keys);
+    await redisClient.del(...await redisClient.keys('adminPermission:*'));
 }
 
 export async function getAdminPermission(adminId: string | Types.ObjectId) {
-    let adminPermission = await enhancedRedisStore.adminPermission.getItem(toObjectIdHexString(adminId));
+    let adminPermission = await redisStore.adminPermission.getItem(toObjectIdHexString(adminId));
     if (!adminPermission) {
         const admin = await AdminModel
             .findById(adminId)
@@ -42,7 +40,7 @@ export async function getAdminPermission(adminId: string | Types.ObjectId) {
             };
         }
 
-        await enhancedRedisStore.adminPermission.setItem(adminPermission, toObjectIdHexString(adminId));
+        await redisStore.adminPermission.setItem(adminPermission, toObjectIdHexString(adminId));
     }
 
     return adminPermission;

@@ -1,6 +1,6 @@
 import { baseSetCookieOptions } from '@kiki-core-stack/pack/hono-backend/constants/cookie';
-import { getManagementSystemTypeFromRoutePath } from '@kiki-core-stack/pack/libs/management-system';
-import type { ManagementSystemType } from '@kiki-core-stack/pack/types';
+import { getManagementTypeFromRoutePath } from '@kiki-core-stack/pack/libs/management';
+import type { ManagementType } from '@kiki-core-stack/pack/types';
 import type { Context } from 'hono';
 import {
     deleteCookie,
@@ -8,24 +8,24 @@ import {
     setCookie,
 } from 'hono/cookie';
 
-export function deleteAuthToken(ctx: Context, systemType?: ManagementSystemType) {
-    return deleteCookie(ctx, resolveAuthTokenName(ctx, systemType));
+export function deleteAuthToken(ctx: Context, managementType?: ManagementType) {
+    return deleteCookie(ctx, resolveAuthTokenName(ctx, managementType));
 }
 
-export function getAuthToken(ctx: Context, systemType?: ManagementSystemType) {
-    return getCookie(ctx, resolveAuthTokenName(ctx, systemType));
+export function getAuthToken(ctx: Context, managementType?: ManagementType) {
+    return getCookie(ctx, resolveAuthTokenName(ctx, managementType));
 }
 
-function resolveAuthTokenName(ctx: Context, systemType?: ManagementSystemType) {
-    systemType ??= getManagementSystemTypeFromRoutePath(ctx.req.path);
-    if (!systemType) throw new Error('No management system type found');
-    return `${systemType}-token`;
+function resolveAuthTokenName(ctx: Context, managementType?: ManagementType) {
+    managementType ??= getManagementTypeFromRoutePath(ctx.req.path);
+    if (!managementType) throw new Error('No management type found');
+    return `${managementType}-token`;
 }
 
-export function setAuthToken(ctx: Context, token: string, systemType?: ManagementSystemType) {
+export function setAuthToken(ctx: Context, token: string, managementType?: ManagementType) {
     setCookie(
         ctx,
-        resolveAuthTokenName(ctx, systemType),
+        resolveAuthTokenName(ctx, managementType),
         token,
         {
             ...baseSetCookieOptions,

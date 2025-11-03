@@ -1,12 +1,7 @@
-import { throwApiError } from '@kiki-core-stack/pack/hono-backend/libs/api';
-import { apiZValidator } from '@kiki-core-stack/pack/hono-backend/libs/api/zod-validator';
-import * as z from '@kiki-core-stack/pack/libs/zod';
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 import type { AdminLoginFormData } from '@kiki-core-stack/pack/types/data/admin';
 
-import { defaultHonoFactory } from '@/core/constants/hono';
-import { defineRouteHandlerOptions } from '@/core/libs/route';
 import { handleAdminLogin } from '@/libs/admin/auth';
 
 const jsonSchema = z.object({
@@ -18,20 +13,18 @@ const jsonSchema = z.object({
 export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
 export const routePermission = 'ignore';
 
-export default defaultHonoFactory.createHandlers(
+export default defineRouteHandlers(
     apiZValidator('json', jsonSchema),
     async (ctx) => {
         const data = ctx.req.valid('json');
-        if (data.verCode !== ctx.popSession('verCode')?.toLowerCase()) {
-            throwApiError(400, '驗證碼不正確', 'invalidVerificationCode');
-        }
-
+        if (data.verCode !== ctx.popSession('verCode')?.toLowerCase()) throwApiError(400, 'invalidVerificationCode');
         const admin = await AdminModel.findOne({
             account: data.account,
             enabled: true,
         });
 
-        if (!admin || !await admin?.verifyPassword(data.password)) throwApiError(404, '帳號不存在，未啟用或密碼不正確');
+        // TODO: errorCode
+        if (!admin || !await admin?.verifyPassword(data.password)) throwApiError(404);
         await handleAdminLogin(ctx, admin._id);
         return ctx.createApiSuccessResponse();
     },

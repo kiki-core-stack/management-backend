@@ -21,6 +21,7 @@ RUN --mount=id=bun-cache,target=/root/.bun/install/cache,type=cache \
 COPY ./.env.production.local ./.gitignore ./eslint.config.mjs ./tsconfig.json ./
 COPY ./src ./src
 RUN bun run lint && \
+    bun run bootstrap:prod && \
     bun run typecheck && \
     bun run build
 
@@ -31,7 +32,7 @@ FROM oven/bun:slim
 ENV NODE_ENV='production' \
     SERVER_HOST='0.0.0.0' \
     SERVER_PORT=8000 \
-    TZ='Asia/Taipei'
+    TZ='UTC'
 
 WORKDIR /app
 
@@ -50,8 +51,8 @@ RUN \
     rm -rf /var/cache/apt/* /var/lib/apt/lists/* && \
     ### Add user
     useradd -mr -g nogroup -s /usr/sbin/nologin -u 10001 user && \
-    ### Install argon2 dependency
-    bun add argon2
+    ### Install dependencies
+    bun add argon2 cbor-x
 
 ## Copy files and libraries
 COPY --from=build-stage /app/dist ./

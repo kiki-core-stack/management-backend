@@ -186,7 +186,8 @@ upgrade-dependencies.sh
 
 ### Custom ###
 
-# Generated production loaders
+# Generated files
+src/core/.generated/
 src/core/loaders/routes/production.ts
 
 # svg-captcha fonts

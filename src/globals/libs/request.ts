@@ -39,14 +39,14 @@ function normalizeApiRequestQueryTypedCondition(condition: any, type?: 'date' | 
     if (condition.$gt !== undefined) normalizedCondition.$gt = parseTypedValue(condition.$gt, type);
     if (condition.$lt !== undefined) normalizedCondition.$lt = parseTypedValue(condition.$lt, type);
     if (condition.$lte !== undefined) normalizedCondition.$lte = parseTypedValue(condition.$lte, type);
-    if (Array.isArray(condition.$in)) {
+    if (Array.isArray(condition.$in) && condition.$in.length) {
         normalizedCondition.$in = condition
             .$in
             .map((value: any) => parseTypedValue(value, type))
             .filter((value: any) => value !== undefined);
     }
 
-    if (typeof condition.$regex === 'string') {
+    if (typeof condition.$regex === 'string' && condition.$regex.length) {
         normalizedCondition.$regex = isValidRegexPattern(condition.$regex)
             ? condition.$regex
             : escapeRegExp(condition.$regex);
@@ -61,7 +61,7 @@ function normalizeApiRequestQueryTypedCondition(condition: any, type?: 'date' | 
 
 export function parseApiRequestQueryParams(ctx: Context): ParsedApiRequestQueryParams {
     const queries = ctx.req.queries();
-    const fields = queries.fields || [];
+    const fields = [...new Set(queries.fields || [])];
     let filter = {};
     if (queries.filter?.[0]) {
         try {

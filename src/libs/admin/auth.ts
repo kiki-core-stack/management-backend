@@ -2,7 +2,6 @@ import { AdminLogType } from '@kiki-core-stack/pack/constants/admin';
 import { AdminLogModel } from '@kiki-core-stack/pack/models/admin/log';
 import type { AdminSession } from '@kiki-core-stack/pack/models/admin/session';
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
-import { generateWithNestedRandomLength } from '@kikiutils/shared/random';
 import type { Context } from 'hono';
 import type {
     ClientSession,
@@ -10,8 +9,6 @@ import type {
     UpdateQuery,
 } from 'mongoose';
 import { nanoid } from 'nanoid';
-
-import { getClientIpFromXForwardedFor } from '@/core/utils/request';
 
 import { setAuthToken } from '../auth';
 

@@ -1,4 +1,3 @@
-import { throwApiError } from '@kiki-core-stack/pack/hono-backend/libs/api';
 import type {
     BaseMongoosePaginateModel,
     MongooseHydratedDocument,
@@ -10,8 +9,6 @@ import type {
     QueryOptions,
     RootFilterQuery,
 } from 'mongoose';
-
-import { parseApiRequestQueryParams } from './request';
 
 export async function getModelDocumentByRouteIdAndDelete<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
     ctx: Context,
@@ -74,6 +71,14 @@ export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethod
                 .entries(paginateOptions.select)
                 .forEach(([key, value]) => queryParams.fields.push(value ? key : `-${key}`));
         }
+    }
+
+    if (queryParams.fields.some((field) => field.startsWith('-'))) {
+        const filteredFields = queryParams.fields.filter(
+            (field) => !field.startsWith('-') && !queryParams.fields.includes(`-${field}`),
+        );
+
+        if (filteredFields.length) queryParams.fields = filteredFields;
     }
 
     let finalSort;
