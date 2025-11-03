@@ -52,7 +52,7 @@ RUN \
     ### Add user
     useradd -mr -g nogroup -s /usr/sbin/nologin -u 10001 user && \
     ### Install dependencies
-    bun add argon2 cbor-x
+    bun add argon2 cbor-x sharp
 
 ## Copy files and libraries
 COPY --from=build-stage /app/dist ./
