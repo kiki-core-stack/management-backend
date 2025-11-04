@@ -1,5 +1,3 @@
-import { throwApiError } from '@kiki-core-stack/pack/hono-backend/libs/api';
-
 import { honoApp } from '@/core/app';
 import { getAdminPermission } from '@/libs/admin/permission';
 import { micromatch } from '@/utils/micromatch';
