@@ -28,6 +28,10 @@ for (const routeEntry of loadedRouteModules.filter((loadedRouteModule) => loaded
         continue;
     }
 
+    if (!routeEntry.module.routePermission) {
+        throw new Error(`No routePermission found for route at ${routeEntry.filePath}`);
+    }
+
     registerRoute(
         routeEntry.method,
         routeEntry.path,
