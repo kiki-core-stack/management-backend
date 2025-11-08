@@ -7,6 +7,9 @@ export default defineRouteHandlers((ctx) => {
         ctx,
         EmailPlatformModel,
         undefined,
-        { populate: populateCreatedAndEditedByAdminOptions },
+        {
+            populate: populateCreatedAndEditedByAdminOptions,
+            sort: { priority: -1 },
+        },
     );
 });
