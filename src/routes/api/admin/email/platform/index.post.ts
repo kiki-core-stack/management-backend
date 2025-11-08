@@ -34,10 +34,7 @@ export const jsonSchema = z.object({
 export const routePermission = 'admin email.platform.create';
 
 export function validateDataConfigField(data: output<ZodValidatorType<EmailPlatform, 'configMd5'>>) {
-    const validator = configValidators[data.serviceProvider];
-    const validateResult = validator.safeParse(data.config);
-    if (!validateResult.success) throwApiError(400);
-    data.config = validateResult.data;
+    data.config = configValidators[data.serviceProvider].parse(data.config);
 }
 
 export default defineRouteHandlers(
