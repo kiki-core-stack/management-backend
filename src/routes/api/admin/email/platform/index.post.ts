@@ -16,7 +16,7 @@ const configValidators: ReadonlyRecord<EmailServiceProvider, ZodType<AnyRecord>>
     [EmailServiceProvider.Smtp]: z.object({
         host: z.hostname().trim(),
         password: z.string().min(1).optional(),
-        port: z.number().min(1).max(65535),
+        port: z.int().min(1).max(65535),
         requireTls: z.boolean(),
         secure: z.boolean(),
         username: z.string().min(1).optional(),
@@ -27,7 +27,7 @@ export const jsonSchema = z.object({
     config: z.object({}).catchall(z.any()),
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(32),
-    priority: z.number(),
+    priority: z.int(),
     serviceProvider: z.enum(EmailServiceProvider),
 }) satisfies ZodValidatorType<EmailPlatform, 'configMd5'>;
 
