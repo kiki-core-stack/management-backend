@@ -4,7 +4,7 @@ import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 
 export const jsonSchema = z.object({
-    account: z.string().trim().min(1).max(16),
+    account: z.string().trim().min(1).max(32),
     email: z.email().trim().toLowerCase().optional(),
     enabled: z.boolean(),
     password: z.string().trim().min(1).optional(),

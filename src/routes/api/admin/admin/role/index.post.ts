@@ -6,7 +6,7 @@ import { allAdminPermissions } from '@/constants/admin';
 import { micromatch } from '@/utils/micromatch';
 
 export const jsonSchema = z.object({
-    name: z.string().trim().min(1).max(16),
+    name: z.string().trim().min(1).max(32),
     permissions: z
         .array(z.string().trim())
         .refine((permissions) => {
