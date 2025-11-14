@@ -15,7 +15,6 @@ export default defineRouteHandlers(
     async (ctx) => {
         const admin = await ctx.getAdmin();
         const data = ctx.req.valid('json');
-        // TODO: errorCode
         if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
         return await mongooseConnections.default!.transaction(async (session) => {
             await admin.assertUpdateSuccess({ password: data.newPassword }, { session });

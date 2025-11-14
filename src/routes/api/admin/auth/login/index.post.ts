@@ -23,7 +23,6 @@ export default defineRouteHandlers(
             enabled: true,
         });
 
-        // TODO: errorCode
         if (!admin || !await admin?.verifyPassword(data.password)) throwApiError(404);
         await handleAdminLogin(ctx, admin._id);
         return ctx.createApiSuccessResponse();

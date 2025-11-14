@@ -20,9 +20,11 @@ export const routePermission = 'admin admin.update';
 export default defineRouteHandlers(
     apiZValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
-        let admin: AdminDocument | undefined;
+        let admin: AdminDocument;
+
         const filter: FilterQuery<Admin> = {};
         if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
+
         let updateQuery: UpdateQuery<AdminDocument> = {};
         await mongooseConnections.default!.transaction(async (session) => {
             admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, { session });
@@ -35,8 +37,8 @@ export default defineRouteHandlers(
             if (!updateQuery.enabled) await AdminSessionModel.deleteMany({ admin }, { session });
         });
 
-        if (admin && !isEqual(admin.roles.toSorted(), updateQuery.roles?.toSorted())) {
-            redisStore.adminPermission.removeItem(admin._id.toHexString()).catch(() => {});
+        if (!isEqual(admin!.roles.toSorted(), updateQuery.roles?.toSorted())) {
+            redisStore.adminPermission.removeItem(admin!._id.toHexString()).catch(() => {});
         }
 
         return ctx.createApiSuccessResponse();

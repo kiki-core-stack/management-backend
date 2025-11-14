@@ -11,6 +11,7 @@ export const routePermission = 'admin admin.toggle';
 export default defineRouteHandlers(async (ctx) => {
     const filter: FilterQuery<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
+
     return mongooseConnections.default!.transaction(async (session) => {
         await getModelDocumentByRouteIdAndUpdateBooleanField(
             ctx,
@@ -18,8 +19,8 @@ export default defineRouteHandlers(async (ctx) => {
             ['enabled'],
             filter,
             { session },
-            async (admin, field) => {
-                if (field === 'enabled') {
+            async (admin, field, value) => {
+                if (field === 'enabled' && !value) {
                     if (admin._id.equals(ctx.adminId)) throwApiError(400);
                     await AdminSessionModel.deleteMany({ admin }, { session });
                 }
