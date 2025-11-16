@@ -1,3 +1,6 @@
+/* eslint-disable eslint-comments/no-unlimited-disable */
+/* eslint-disable */
+
 export type AdminPermission =
   | 'admin.create'
   | 'admin.delete'
@@ -15,6 +18,11 @@ export type AdminPermission =
   | 'email.platform.toggle'
   | 'email.platform.update'
   | 'email.sendRecord.list'
+  | 'email.senderIdentity.create'
+  | 'email.senderIdentity.delete'
+  | 'email.senderIdentity.list'
+  | 'email.senderIdentity.toggle'
+  | 'email.senderIdentity.update'
   | 'home.dashboard.view';
 
 export type AdminPermissionGroup =
@@ -24,5 +32,6 @@ export type AdminPermissionGroup =
   | 'email'
   | 'email.platform'
   | 'email.sendRecord'
+  | 'email.senderIdentity'
   | 'home'
   | 'home.dashboard';
