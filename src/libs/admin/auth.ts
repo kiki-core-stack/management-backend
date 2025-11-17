@@ -27,7 +27,7 @@ export async function createOrUpdateAdminSessionAndSetAuthToken(
         lastActiveAt: new Date(),
         lastActiveIp: ip,
         token: generateWithNestedRandomLength(nanoid, 48, 64, 80, 96),
-        userAgent: ctx.req.header('User-Agent'),
+        userAgent: ctx.req.header('user-agent'),
     };
 
     if (options?.sessionId) {
