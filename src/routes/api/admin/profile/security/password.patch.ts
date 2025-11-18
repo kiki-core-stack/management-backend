@@ -1,7 +1,6 @@
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 import type { AdminChangePasswordData } from '@kiki-core-stack/pack/types/data/admin';
-import { mongooseConnections } from '@kikiutils/mongoose/constants';
 
 const jsonSchema = z.object({
     newPassword: z.string().trim().min(1),

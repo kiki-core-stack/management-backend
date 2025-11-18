@@ -4,7 +4,6 @@ import type {
     AdminDocument,
 } from '@kiki-core-stack/pack/models/admin';
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
-import { mongooseConnections } from '@kikiutils/mongoose/constants';
 import { isEqual } from 'es-toolkit';
 import type {
     FilterQuery,

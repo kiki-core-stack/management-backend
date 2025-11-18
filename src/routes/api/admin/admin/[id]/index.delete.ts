@@ -1,7 +1,6 @@
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { Admin } from '@kiki-core-stack/pack/models/admin';
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
-import { mongooseConnections } from '@kikiutils/mongoose/constants';
 import type { FilterQuery } from 'mongoose';
 
 import { getAdminPermission } from '@/libs/admin/permission';
