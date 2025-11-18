@@ -17,9 +17,11 @@ const configValidators: ReadonlyRecord<EmailServiceProvider, ZodType<AnyRecord>>
         host: z.hostname().trim(),
         password: z.string().min(1).optional(),
         port: z.int().min(1).max(65535),
-        rejectTlsUnauthorized: z.boolean(),
-        requireTls: z.boolean(),
         secure: z.boolean(),
+        tls: z.object({
+            rejectUnauthorized: z.boolean(),
+            required: z.boolean(),
+        }),
         username: z.string().min(1).optional(),
     }) satisfies ZodValidatorType<EmailPlatformConfigs.Smtp>,
 };
