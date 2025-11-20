@@ -8,7 +8,6 @@ import type {
     Types,
     UpdateQuery,
 } from 'mongoose';
-import { nanoid } from 'nanoid';
 
 import { setAuthToken } from '../auth';
 

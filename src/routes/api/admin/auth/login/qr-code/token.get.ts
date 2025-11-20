@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid';
-
 const querySchema = z.object({ oldToken: z.string().trim().min(1).optional() });
 export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
 export const routePermission = 'ignore';
