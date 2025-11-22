@@ -6,7 +6,7 @@ import type {
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 import { isEqual } from 'es-toolkit';
 import type {
-    FilterQuery,
+    QueryFilter,
     UpdateQuery,
 } from 'mongoose';
 
@@ -21,7 +21,7 @@ export default defineRouteHandlers(
     async (ctx) => {
         let admin: AdminDocument;
 
-        const filter: FilterQuery<Admin> = {};
+        const filter: QueryFilter<Admin> = {};
         if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
 
         let updateQuery: UpdateQuery<AdminDocument> = {};

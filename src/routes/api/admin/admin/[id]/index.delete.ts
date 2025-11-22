@@ -1,7 +1,7 @@
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { Admin } from '@kiki-core-stack/pack/models/admin';
 import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
-import type { FilterQuery } from 'mongoose';
+import type { QueryFilter } from 'mongoose';
 
 import { getAdminPermission } from '@/libs/admin/permission';
 
@@ -10,7 +10,7 @@ export const routePermission = 'admin admin.delete';
 export default defineRouteHandlers(async (ctx) => {
     let adminId: string;
 
-    const filter: FilterQuery<Admin> = {};
+    const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
 
     await mongooseConnections.default!.transaction(async (session) => {

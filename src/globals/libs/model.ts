@@ -6,14 +6,14 @@ import type { PaginateOptions } from '@kikiutils/mongoose/types/paginate';
 import type { Nullable } from '@kikiutils/shared/types';
 import type { Context } from 'hono';
 import type {
+    QueryFilter,
     QueryOptions,
-    RootFilterQuery,
 } from 'mongoose';
 
 export async function getModelDocumentByRouteIdAndDelete<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
     ctx: Context,
     model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
-    filter?: RootFilterQuery<RawDocType>,
+    filter?: QueryFilter<RawDocType>,
     options?: Nullable<QueryOptions<RawDocType>>,
     beforeDelete?: (document: MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>) => any,
 ) {
@@ -31,7 +31,7 @@ export async function getModelDocumentByRouteIdAndUpdateBooleanField<
     ctx: Context,
     model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
     allowedFields: string[],
-    filter?: RootFilterQuery<RawDocType>,
+    filter?: QueryFilter<RawDocType>,
     options?: Nullable<QueryOptions<RawDocType>>,
     beforeUpdate?: (
         document: MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>,
