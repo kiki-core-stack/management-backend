@@ -8,7 +8,7 @@ export async function clearAllAdminPermissionCache() {
     await redisClient.del(...await redisClient.keys('adminPermission:*'));
 }
 
-export async function getAdminPermission(adminId: string | Types.ObjectId) {
+export async function getAdminPermission(adminId: Types.ObjectId) {
     let adminPermission = await redisStore.adminPermission.getItem(toObjectIdHexString(adminId));
     if (!adminPermission) {
         const admin = await AdminModel

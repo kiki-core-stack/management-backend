@@ -13,7 +13,7 @@ import { setAuthToken } from '../auth';
 
 export async function createOrUpdateAdminSessionAndSetAuthToken(
     ctx: Context,
-    adminId: string | Types.ObjectId,
+    adminId: Types.ObjectId,
     options?: {
         ip?: string;
         mongooseSession?: ClientSession;
@@ -45,7 +45,7 @@ export async function createOrUpdateAdminSessionAndSetAuthToken(
 
 export async function handleAdminLogin(
     ctx: Context,
-    adminId: string | Types.ObjectId,
+    adminId: Types.ObjectId,
     session?: ClientSession,
     logNote?: string,
 ) {
