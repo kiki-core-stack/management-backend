@@ -28,7 +28,7 @@ async function buildRouteRegistrationSnippet(routeDefinition: RouteDefinition, i
     const methodConstName = getOrCreateConstName(routeDefinition.method);
     const pathConstName = getOrCreateConstName(routeDefinition.path);
     // eslint-disable-next-line style/max-len
-    let registration = `registerRoute(${methodConstName}, ${pathConstName}, normalizeRouteHandlers(${importAlias}.default), ${importAlias}.routePermission,`;
+    let registration = `await registerRoute(${methodConstName}, ${pathConstName}, normalizeRouteHandlers(${importAlias}.default), ${importAlias}.routePermission,`;
     if (moduleExports.includes('routeHandlerOptions')) registration += ` ${importAlias}.routeHandlerOptions,`;
 
     return `${registration.replace(/,\s*$/, '')});`;
