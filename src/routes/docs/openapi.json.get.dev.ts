@@ -2,6 +2,7 @@ import { OpenApiGeneratorV31 } from '@asteasolutions/zod-to-openapi';
 
 import { zodOpenApiRegistry } from '@/core/constants/zod-openapi';
 
+export const routePermission = 'ignore';
 const tagToDescriptionMap: Record<string, string> = {};
 
 const tags = Object
