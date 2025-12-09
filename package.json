@@ -21,7 +21,6 @@
     "@kikiutils/mongoose": "^7.0.0",
     "@kikiutils/shared": "^14.0.0",
     "@sylke/email-validation": "^1.0.0",
-    "argon2": "^0.44.0",
     "consola": "^3.4.2",
     "date-fns": "^4.1.0",
     "es-toolkit": "^1.42.0",
