@@ -97,7 +97,7 @@ export async function registerRoute(
         },
     );
 
-    honoApp.on(method, path, ...handlers);
+    honoApp.on(method, [path], ...handlers);
     (allRoutes as WritableDeep<typeof allRoutes>)[method][path] = { handlerProperties: handlerOptions?.properties };
 
     if (process.env.NODE_ENV === 'development' && zodOpenApiOptions) {
