@@ -2,6 +2,6 @@ export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noL
 export const routePermission = 'ignore';
 
 export default defineRouteHandlers((ctx) => {
-    ctx.header('clear-site-data', '"cache", "clienthints", "executionContexts"');
+    ctx.header('clear-site-data', '"cache", "clienthints", "executionContexts", "prefetchCache", "prerenderCache"');
     return ctx.createApiSuccessResponse();
 });
