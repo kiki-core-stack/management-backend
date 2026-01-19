@@ -1,46 +1,61 @@
 import { AdminLogType } from '@kiki-core-stack/pack/constants/admin';
+import { redisClient } from '@kiki-core-stack/pack/constants/redis';
 import { AdminLogModel } from '@kiki-core-stack/pack/models/admin/log';
-import type { AdminSession } from '@kiki-core-stack/pack/models/admin/session';
-import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
+import type { AdminSessionData } from '@kiki-core-stack/pack/types/data/admin';
+import type { MaybeReadonly } from '@kikiutils/shared/types';
 import type { Context } from 'hono';
-import type {
-    ClientSession,
-    Types,
-    UpdateQuery,
-} from 'mongoose';
+import { Types } from 'mongoose';
+import type { ClientSession } from 'mongoose';
+import type { Arrayable } from 'type-fest';
 
 import { setAuthToken } from '../auth';
 
 export async function createOrUpdateAdminSessionAndSetAuthToken(
     ctx: Context,
-    adminId: Types.ObjectId,
+    adminId: string,
     options?: {
         ip?: string;
-        mongooseSession?: ClientSession;
-        sessionId?: Types.ObjectId;
+        oldToken?: string;
+        sessionId?: string;
     },
 ) {
-    const ip = options?.ip || getClientIpFromXForwardedFor(ctx);
-    const updateQuery: UpdateQuery<AdminSession> = {
-        admin: adminId,
-        lastActiveAt: new Date(),
+    const ip = options?.ip || getClientIpFromXForwardedFor(ctx)!;
+    const oldAdminSession = options?.oldToken ? await redisStore.adminSession.getItem(options.oldToken) : undefined;
+    const adminSessionId = options?.sessionId || new Types.ObjectId().toHexString();
+    const adminSessionData: AdminSessionData = {
+        adminId,
+        id: adminSessionId,
+        lastActiveAt: new Date().toISOString(),
         lastActiveIp: ip,
-        token: generateWithNestedRandomLength(nanoid, 48, 64, 80, 96),
+        loggedAt: oldAdminSession?.loggedAt || new Date().toISOString(),
+        loginIp: oldAdminSession?.loginIp || ip,
         userAgent: ctx.req.header('user-agent'),
     };
 
-    if (options?.sessionId) {
-        await AdminSessionModel.assertUpdateSuccess(
-            { _id: options.sessionId },
-            updateQuery,
-            { session: options.mongooseSession },
+    const adminSessionsSetKey = `admin:sessions:${adminId}`;
+    const newToken = generateWithNestedRandomLength(nanoid, 48, 64, 80, 96);
+    const redisValueTtlSeconds = 60 * 60 * 24 * 7;
+
+    const promises: Promise<any>[] = [
+        redisStore.adminSession.setItemWithTtl(redisValueTtlSeconds, adminSessionData, newToken),
+        redisStore.adminSessionToken.setItemWithTtl(redisValueTtlSeconds, newToken, adminSessionId),
+    ];
+
+    if (options?.oldToken && options.sessionId) {
+        promises.push(
+            redisClient.expire(redisStore.adminSession.resolveKey(options.oldToken), 30),
+            redisClient.srem(adminSessionsSetKey, options.oldToken),
         );
-    } else {
-        updateQuery.loginIp = ip;
-        await AdminSessionModel.create([updateQuery], { session: options?.mongooseSession });
     }
 
-    setAuthToken(ctx, updateQuery.token);
+    promises.push(
+        redisClient.sadd(adminSessionsSetKey, newToken),
+        redisClient.expire(adminSessionsSetKey, redisValueTtlSeconds),
+    );
+
+    await Promise.all(promises);
+
+    setAuthToken(ctx, newToken);
 }
 
 export async function handleAdminLogin(
@@ -50,15 +65,7 @@ export async function handleAdminLogin(
     logNote?: string,
 ) {
     const ip = getClientIpFromXForwardedFor(ctx);
-    await createOrUpdateAdminSessionAndSetAuthToken(
-        ctx,
-        adminId,
-        {
-            ip,
-            mongooseSession: session,
-        },
-    );
-
+    await createOrUpdateAdminSessionAndSetAuthToken(ctx, adminId.toHexString(), { ip });
     await AdminLogModel.create(
         [
             {
@@ -70,4 +77,26 @@ export async function handleAdminLogin(
         ],
         { session },
     );
+}
+
+export async function kickAdminSessions(adminId: string, ...tokens: MaybeReadonly<Arrayable<string>>[]) {
+    const resolvedTokens = tokens.flat();
+    const sessionsSetKey = `admin:sessions:${adminId}`;
+    const adminSessionTokens = resolvedTokens.length ? resolvedTokens : await redisClient.smembers(sessionsSetKey);
+    const adminSessions = await Promise.all(
+        adminSessionTokens.map(async (token) => {
+            const adminSession = await redisStore.adminSession.getItem(token);
+            await Promise.all([
+                redisClient.srem(sessionsSetKey, token),
+                redisStore.adminSession.removeItem(token),
+            ]);
+
+            return adminSession;
+        }),
+    );
+
+    const adminSessionIds = adminSessions.map((adminSession) => adminSession?.id).filter((id) => id !== undefined);
+    if (adminSessionIds.length) {
+        await redisClient.del(...adminSessionIds.map((id) => redisStore.adminSessionToken.resolveKey(id)));
+    }
 }

@@ -1,12 +1,11 @@
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { AdminDocument } from '@kiki-core-stack/pack/models/admin';
-import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 import {
     isBefore,
-    subDays,
     subMinutes,
 } from 'date-fns';
 import type { Context } from 'hono';
+import { Types } from 'mongoose';
 
 import { honoApp } from '@/core/app';
 import { createOrUpdateAdminSessionAndSetAuthToken } from '@/libs/admin/auth';
@@ -33,27 +32,19 @@ honoApp.use(
         if (!ctx.routeHandler?.isHandler) return await next();
         const token = getAuthToken(ctx);
         if (token) {
-            const adminSession = await AdminSessionModel
-                .findOne({ token })
-                .select([
-                    'admin',
-                    'lastActiveAt',
-                ]);
-
+            const adminSession = await redisStore.adminSession.getItem(token);
             if (!adminSession) deleteAuthToken(ctx);
             else {
-                ctx.adminId = adminSession.admin;
-                ctx.adminSessionId = adminSession._id;
-                const today = new Date();
-                if (isBefore(adminSession.lastActiveAt, subDays(today, 7))) {
-                    await adminSession.deleteOne();
-                    deleteAuthToken(ctx);
-                    delete ctx.adminId;
-                } else if (isBefore(adminSession.lastActiveAt, subMinutes(today, 10))) {
+                ctx.adminId = new Types.ObjectId(adminSession.adminId);
+                ctx.adminSessionId = new Types.ObjectId(adminSession.id);
+                if (isBefore(adminSession.lastActiveAt, subMinutes(new Date(), 10))) {
                     await createOrUpdateAdminSessionAndSetAuthToken(
                         ctx,
-                        adminSession.admin,
-                        { sessionId: adminSession._id },
+                        adminSession.adminId,
+                        {
+                            oldToken: token,
+                            sessionId: adminSession.id,
+                        },
                     );
                 }
             }

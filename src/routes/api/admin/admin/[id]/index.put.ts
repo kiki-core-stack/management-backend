@@ -3,13 +3,13 @@ import type {
     Admin,
     AdminDocument,
 } from '@kiki-core-stack/pack/models/admin';
-import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 import { isEqual } from 'es-toolkit';
 import type {
     QueryFilter,
     UpdateQuery,
 } from 'mongoose';
 
+import { kickAdminSessions } from '@/libs/admin/auth';
 import { getAdminPermission } from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
@@ -33,7 +33,7 @@ export default defineRouteHandlers(
             if (!updateQuery.email) updateQuery.$unset = { email: true };
             await admin.assertUpdateSuccess(updateQuery, { session });
 
-            if (!updateQuery.enabled) await AdminSessionModel.deleteMany({ admin }, { session });
+            if (!updateQuery.enabled) await kickAdminSessions(admin._id.toHexString());
         });
 
         if (!isEqual(admin!.roles.toSorted(), updateQuery.roles?.toSorted())) {

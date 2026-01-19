@@ -1,5 +1,4 @@
-import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
-
+import { kickAdminSessions } from '@/libs/admin/auth';
 import {
     deleteAuthToken,
     getAuthToken,
@@ -12,7 +11,8 @@ export default defineRouteHandlers(async (ctx) => {
     ctx.clearSession();
     const token = getAuthToken(ctx);
     if (token) {
-        await AdminSessionModel.deleteOne({ token });
+        const adminId = ctx.adminId?.toHexString();
+        if (adminId) await kickAdminSessions(adminId, token);
         deleteAuthToken(ctx);
     }
 

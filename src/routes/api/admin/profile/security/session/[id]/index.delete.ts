@@ -1,12 +1,14 @@
-import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
-
+import { kickAdminSessions } from '@/libs/admin/auth';
 import { getAuthToken } from '@/libs/auth';
 
 export const routePermission = 'ignore';
 
 export default defineRouteHandlers(async (ctx) => {
-    const adminSession = await AdminSessionModel.findByRouteIdOrThrowNotFoundError(ctx, { admin: ctx.adminId });
-    if (adminSession.token === getAuthToken(ctx)) throwApiError(400);
-    await adminSession.deleteOne();
+    const adminSessionToken = await redisStore.adminSessionToken.getItem(ctx.req.param('id')!);
+    if (adminSessionToken) {
+        if (adminSessionToken === getAuthToken(ctx)) throwApiError(400);
+        await kickAdminSessions(ctx.adminId!.toHexString(), adminSessionToken);
+    }
+
     return ctx.createApiSuccessResponse();
 });

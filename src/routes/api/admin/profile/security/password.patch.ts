@@ -1,6 +1,7 @@
-import { AdminSessionModel } from '@kiki-core-stack/pack/models/admin/session';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 import type { AdminChangePasswordData } from '@kiki-core-stack/pack/types/data/admin';
+
+import { kickAdminSessions } from '@/libs/admin/auth';
 
 const jsonSchema = z.object({
     newPassword: z.string().trim().min(1),
@@ -17,7 +18,7 @@ export default defineRouteHandlers(
         if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
         return await mongooseConnections.default!.transaction(async (session) => {
             await admin.assertUpdateSuccess({ password: data.newPassword }, { session });
-            await AdminSessionModel.deleteMany({ admin }, { session });
+            await kickAdminSessions(admin._id.toHexString());
             return ctx.createApiSuccessResponse();
         });
     },
