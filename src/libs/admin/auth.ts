@@ -25,9 +25,9 @@ export async function createOrUpdateAdminSessionAndSetAuthToken(
     const adminSessionData: AdminSessionData = {
         adminId,
         id: adminSessionId,
-        lastActiveAt: new Date().toISOString(),
+        lastActiveAt: new Date(),
         lastActiveIp: ip,
-        loggedAt: oldAdminSession?.loggedAt || new Date().toISOString(),
+        loggedAt: oldAdminSession?.loggedAt || new Date(),
         loginIp: oldAdminSession?.loginIp || ip,
         userAgent: ctx.req.header('user-agent'),
     };
