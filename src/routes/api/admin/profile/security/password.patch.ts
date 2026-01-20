@@ -16,10 +16,8 @@ export default defineRouteHandlers(
         const admin = await ctx.getAdmin();
         const data = ctx.req.valid('json');
         if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
-        return await mongooseConnections.default!.transaction(async (session) => {
-            await admin.assertUpdateSuccess({ password: data.newPassword }, { session });
-            await kickAdminSessions(admin._id.toHexString());
-            return ctx.createApiSuccessResponse();
-        });
+        await admin.assertUpdateSuccess({ password: data.newPassword });
+        await kickAdminSessions(admin._id.toHexString());
+        return ctx.createApiSuccessResponse();
     },
 );

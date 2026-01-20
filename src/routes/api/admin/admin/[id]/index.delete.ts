@@ -8,7 +8,7 @@ import { getAdminPermission } from '@/libs/admin/permission';
 export const routePermission = 'admin admin.delete';
 
 export default defineRouteHandlers(async (ctx) => {
-    let adminId: string;
+    let adminId: string | undefined;
 
     const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
