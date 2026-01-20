@@ -22,7 +22,7 @@ export default defineRouteHandlers(
                 });
 
                 if (!admin) throwApiError(410);
-                await handleAdminLogin(ctx, admin._id, undefined, 'QR Code 登入');
+                await handleAdminLogin(ctx, admin._id, 'QR Code 登入');
                 redisStore.adminQrCodeLoginData.removeItem(token).catch(() => {});
                 return ctx.createApiSuccessResponse({ status: 'success' });
             }

@@ -11,8 +11,7 @@ export default defineRouteHandlers(async (ctx) => {
     ctx.clearSession();
     const token = getAuthToken(ctx);
     if (token) {
-        const adminId = ctx.adminId?.toHexString();
-        if (adminId) await kickAdminSessions(adminId, token);
+        if (ctx.adminId) await kickAdminSessions(ctx.adminId.toHexString(), token);
         deleteAuthToken(ctx);
     }
 

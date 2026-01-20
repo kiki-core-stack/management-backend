@@ -5,7 +5,6 @@ import type { AdminSessionData } from '@kiki-core-stack/pack/types/data/admin';
 import type { MaybeReadonly } from '@kikiutils/shared/types';
 import type { Context } from 'hono';
 import { Types } from 'mongoose';
-import type { ClientSession } from 'mongoose';
 import type { Arrayable } from 'type-fest';
 
 import { setAuthToken } from '../auth';
@@ -58,25 +57,16 @@ export async function createOrUpdateAdminSessionAndSetAuthToken(
     setAuthToken(ctx, newToken);
 }
 
-export async function handleAdminLogin(
-    ctx: Context,
-    adminId: Types.ObjectId,
-    session?: ClientSession,
-    logNote?: string,
-) {
+export async function handleAdminLogin(ctx: Context, adminId: Types.ObjectId, logNote?: string) {
     const ip = getClientIpFromXForwardedFor(ctx);
+    await AdminLogModel.create({
+        admin: adminId,
+        ip,
+        note: logNote,
+        type: AdminLogType.LoginSuccess,
+    });
+
     await createOrUpdateAdminSessionAndSetAuthToken(ctx, adminId.toHexString(), { ip });
-    await AdminLogModel.create(
-        [
-            {
-                admin: adminId,
-                ip,
-                note: logNote,
-                type: AdminLogType.LoginSuccess,
-            },
-        ],
-        { session },
-    );
 }
 
 export async function kickAdminSessions(adminId: string, ...tokens: MaybeReadonly<Arrayable<string>>[]) {
