@@ -11,7 +11,6 @@ export * from '@kikiutils/shared/general';
 export * from '@kikiutils/shared/random';
 export * from '@kikiutils/shared/string';
 export {
-    cloneDeep,
     merge,
     omit,
     pick,
