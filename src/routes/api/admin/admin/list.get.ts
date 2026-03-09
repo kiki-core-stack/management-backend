@@ -5,12 +5,12 @@ import { getAdminPermission } from '@/libs/admin/permission';
 export const routePermission = 'admin admin.list';
 
 export default defineRouteHandlers(async (ctx) => {
-    const parsedQueryParams = parseApiRequestQueryParams(ctx);
-    if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) parsedQueryParams.filter.isSuperAdmin = false;
+    const parsedApiRequestQueryParams = parseApiRequestQueryParams(ctx);
+    if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) parsedApiRequestQueryParams.filter.isSuperAdmin = false;
     return paginateModelDataWithApiResponse(
         ctx,
         AdminModel,
-        parsedQueryParams,
+        parsedApiRequestQueryParams,
         {
             populate: {
                 path: 'roles',
