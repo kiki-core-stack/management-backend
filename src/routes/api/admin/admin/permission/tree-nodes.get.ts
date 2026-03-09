@@ -41,10 +41,12 @@ function sortTreeNodes(treeNodes: TreeNode[]): TreeNode[] {
 
 export default defineRouteHandlers((ctx) => {
     const nestedPermissions: any = unflatten(
-        Object.fromEntries([...allAdminPermissions].sort().map((permission) => [
-            permission,
-            permission,
-        ])),
+        Object.fromEntries(
+            [...allAdminPermissions].toSorted().map((permission) => [
+                permission,
+                permission,
+            ]),
+        ),
         { object: true },
     );
 

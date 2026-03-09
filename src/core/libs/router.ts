@@ -77,7 +77,7 @@ export async function registerRoute(
         }
     }
 
-    const latestHandler = handlers[handlers.length - 1];
+    const latestHandler = handlers.at(-1);
 
     Object.defineProperty(
         latestHandler,
