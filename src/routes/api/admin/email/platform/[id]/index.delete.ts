@@ -10,7 +10,7 @@ export default defineRouteHandlers(async (ctx) => {
         undefined,
         undefined,
         async (emailPlatform) => {
-            if (await EmailSendRecordModel.exists({ platform: emailPlatform })) throwApiError(409);
+            if (await EmailSendRecordModel.exists({ platform: emailPlatform._id })) throwApiError(409);
         },
     );
 

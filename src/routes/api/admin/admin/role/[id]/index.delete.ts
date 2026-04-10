@@ -10,7 +10,7 @@ export default defineRouteHandlers(async (ctx) => {
         undefined,
         undefined,
         async (adminRole) => {
-            if (await AdminModel.exists({ roles: adminRole })) throwApiError(409);
+            if (await AdminModel.exists({ roles: adminRole._id })) throwApiError(409);
         },
     );
 
