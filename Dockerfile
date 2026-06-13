@@ -53,11 +53,10 @@ RUN \
     ### Add user
     useradd -mr -g nogroup -s /usr/sbin/nologin -u 10001 user && \
     ### Install dependencies
-    bun add msgpackr sharp
+    bun add msgpackr sharp svg-captcha
 
 ## Copy files and libraries
 COPY --from=build-stage /app/dist ./
-COPY --from=build-stage /app/node_modules/svg-captcha/fonts ./node_modules/svg-captcha/fonts
 COPY ./.env.production.local ./.env
 
 ## Copy and set the entrypoint script
