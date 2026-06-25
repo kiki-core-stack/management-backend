@@ -29,7 +29,7 @@ const configValidators: ReadonlyRecord<EmailServiceProvider, ZodType<AnyRecord>>
 export const jsonSchema = z.object({
     config: z.object({}).catchall(z.any()),
     enabled: z.boolean(),
-    name: z.string().trim().min(1).max(32),
+    name: z.string().trim().min(1).max(64),
     priority: z.int(),
     serviceProvider: z.enum(EmailServiceProvider),
 }) satisfies ZodValidatorType<EmailPlatform, 'configMd5'>;
