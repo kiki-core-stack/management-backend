@@ -3,7 +3,6 @@ import type {
     MongooseHydratedDocument,
 } from '@kikiutils/mongoose/types';
 import type { PaginateOptions } from '@kikiutils/mongoose/types/paginate';
-import type { Nullable } from '@kikiutils/shared/types';
 import type { Context } from 'hono';
 import type {
     QueryFilter,
@@ -14,7 +13,7 @@ export async function getModelDocumentByRouteIdAndDelete<RawDocType, QueryHelper
     ctx: Context,
     model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
     filter?: QueryFilter<RawDocType>,
-    options?: Nullable<QueryOptions<RawDocType>>,
+    options?: null | QueryOptions<RawDocType>,
     beforeDelete?: (document: MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>) => any,
 ) {
     const document = await model.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, options);
@@ -32,7 +31,7 @@ export async function getModelDocumentByRouteIdAndUpdateBooleanField<
     model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
     allowedFields: string[],
     filter?: QueryFilter<RawDocType>,
-    options?: Nullable<QueryOptions<RawDocType>>,
+    options?: null | QueryOptions<RawDocType>,
     beforeUpdate?: (
         document: MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>,
         field: string,
