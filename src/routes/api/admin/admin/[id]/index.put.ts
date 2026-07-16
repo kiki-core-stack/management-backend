@@ -27,12 +27,14 @@ export default defineRouteHandlers(
         const updateQuery: UpdateQuery<AdminDocument> = assertNotModifiedAndStripData(ctx.req.valid('json'), admin);
         updateQuery.enabled = updateQuery.enabled || admin._id.equals(ctx.adminId);
         if (!updateQuery.email) updateQuery.$unset = { email: true };
+
+        const adminId = admin._id.toHexString();
+        if (!updateQuery.enabled) await adminAuthenticationSessionStore.revokeAll(adminId);
+
         await admin.assertUpdateSuccess(updateQuery);
 
-        if (!updateQuery.enabled) await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString());
-
         if (!isEqual(admin!.roles.toSorted(), updateQuery.roles?.toSorted())) {
-            redisStore.adminPermission.removeItem(admin!._id.toHexString()).catch(() => {});
+            redisStore.adminPermission.removeItem(adminId).catch(() => {});
         }
 
         return ctx.createApiSuccessResponse();
