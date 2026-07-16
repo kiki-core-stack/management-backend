@@ -9,7 +9,7 @@ import type {
     UpdateQuery,
 } from 'mongoose';
 
-import { kickAdminSessions } from '@/libs/admin/auth';
+import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
@@ -29,7 +29,7 @@ export default defineRouteHandlers(
         if (!updateQuery.email) updateQuery.$unset = { email: true };
         await admin.assertUpdateSuccess(updateQuery);
 
-        if (!updateQuery.enabled) await kickAdminSessions(admin._id.toHexString());
+        if (!updateQuery.enabled) await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString());
 
         if (!isEqual(admin!.roles.toSorted(), updateQuery.roles?.toSorted())) {
             redisStore.adminPermission.removeItem(admin!._id.toHexString()).catch(() => {});

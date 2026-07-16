@@ -1,19 +1,14 @@
-import { kickAdminSessions } from '@/libs/admin/auth';
 import {
-    deleteAuthToken,
-    getAuthToken,
-} from '@/libs/auth';
+    adminAuthenticationSession,
+    adminAuthenticationSessionStore,
+} from '@/constants/admin/authentication-session';
 
 export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
 export const routePermission = 'ignore';
 
 export default defineRouteHandlers(async (ctx) => {
     ctx.clearSession();
-    const token = getAuthToken(ctx);
-    if (token) {
-        if (ctx.adminId) await kickAdminSessions(ctx.adminId.toHexString(), token);
-        deleteAuthToken(ctx);
-    }
-
+    if (ctx.adminId && ctx.adminSessionId) await adminAuthenticationSessionStore.revoke(ctx.adminSessionId);
+    adminAuthenticationSession.deleteCookie(ctx);
     return ctx.createApiSuccessResponse();
 });

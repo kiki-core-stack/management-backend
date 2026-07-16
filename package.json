@@ -15,8 +15,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.8.0",
-    "@kiki-core-stack/pack": "^0.95.4",
+    "@hono/zod-validator": "^0.9.0",
+    "@kiki-core-stack/pack": "git+https://github.com/kiki-core-stack/pack#db924fd625ee673beeb6a0b1e93c2b37f4f188f4",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^7.0.2",
     "@kikiutils/shared": "^16.0.0",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.1.0",
-    "@asteasolutions/zod-to-openapi": "^8.5.0",
+    "@asteasolutions/zod-to-openapi": "^9.0.0",
     "@hono/swagger-ui": "^0.6.1",
     "@kikiutils/eslint-config": "^9.2.0",
     "@kikiutils/tsconfigs": "^7.0.0",

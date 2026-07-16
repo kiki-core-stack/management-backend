@@ -2,7 +2,7 @@ import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { Admin } from '@kiki-core-stack/pack/models/admin';
 import type { QueryFilter } from 'mongoose';
 
-import { kickAdminSessions } from '@/libs/admin/auth';
+import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
 export const routePermission = 'admin admin.toggle';
@@ -20,7 +20,7 @@ export default defineRouteHandlers(async (ctx) => {
         async (admin, field, value) => {
             if (field === 'enabled' && !value) {
                 if (admin._id.equals(ctx.adminId)) throwApiError(400);
-                await kickAdminSessions(admin._id.toHexString());
+                await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString());
             }
         },
     );

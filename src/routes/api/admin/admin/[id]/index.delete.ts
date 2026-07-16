@@ -2,7 +2,7 @@ import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { Admin } from '@kiki-core-stack/pack/models/admin';
 import type { QueryFilter } from 'mongoose';
 
-import { kickAdminSessions } from '@/libs/admin/auth';
+import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
 export const routePermission = 'admin admin.delete';
@@ -23,7 +23,7 @@ export default defineRouteHandlers(async (ctx) => {
                 if (admin._id.equals(ctx.adminId)) throwApiError(409);
                 if (await AdminModel.countDocuments(undefined, { session }) === 1) throwApiError(409);
                 adminId = admin._id.toHexString();
-                await kickAdminSessions(adminId);
+                await adminAuthenticationSessionStore.revokeAll(adminId);
             },
         );
     });

@@ -1,7 +1,10 @@
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 import type { AdminChangePasswordData } from '@kiki-core-stack/pack/types/data/admin';
 
-import { kickAdminSessions } from '@/libs/admin/auth';
+import {
+    adminAuthenticationSession,
+    adminAuthenticationSessionStore,
+} from '@/constants/admin/authentication-session';
 
 const jsonSchema = z.object({
     newPassword: z.string().trim().min(1),
@@ -17,7 +20,8 @@ export default defineRouteHandlers(
         const data = ctx.req.valid('json');
         if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
         await admin.assertUpdateSuccess({ password: data.newPassword });
-        await kickAdminSessions(admin._id.toHexString());
+        await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString());
+        adminAuthenticationSession.deleteCookie(ctx);
         return ctx.createApiSuccessResponse();
     },
 );
