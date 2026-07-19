@@ -53,7 +53,7 @@ RUN \
     ### Add user
     useradd -mr -g nogroup -s /usr/sbin/nologin -u 10001 user && \
     ### Install dependencies
-    bun add msgpackr sharp svg-captcha
+    bun add msgpackr sharp
 
 ## Copy files and libraries
 COPY --from=build-stage /app/dist ./

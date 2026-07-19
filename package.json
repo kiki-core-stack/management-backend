@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.0",
-    "@kiki-core-stack/pack": "git+https://github.com/kiki-core-stack/pack#ca7a6e8f4ac1686abc0128f28169ed9185ef71c3",
+    "@kiki-core-stack/pack": "git+https://github.com/kiki-core-stack/pack#449cd15a42680fb5f8054b1795d2f5c613ead526",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^7.0.2",
     "@kikiutils/shared": "^16.0.0",
@@ -34,7 +34,6 @@
     "node-ciphers": "^6.1.4",
     "on-change": "^6.0.2",
     "sharp": "^0.35.3",
-    "svg-captcha": "^1.4.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

@@ -189,6 +189,3 @@ upgrade-dependencies.sh
 # Generated files
 src/core/.generated/
 src/core/loaders/routes/production.ts
-
-# svg-captcha fonts
-!./node_modules/svg-captcha/fonts
