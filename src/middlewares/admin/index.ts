@@ -1,13 +1,9 @@
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { AdminDocument } from '@kiki-core-stack/pack/models/admin';
 import type { Context } from 'hono';
-import { getCookie } from 'hono/cookie';
 import { Types } from 'mongoose';
 
-import {
-    adminAuthenticationSession,
-    adminAuthenticationSessionCookieName,
-} from '@/constants/admin/authentication-session';
+import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
 import { honoApp } from '@/core/app';
 
 declare module 'hono' {
@@ -29,10 +25,8 @@ honoApp.use(
 
         const session = await adminAuthenticationSession.authenticate(ctx, { ip: getClientIpFromXForwardedFor(ctx)! });
         if (session) {
+            ctx.adminAuthenticationSession = session;
             ctx.adminId = new Types.ObjectId(session.principalId);
-            ctx.adminSessionId = session.id;
-        } else if (getCookie(ctx, adminAuthenticationSessionCookieName, 'host')) {
-            adminAuthenticationSession.deleteCookie(ctx);
         }
 
         if (!ctx.routeHandler.noLoginRequired && !ctx.adminId) throwApiError(401);

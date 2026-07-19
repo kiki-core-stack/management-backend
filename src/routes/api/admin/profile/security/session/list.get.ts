@@ -4,7 +4,7 @@ export const routePermission = 'ignore';
 
 export default defineRouteHandlers(async (ctx) => {
     const sessions = await adminAuthenticationSessionStore.list({
-        currentSessionId: ctx.adminSessionId,
+        currentSessionId: ctx.adminAuthenticationSession!.id,
         principalId: ctx.adminId!.toHexString(),
     });
 

@@ -8,7 +8,7 @@ export const routePermission = 'ignore';
 
 export default defineRouteHandlers(async (ctx) => {
     ctx.clearSession();
-    if (ctx.adminId && ctx.adminSessionId) await adminAuthenticationSessionStore.revoke(ctx.adminSessionId);
+    if (ctx.adminAuthenticationSession) await adminAuthenticationSessionStore.revoke(ctx.adminAuthenticationSession.id);
     adminAuthenticationSession.deleteCookie(ctx);
     return ctx.createApiSuccessResponse();
 });

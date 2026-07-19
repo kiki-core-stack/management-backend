@@ -16,6 +16,7 @@ export default defineRouteHandlers((ctx) => {
     });
 
     ctx.session.verCode = captcha.text;
+    ctx.header('cache-control', 'no-store');
     ctx.header('content-type', 'image/svg+xml');
     return ctx.body(captcha.data);
 });

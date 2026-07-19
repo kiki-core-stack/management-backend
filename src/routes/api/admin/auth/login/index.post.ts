@@ -23,8 +23,8 @@ export default defineRouteHandlers(
             enabled: true,
         });
 
-        if (!admin || !await admin?.verifyPassword(data.password)) throwApiError(404);
-        await handleAdminLogin(ctx, admin._id);
+        if (!admin || !await admin.verifyPassword(data.password)) throwApiError(404);
+        await handleAdminLogin(ctx, admin);
         return ctx.createApiSuccessResponse();
     },
 );

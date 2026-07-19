@@ -19,8 +19,12 @@ export default defineRouteHandlers(
         const admin = await ctx.getAdmin();
         const data = ctx.req.valid('json');
         if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
-        await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString());
-        await admin.assertUpdateSuccess({ password: data.newPassword });
+        await admin.assertUpdateSuccess({
+            $inc: { authenticationRevision: 1 },
+            password: data.newPassword,
+        });
+
+        adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);
         adminAuthenticationSession.deleteCookie(ctx);
         return ctx.createApiSuccessResponse();
     },

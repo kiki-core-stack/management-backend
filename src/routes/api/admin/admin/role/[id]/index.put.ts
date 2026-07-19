@@ -18,7 +18,7 @@ export default defineRouteHandlers(
         });
 
         if (!isEqual(adminRole.permissions.toSorted(), data.permissions.toSorted())) {
-            clearAllAdminPermissionCache().catch(() => {});
+            await clearAllAdminPermissionCache();
         }
 
         return ctx.createApiSuccessResponse();

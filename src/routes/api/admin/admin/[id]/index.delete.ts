@@ -23,11 +23,11 @@ export default defineRouteHandlers(async (ctx) => {
                 if (admin._id.equals(ctx.adminId)) throwApiError(409);
                 if (await AdminModel.countDocuments(undefined, { session }) === 1) throwApiError(409);
                 adminId = admin._id.toHexString();
-                await adminAuthenticationSessionStore.revokeAll(adminId);
             },
         );
     });
 
-    redisStore.adminPermission.removeItem(adminId!).catch(() => {});
+    adminAuthenticationSessionStore.revokeAll(adminId!).catch(logger.error);
+    redisStore.adminPermission.removeItem(adminId!).catch(logger.error);
     return ctx.createApiSuccessResponse();
 });
