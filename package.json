@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.0",
-    "@kiki-core-stack/pack": "git+https://github.com/kiki-core-stack/pack#449cd15a42680fb5f8054b1795d2f5c613ead526",
+    "@kiki-core-stack/pack": "git+https://github.com/kiki-core-stack/pack.git#5abbe5392faead7917f995f18e2449e74890914d",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^7.0.2",
     "@kikiutils/shared": "^16.0.0",
@@ -26,7 +26,7 @@
     "es-toolkit": "^1.49.0",
     "file-type": "^22.0.1",
     "flat": "^6.0.1",
-    "hono": "^4.12.30",
+    "hono": "^4.12.31",
     "lru-cache": "^11.5.2",
     "mongoose": "^9.7.4",
     "msgpackr": "^2.0.4",
