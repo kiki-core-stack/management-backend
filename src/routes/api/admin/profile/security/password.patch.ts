@@ -24,7 +24,7 @@ export default defineRouteHandlers(
             password: data.newPassword,
         });
 
-        adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);
+        await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);
         adminAuthenticationSession.deleteCookie(ctx);
         return ctx.createApiSuccessResponse();
     },
