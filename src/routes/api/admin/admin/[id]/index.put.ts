@@ -29,10 +29,11 @@ export default defineRouteHandlers(
         if (!updateQuery.email) updateQuery.$unset = { email: true };
 
         const adminId = admin._id.toHexString();
-        if (!updateQuery.enabled) updateQuery.$inc = { authenticationRevision: 1 };
+        const shouldRevokeAuthenticationSessions = !updateQuery.enabled || updateQuery.password !== undefined;
+        if (shouldRevokeAuthenticationSessions) updateQuery.$inc = { authenticationRevision: 1 };
 
         await admin.assertUpdateSuccess(updateQuery);
-        if (!updateQuery.enabled) adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
+        if (shouldRevokeAuthenticationSessions) adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
         if (!isEqual(admin!.roles.toSorted(), updateQuery.roles?.toSorted())) {
             await redisStore.adminPermission.removeItem(adminId);
         }

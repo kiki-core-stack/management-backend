@@ -1,3 +1,7 @@
+import {
+    hashPasswordWithArgon2,
+    verifyPasswordWithArgon2,
+} from '@kiki-core-stack/pack/libs/password-argon2';
 import { AdminModel } from '@kiki-core-stack/pack/models/admin';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
 import type { AdminLoginFormData } from '@kiki-core-stack/pack/types/data/admin';
@@ -9,6 +13,7 @@ const jsonSchema = z.object({
     password: z.string().trim().min(1),
 }) satisfies ZodValidatorType<AdminLoginFormData>;
 
+const missingAdminPasswordHash = await hashPasswordWithArgon2('missing-admin');
 export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
 export const routePermission = 'ignore';
 
@@ -21,7 +26,11 @@ export default defineRouteHandlers(
             enabled: true,
         });
 
-        if (!admin || !await admin.verifyPassword(data.password)) throwApiError(404);
+        const passwordVerified = admin
+            ? await admin.verifyPassword(data.password)
+            : await verifyPasswordWithArgon2(missingAdminPasswordHash, data.password);
+
+        if (!admin || !passwordVerified) throwApiError(404);
         await handleAdminLogin(ctx, admin);
         return ctx.createApiSuccessResponse();
     },
