@@ -33,7 +33,10 @@ export default defineRouteHandlers(
         if (shouldRevokeAuthenticationSessions) updateQuery.$inc = { authenticationRevision: 1 };
 
         await admin.assertUpdateSuccess(updateQuery);
-        if (shouldRevokeAuthenticationSessions) adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
+        if (shouldRevokeAuthenticationSessions) {
+            await adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
+        }
+
         if (!isEqual(admin!.roles.toSorted(), updateQuery.roles?.toSorted())) {
             await redisStore.adminPermission.removeItem(adminId);
         }
