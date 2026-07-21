@@ -27,7 +27,7 @@ export default defineRouteHandlers(async (ctx) => {
             if (!value) updateQuery.$inc = { authenticationRevision: 1 };
 
             await admin.assertUpdateSuccess(updateQuery);
-            if (!value) adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);
+            if (!value) await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);
             break;
         }
 
