@@ -9,10 +9,10 @@ export default defineRouteHandlers((ctx) => {
         undefined,
         {
             populate: {
-                path: 'platform',
+                path: 'provider',
                 select: [
                     'name',
-                    'serviceProvider',
+                    'providerCode',
                 ],
             },
         },

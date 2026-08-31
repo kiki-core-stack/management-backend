@@ -1,11 +1,11 @@
-import { EmailPlatformModel } from '@kiki-core-stack/pack/models/email/platform';
+import { EmailProviderModel } from '@kiki-core-stack/pack/models/email/provider';
 
-export const routePermission = 'admin email.platform.list';
+export const routePermission = 'admin email.provider.list';
 
 export default defineRouteHandlers((ctx) => {
     return paginateModelDataWithApiResponse(
         ctx,
-        EmailPlatformModel,
+        EmailProviderModel,
         undefined,
         {
             populate: populateCreatedAndEditedByAdminOptions,

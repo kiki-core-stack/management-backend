@@ -1,8 +1,8 @@
-import { EmailServiceProvider } from '@kiki-core-stack/pack/constants/email';
-import { EmailPlatformModel } from '@kiki-core-stack/pack/models/email/platform';
-import type { EmailPlatform } from '@kiki-core-stack/pack/models/email/platform';
+import { EmailProviderCode } from '@kiki-core-stack/pack/constants/email';
+import { EmailProviderModel } from '@kiki-core-stack/pack/models/email/provider';
+import type { EmailProvider } from '@kiki-core-stack/pack/models/email/provider';
 import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
-import type { EmailPlatformConfigs } from '@kiki-core-stack/pack/types/email';
+import type { EmailProviderConfigs } from '@kiki-core-stack/pack/types/email';
 import type {
     AnyRecord,
     ReadonlyRecord,
@@ -12,8 +12,8 @@ import type {
     ZodType,
 } from 'zod';
 
-const configValidators: ReadonlyRecord<EmailServiceProvider, ZodType<AnyRecord>> = {
-    [EmailServiceProvider.Smtp]: z.object({
+const configValidators: ReadonlyRecord<EmailProviderCode, ZodType<AnyRecord>> = {
+    [EmailProviderCode.Smtp]: z.object({
         host: z.hostname().trim(),
         password: z.string().min(1).optional(),
         port: z.int().min(1).max(65535),
@@ -23,21 +23,22 @@ const configValidators: ReadonlyRecord<EmailServiceProvider, ZodType<AnyRecord>>
             required: z.boolean(),
         }),
         username: z.string().min(1).optional(),
-    }) satisfies ZodValidatorType<EmailPlatformConfigs.Smtp>,
+    }) satisfies ZodValidatorType<EmailProviderConfigs.Smtp>,
 };
 
 export const jsonSchema = z.object({
+    apiProxyUrl: z.url().trim().optional(),
     config: z.object({}).catchall(z.any()),
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-    serviceProvider: z.enum(EmailServiceProvider),
-}) satisfies ZodValidatorType<EmailPlatform, 'configMd5'>;
+    providerCode: z.enum(EmailProviderCode),
+}) satisfies ZodValidatorType<EmailProvider, 'configHash'>;
 
-export const routePermission = 'admin email.platform.create';
+export const routePermission = 'admin email.provider.create';
 
-export function validateDataConfigField(data: output<ZodValidatorType<EmailPlatform, 'configMd5'>>) {
-    data.config = configValidators[data.serviceProvider].parse(data.config);
+export function validateDataConfigField(data: output<ZodValidatorType<EmailProvider, 'configHash'>>) {
+    data.config = configValidators[data.providerCode].parse(data.config);
 }
 
 export default defineRouteHandlers(
@@ -45,9 +46,9 @@ export default defineRouteHandlers(
     async (ctx) => {
         const data = ctx.req.valid('json');
         validateDataConfigField(data);
-        await EmailPlatformModel.create({
+        await EmailProviderModel.create({
             ...data,
-            configMd5: Bun.MD5.hash(JSON.stringify(data.config), 'hex'),
+            configHash: Bun.MD5.hash(JSON.stringify(data.config), 'hex'),
             createdByAdmin: ctx.adminId,
         });
 
