@@ -1,4 +1,4 @@
-import { EmailProviderModel } from '@kiki-core-stack/pack/models/email/provider';
+import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 
 export const routePermission = 'admin email.provider.list';
 

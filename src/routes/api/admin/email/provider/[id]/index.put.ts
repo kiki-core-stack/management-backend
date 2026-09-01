@@ -1,5 +1,5 @@
-import { EmailProviderModel } from '@kiki-core-stack/pack/models/email/provider';
-import type { EmailProviderDocument } from '@kiki-core-stack/pack/models/email/provider';
+import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
+import type { EmailProviderDocument } from '@kcs-project/pack/models/email/provider';
 import type { UpdateQuery } from 'mongoose';
 
 import {

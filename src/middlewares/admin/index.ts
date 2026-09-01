@@ -1,5 +1,5 @@
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
-import type { AdminDocument } from '@kiki-core-stack/pack/models/admin';
+import { AdminModel } from '@kcs-project/pack/models/admin';
+import type { AdminDocument } from '@kcs-project/pack/models/admin';
 import type { Context } from 'hono';
 import { Types } from 'mongoose';
 

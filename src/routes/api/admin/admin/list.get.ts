@@ -1,4 +1,4 @@
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
+import { AdminModel } from '@kcs-project/pack/models/admin';
 
 import { getAdminPermission } from '@/libs/admin/permission';
 

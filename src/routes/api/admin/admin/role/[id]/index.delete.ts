@@ -1,5 +1,5 @@
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
-import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
+import { AdminModel } from '@kcs-project/pack/models/admin';
+import { AdminRoleModel } from '@kcs-project/pack/models/admin/role';
 
 export const routePermission = 'admin admin.role.delete';
 

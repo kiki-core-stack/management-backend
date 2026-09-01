@@ -1,5 +1,5 @@
-import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
-import type { AdminChangePasswordData } from '@kiki-core-stack/pack/types/data/admin';
+import type { ZodValidatorType } from '@kcs-project/pack/types';
+import type { AdminChangePasswordData } from '@kcs-project/pack/types/data/admin';
 
 import {
     adminAuthenticationSession,

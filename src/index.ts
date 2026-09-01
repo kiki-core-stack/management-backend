@@ -1,9 +1,9 @@
-import '@kiki-core-stack/pack/hono-backend/setups/mongoose-model-statics/find-by-route-id-or-throw-not-found-error';
-import '@kiki-core-stack/pack/hono-backend/setups/mongoose-model-statics';
+import '@kcs-project/pack/hono-backend/setups/mongoose-model-statics/find-by-route-id-or-throw-not-found-error';
+import '@kcs-project/pack/hono-backend/setups/mongoose-model-statics';
 
 import type { Server } from 'bun';
 
-import { setupHonoAppErrorHandling } from '@kiki-core-stack/pack/hono-backend/setups/error-handling';
+import { setupHonoAppErrorHandling } from '@kcs-project/pack/hono-backend/setups/error-handling';
 
 import { honoApp } from '@/core/app';
 import { gracefulExit } from '@/graceful-exit';
@@ -24,7 +24,7 @@ await import(`@/runtime-inits/${process.env.NODE_ENV}`);
 setupHonoAppErrorHandling(honoApp, logger);
 
 // Initialize system startup
-await (await import('@kiki-core-stack/pack/init')).initializeSystemStartup();
+await (await import('@kcs-project/pack/init')).initializeSystemStartup();
 
 // Load middlewares
 await import('@/middlewares');

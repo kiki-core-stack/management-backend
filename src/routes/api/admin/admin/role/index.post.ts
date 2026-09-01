@@ -1,6 +1,6 @@
-import type { AdminRole } from '@kiki-core-stack/pack/models/admin/role';
-import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
-import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
+import type { AdminRole } from '@kcs-project/pack/models/admin/role';
+import { AdminRoleModel } from '@kcs-project/pack/models/admin/role';
+import type { ZodValidatorType } from '@kcs-project/pack/types';
 
 import { allAdminPermissions } from '@/constants/admin';
 import { micromatch } from '@/utils/micromatch';

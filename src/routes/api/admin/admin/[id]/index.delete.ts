@@ -1,5 +1,5 @@
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
-import type { Admin } from '@kiki-core-stack/pack/models/admin';
+import { AdminModel } from '@kcs-project/pack/models/admin';
+import type { Admin } from '@kcs-project/pack/models/admin';
 import type { QueryFilter } from 'mongoose';
 
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';

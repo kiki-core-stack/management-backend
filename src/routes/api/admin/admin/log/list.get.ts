@@ -1,4 +1,4 @@
-import { AdminLogModel } from '@kiki-core-stack/pack/models/admin/log';
+import { AdminLogModel } from '@kcs-project/pack/models/admin/log';
 
 export const routePermission = 'admin admin.log.list';
 

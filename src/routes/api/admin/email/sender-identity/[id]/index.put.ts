@@ -1,4 +1,4 @@
-import { EmailSenderIdentityModel } from '@kiki-core-stack/pack/models/email/sender-identity';
+import { EmailSenderIdentityModel } from '@kcs-project/pack/models/email/sender-identity';
 
 import { jsonSchema } from '../index.post';
 

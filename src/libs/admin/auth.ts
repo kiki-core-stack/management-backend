@@ -1,6 +1,6 @@
-import { AdminLogType } from '@kiki-core-stack/pack/constants/admin';
-import type { AdminDocument } from '@kiki-core-stack/pack/models/admin';
-import { AdminLogModel } from '@kiki-core-stack/pack/models/admin/log';
+import { AdminLogType } from '@kcs-project/pack/constants/admin';
+import type { AdminDocument } from '@kcs-project/pack/models/admin';
+import { AdminLogModel } from '@kcs-project/pack/models/admin/log';
 import type { Context } from 'hono';
 
 import { adminAuthenticationSession } from '@/constants/admin/authentication-session';

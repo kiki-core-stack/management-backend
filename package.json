@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.0",
-    "@kiki-core-stack/pack": "git+https://github.com/kiki-core-stack/pack#8fcc9c5a89c031767e41b2dbece7c6202c2dee09",
+    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#e3540e4d067219b39cdc21ff9db89067621262b0",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^7.0.3",
     "@kikiutils/shared": "^18.0.1",

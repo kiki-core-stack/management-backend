@@ -1,4 +1,4 @@
-import { EmailSendRecordModel } from '@kiki-core-stack/pack/models/email/send-record';
+import { EmailSendRecordModel } from '@kcs-project/pack/models/email/send-record';
 
 export const routePermission = 'admin email.sendRecord.list';
 

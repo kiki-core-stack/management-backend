@@ -1,7 +1,7 @@
-import { EmailSenderIdentityKey } from '@kiki-core-stack/pack/constants/email';
-import type { EmailSenderIdentity } from '@kiki-core-stack/pack/models/email/sender-identity';
-import { EmailSenderIdentityModel } from '@kiki-core-stack/pack/models/email/sender-identity';
-import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
+import { EmailSenderIdentityKey } from '@kcs-project/pack/constants/email';
+import type { EmailSenderIdentity } from '@kcs-project/pack/models/email/sender-identity';
+import { EmailSenderIdentityModel } from '@kcs-project/pack/models/email/sender-identity';
+import type { ZodValidatorType } from '@kcs-project/pack/types';
 import { isValid } from '@sylke/email-validation';
 
 export const jsonSchema = z.object({

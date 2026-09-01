@@ -1,6 +1,6 @@
-import { redisClient } from '@kiki-core-stack/pack/constants/redis';
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
-import type { AdminRoleDocument } from '@kiki-core-stack/pack/models/admin/role';
+import { redisClient } from '@kcs-project/pack/constants/redis';
+import { AdminModel } from '@kcs-project/pack/models/admin';
+import type { AdminRoleDocument } from '@kcs-project/pack/models/admin/role';
 import { toObjectIdHexString } from '@kikiutils/mongoose/helpers';
 import type { Types } from 'mongoose';
 

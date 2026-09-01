@@ -1,8 +1,8 @@
-import { EmailProviderCode } from '@kiki-core-stack/pack/constants/email';
-import { EmailProviderModel } from '@kiki-core-stack/pack/models/email/provider';
-import type { EmailProvider } from '@kiki-core-stack/pack/models/email/provider';
-import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
-import type { EmailProviderConfigs } from '@kiki-core-stack/pack/types/email';
+import { EmailProviderCode } from '@kcs-project/pack/constants/email';
+import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
+import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
+import type { ZodValidatorType } from '@kcs-project/pack/types';
+import type { EmailProviderConfigs } from '@kcs-project/pack/types/email';
 import type {
     AnyRecord,
     ReadonlyRecord,

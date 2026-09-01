@@ -1,7 +1,7 @@
-import { redisClient } from '@kiki-core-stack/pack/constants/redis';
-import { createHonoAuthenticationSession } from '@kiki-core-stack/pack/hono-backend/libs/authentication-session';
-import { createRedisAuthenticationSessionStore } from '@kiki-core-stack/pack/libs/authentication-session/redis-store';
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
+import { redisClient } from '@kcs-project/pack/constants/redis';
+import { createHonoAuthenticationSession } from '@kcs-project/pack/hono-backend/libs/authentication-session';
+import { createRedisAuthenticationSessionStore } from '@kcs-project/pack/libs/authentication-session/redis-store';
+import { AdminModel } from '@kcs-project/pack/models/admin';
 
 export const adminAuthenticationSessionStore = createRedisAuthenticationSessionStore({
     client: redisClient,

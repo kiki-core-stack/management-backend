@@ -1,10 +1,10 @@
 import {
     hashPasswordWithArgon2,
     verifyPasswordWithArgon2,
-} from '@kiki-core-stack/pack/libs/password-argon2';
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
-import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
-import type { AdminLoginFormData } from '@kiki-core-stack/pack/types/data/admin';
+} from '@kcs-project/pack/libs/password-argon2';
+import { AdminModel } from '@kcs-project/pack/models/admin';
+import type { ZodValidatorType } from '@kcs-project/pack/types';
+import type { AdminLoginFormData } from '@kcs-project/pack/types/data/admin';
 
 import { handleAdminLogin } from '@/libs/admin/auth';
 

@@ -1,4 +1,4 @@
-import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
+import { AdminRoleModel } from '@kcs-project/pack/models/admin/role';
 import { isEqual } from 'es-toolkit';
 
 import { clearAllAdminPermissionCache } from '@/libs/admin/permission';

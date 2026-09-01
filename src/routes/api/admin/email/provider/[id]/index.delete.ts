@@ -1,5 +1,5 @@
-import { EmailProviderModel } from '@kiki-core-stack/pack/models/email/provider';
-import { EmailSendRecordModel } from '@kiki-core-stack/pack/models/email/send-record';
+import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
+import { EmailSendRecordModel } from '@kcs-project/pack/models/email/send-record';
 
 export const routePermission = 'admin email.provider.delete';
 

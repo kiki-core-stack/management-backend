@@ -1,8 +1,8 @@
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
+import { AdminModel } from '@kcs-project/pack/models/admin';
 import type {
     Admin,
     AdminDocument,
-} from '@kiki-core-stack/pack/models/admin';
+} from '@kcs-project/pack/models/admin';
 import { isEqual } from 'es-toolkit';
 import type {
     QueryFilter,

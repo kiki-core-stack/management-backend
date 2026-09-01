@@ -1,7 +1,7 @@
-import { AdminModel } from '@kiki-core-stack/pack/models/admin';
-import type { Admin } from '@kiki-core-stack/pack/models/admin';
-import { AdminRoleModel } from '@kiki-core-stack/pack/models/admin/role';
-import type { ZodValidatorType } from '@kiki-core-stack/pack/types';
+import { AdminModel } from '@kcs-project/pack/models/admin';
+import type { Admin } from '@kcs-project/pack/models/admin';
+import { AdminRoleModel } from '@kcs-project/pack/models/admin/role';
+import type { ZodValidatorType } from '@kcs-project/pack/types';
 
 export const jsonSchema = z.object({
     account: z.string().trim().min(1).max(64),
