@@ -15,7 +15,6 @@ import type {
 const configValidators: ReadonlyRecord<SmsProviderCode, ZodType<AnyRecord>> = {
     [SmsProviderCode.Mitake]: z.object({
         apiUrl: z.url().trim(),
-        encoding: z.literal('UTF8'),
         password: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
         username: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
     }) satisfies ZodValidatorType<SmsProviderConfigs.Mitake>,
