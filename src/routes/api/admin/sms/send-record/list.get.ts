@@ -11,8 +11,8 @@ export default defineRouteHandlers((ctx) => {
             populate: {
                 path: 'provider',
                 select: [
+                    'code',
                     'name',
-                    'providerCode',
                 ],
             },
         },

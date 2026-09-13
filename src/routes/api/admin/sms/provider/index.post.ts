@@ -27,17 +27,17 @@ const configValidators: ReadonlyRecord<SmsProviderCode, ZodType<AnyRecord>> = {
 
 export const jsonSchema = z.object({
     apiProxyUrl: z.url().trim().optional(),
+    code: z.enum(SmsProviderCode),
     config: z.object({}).catchall(z.any()),
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-    providerCode: z.enum(SmsProviderCode),
 }) satisfies ZodValidatorType<SmsProvider, 'configHash'>;
 
 export const routePermission = 'admin sms.provider.create';
 
 export function validateDataConfigField(data: output<ZodValidatorType<SmsProvider, 'configHash'>>) {
-    data.config = configValidators[data.providerCode].parse(data.config);
+    data.config = configValidators[data.code].parse(data.config);
 }
 
 export default defineRouteHandlers(

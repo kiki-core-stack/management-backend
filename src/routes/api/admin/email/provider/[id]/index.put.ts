@@ -14,7 +14,7 @@ export default defineRouteHandlers(
     async (ctx) => {
         const emailProvider = await EmailProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
         const data = assertNotModifiedAndStripData(ctx.req.valid('json'), emailProvider);
-        data.providerCode = emailProvider.providerCode;
+        data.code = emailProvider.code;
         validateDataConfigField(data);
 
         const updateQuery: UpdateQuery<EmailProviderDocument> = data;

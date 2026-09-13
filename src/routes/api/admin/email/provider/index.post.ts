@@ -28,17 +28,17 @@ const configValidators: ReadonlyRecord<EmailProviderCode, ZodType<AnyRecord>> = 
 
 export const jsonSchema = z.object({
     apiProxyUrl: z.url().trim().optional(),
+    code: z.enum(EmailProviderCode),
     config: z.object({}).catchall(z.any()),
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-    providerCode: z.enum(EmailProviderCode),
 }) satisfies ZodValidatorType<EmailProvider, 'configHash'>;
 
 export const routePermission = 'admin email.provider.create';
 
 export function validateDataConfigField(data: output<ZodValidatorType<EmailProvider, 'configHash'>>) {
-    data.config = configValidators[data.providerCode].parse(data.config);
+    data.config = configValidators[data.code].parse(data.config);
 }
 
 export default defineRouteHandlers(

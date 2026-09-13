@@ -14,7 +14,7 @@ export default defineRouteHandlers(
     async (ctx) => {
         const smsProvider = await SmsProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
         const data = assertNotModifiedAndStripData(ctx.req.valid('json'), smsProvider);
-        data.providerCode = smsProvider.providerCode;
+        data.code = smsProvider.code;
         validateDataConfigField(data);
 
         const updateQuery: UpdateQuery<SmsProviderDocument> = data;
