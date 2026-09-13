@@ -17,7 +17,6 @@ const configValidators: ReadonlyRecord<SmsProviderCode, ZodType<AnyRecord>> = {
         apiUrl: z.url().trim(),
         encoding: z.literal('UTF8'),
         password: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
-        sendPath: z.string().trim().min(1),
         username: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
     }) satisfies ZodValidatorType<SmsProviderConfigs.Mitake>,
     [SmsProviderCode.TwSms]: z.object({
