@@ -21,7 +21,7 @@ export default defineRouteHandlers(
         if (!updateQuery.apiProxyUrl) updateQuery.$unset = { apiProxyUrl: true };
         await smsProvider.assertUpdateSuccess({
             ...updateQuery,
-            configHash: Bun.MD5.hash(JSON.stringify(data.config), 'hex'),
+            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
             editedByAdmin: ctx.adminId,
         });
 

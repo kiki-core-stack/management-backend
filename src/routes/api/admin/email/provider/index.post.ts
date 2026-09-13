@@ -33,11 +33,11 @@ export const jsonSchema = z.object({
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-}) satisfies ZodValidatorType<EmailProvider, 'configHash'>;
+}) satisfies ZodValidatorType<EmailProvider, 'cacheKey'>;
 
 export const routePermission = 'admin email.provider.create';
 
-export function validateDataConfigField(data: output<ZodValidatorType<EmailProvider, 'configHash'>>) {
+export function validateDataConfigField(data: output<ZodValidatorType<EmailProvider, 'cacheKey'>>) {
     data.config = configValidators[data.code].parse(data.config);
 }
 
@@ -48,7 +48,7 @@ export default defineRouteHandlers(
         validateDataConfigField(data);
         await EmailProviderModel.create({
             ...data,
-            configHash: Bun.MD5.hash(JSON.stringify(data.config), 'hex'),
+            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
             createdByAdmin: ctx.adminId,
         });
 

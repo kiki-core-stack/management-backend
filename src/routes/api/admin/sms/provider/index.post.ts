@@ -32,11 +32,11 @@ export const jsonSchema = z.object({
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-}) satisfies ZodValidatorType<SmsProvider, 'configHash'>;
+}) satisfies ZodValidatorType<SmsProvider, 'cacheKey'>;
 
 export const routePermission = 'admin sms.provider.create';
 
-export function validateDataConfigField(data: output<ZodValidatorType<SmsProvider, 'configHash'>>) {
+export function validateDataConfigField(data: output<ZodValidatorType<SmsProvider, 'cacheKey'>>) {
     data.config = configValidators[data.code].parse(data.config);
 }
 
@@ -47,7 +47,7 @@ export default defineRouteHandlers(
         validateDataConfigField(data);
         await SmsProviderModel.create({
             ...data,
-            configHash: Bun.MD5.hash(JSON.stringify(data.config), 'hex'),
+            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
             createdByAdmin: ctx.adminId,
         });
 
