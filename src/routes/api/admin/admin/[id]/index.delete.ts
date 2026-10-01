@@ -28,6 +28,6 @@ export default defineRouteHandlers(async (ctx) => {
     });
 
     adminAuthenticationSessionStore.revokeAll(adminId!).catch(logger.error);
-    redisStore.adminPermission.removeItem(adminId!).catch(logger.error);
+    redisStore.admin.permission.removeItem(adminId!).catch(logger.error);
     return ctx.createApiSuccessResponse();
 });

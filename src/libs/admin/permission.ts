@@ -9,7 +9,7 @@ export async function clearAllAdminPermissionCache() {
 }
 
 export async function getAdminPermission(adminId: Types.ObjectId) {
-    let adminPermission = await redisStore.adminPermission.getItem(toObjectIdHexString(adminId));
+    let adminPermission = await redisStore.admin.permission.getItem(toObjectIdHexString(adminId));
     if (!adminPermission) {
         const admin = await AdminModel
             .findById(adminId)
@@ -40,7 +40,7 @@ export async function getAdminPermission(adminId: Types.ObjectId) {
             };
         }
 
-        await redisStore.adminPermission.setItem(adminPermission, toObjectIdHexString(adminId));
+        await redisStore.admin.permission.setItem(adminPermission, toObjectIdHexString(adminId));
     }
 
     return adminPermission;
