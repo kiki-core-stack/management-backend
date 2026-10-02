@@ -5,7 +5,8 @@ import { toObjectIdHexString } from '@kikiutils/mongoose/helpers';
 import type { Types } from 'mongoose';
 
 export async function clearAllAdminPermissionCache() {
-    await redisClient.del(...await redisClient.keys('adminPermission:*'));
+    const keys = await redisClient.keys(redisStore.admin.permission.resolveKey('*'));
+    if (keys.length) await redisClient.del(...keys);
 }
 
 export async function getAdminPermission(adminId: Types.ObjectId) {
