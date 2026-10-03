@@ -3,7 +3,7 @@ import * as z from '@kcs-project/pack/libs/zod';
 import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
 import type { SmsProvider } from '@kcs-project/pack/models/sms/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
-import type { SmsProviderConfigs } from '@kcs-project/pack/types/sms';
+import type { SmsProviderConfig } from '@kcs-project/pack/types/sms';
 import type {
     AnyRecord,
     ReadonlyRecord,
@@ -13,17 +13,17 @@ import type { SetFieldType } from 'type-fest';
 type SmsProviderZodSchemaType = ZodValidatorType<SetFieldType<SmsProvider, 'config', AnyRecord>, 'cacheKey'>;
 
 // Constants/Variables
-const configValidators: ReadonlyRecord<SmsProviderCode, z.ZodType<AnyRecord>> = {
+const configValidators: ReadonlyRecord<SmsProviderCode, z.ZodType<SmsProviderConfig>> = {
     [SmsProviderCode.Mitake]: z.object({
         apiUrl: z.url().trim(),
         password: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
         username: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
-    }) satisfies ZodValidatorType<SmsProviderConfigs.Mitake>,
+    }),
     [SmsProviderCode.TwSms]: z.object({
         apiUrl: z.url().trim(),
         password: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
         username: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
-    }) satisfies ZodValidatorType<SmsProviderConfigs.TwSms>,
+    }),
 };
 
 export const jsonSchema = z.object({

@@ -3,7 +3,7 @@ import * as z from '@kcs-project/pack/libs/zod';
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
-import type { EmailProviderConfigs } from '@kcs-project/pack/types/email';
+import type { EmailProviderConfig } from '@kcs-project/pack/types/email';
 import type {
     AnyRecord,
     ReadonlyRecord,
@@ -13,7 +13,7 @@ import type { SetFieldType } from 'type-fest';
 type EmailProviderZodSchemaType = ZodValidatorType<SetFieldType<EmailProvider, 'config', AnyRecord>, 'cacheKey'>;
 
 // Constants/Variables
-const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<AnyRecord>> = {
+const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<EmailProviderConfig>> = {
     [EmailProviderCode.Smtp]: z.object({
         host: z.hostname().trim(),
         password: z.string().min(1).optional(),
@@ -24,7 +24,7 @@ const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<AnyRecord>> 
             required: z.boolean(),
         }),
         username: z.string().min(1).optional(),
-    }) satisfies ZodValidatorType<EmailProviderConfigs.Smtp>,
+    }),
 };
 
 export const jsonSchema = z.object({
