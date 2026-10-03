@@ -7,12 +7,9 @@ import type {
     AnyRecord,
     ReadonlyRecord,
 } from '@kikiutils/shared/types';
-import type {
-    output,
-    ZodType,
-} from 'zod';
+import * as z from 'zod';
 
-const configValidators: ReadonlyRecord<SmsProviderCode, ZodType<AnyRecord>> = {
+const configValidators: ReadonlyRecord<SmsProviderCode, z.ZodType<AnyRecord>> = {
     [SmsProviderCode.Mitake]: z.object({
         apiUrl: z.url().trim(),
         password: z.string().trim().min(1).regex(/^[a-z0-9]+$/i),
@@ -36,7 +33,7 @@ export const jsonSchema = z.object({
 
 export const routePermission = 'admin sms.provider.create';
 
-export function validateDataConfigField(data: output<ZodValidatorType<SmsProvider, 'cacheKey'>>) {
+export function validateDataConfigField(data: z.infer<ZodValidatorType<SmsProvider, 'cacheKey'>>) {
     data.config = configValidators[data.code].parse(data.config);
 }
 
