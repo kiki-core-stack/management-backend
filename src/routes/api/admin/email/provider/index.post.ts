@@ -1,4 +1,5 @@
 import { EmailProviderCode } from '@kcs-project/pack/constants/email';
+import * as z from '@kcs-project/pack/libs/zod';
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
@@ -7,7 +8,6 @@ import type {
     AnyRecord,
     ReadonlyRecord,
 } from '@kikiutils/shared/types';
-import * as z from 'zod';
 
 const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<AnyRecord>> = {
     [EmailProviderCode.Smtp]: z.object({

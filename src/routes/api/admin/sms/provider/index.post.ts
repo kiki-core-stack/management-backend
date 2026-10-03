@@ -1,4 +1,5 @@
 import { SmsProviderCode } from '@kcs-project/pack/constants/sms';
+import * as z from '@kcs-project/pack/libs/zod';
 import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
 import type { SmsProvider } from '@kcs-project/pack/models/sms/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
@@ -7,7 +8,6 @@ import type {
     AnyRecord,
     ReadonlyRecord,
 } from '@kikiutils/shared/types';
-import * as z from 'zod';
 
 const configValidators: ReadonlyRecord<SmsProviderCode, z.ZodType<AnyRecord>> = {
     [SmsProviderCode.Mitake]: z.object({
