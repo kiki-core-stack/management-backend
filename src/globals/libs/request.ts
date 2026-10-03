@@ -1,3 +1,4 @@
+import { EnhancedDate } from '@kikiutils/shared/classes/enhanced-date';
 import type { AnyRecord } from '@kikiutils/shared/types';
 import {
     escapeRegExp,
@@ -98,8 +99,8 @@ export function parseApiRequestQueryParams(ctx: Context): ParsedApiRequestQueryP
 function parseTypedValue(value: any, type?: 'date' | 'objectId') {
     switch (type) {
         case 'date': {
-            const date = new Date(value);
-            if (!Number.isNaN(date.getTime())) return date;
+            const date = new EnhancedDate(value);
+            if (date.isValid()) return date;
             break;
         }
 
