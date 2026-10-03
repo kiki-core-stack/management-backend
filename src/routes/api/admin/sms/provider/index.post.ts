@@ -8,7 +8,11 @@ import type {
     AnyRecord,
     ReadonlyRecord,
 } from '@kikiutils/shared/types';
+import type { SetFieldType } from 'type-fest';
 
+type SmsProviderZodSchemaType = ZodValidatorType<SetFieldType<SmsProvider, 'config', AnyRecord>, 'cacheKey'>;
+
+// Constants/Variables
 const configValidators: ReadonlyRecord<SmsProviderCode, z.ZodType<AnyRecord>> = {
     [SmsProviderCode.Mitake]: z.object({
         apiUrl: z.url().trim(),
@@ -29,11 +33,11 @@ export const jsonSchema = z.object({
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-}) satisfies ZodValidatorType<SmsProvider, 'cacheKey'>;
+}) satisfies SmsProviderZodSchemaType;
 
 export const routePermission = 'admin sms.provider.create';
 
-export function validateDataConfigField(data: z.infer<ZodValidatorType<SmsProvider, 'cacheKey'>>) {
+export function validateDataConfigField(data: z.infer<SmsProviderZodSchemaType>) {
     data.config = configValidators[data.code].parse(data.config);
 }
 

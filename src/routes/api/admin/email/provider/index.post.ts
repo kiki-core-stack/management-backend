@@ -8,7 +8,11 @@ import type {
     AnyRecord,
     ReadonlyRecord,
 } from '@kikiutils/shared/types';
+import type { SetFieldType } from 'type-fest';
 
+type EmailProviderZodSchemaType = ZodValidatorType<SetFieldType<EmailProvider, 'config', AnyRecord>, 'cacheKey'>;
+
+// Constants/Variables
 const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<AnyRecord>> = {
     [EmailProviderCode.Smtp]: z.object({
         host: z.hostname().trim(),
@@ -30,11 +34,11 @@ export const jsonSchema = z.object({
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
     priority: z.int(),
-}) satisfies ZodValidatorType<EmailProvider, 'cacheKey'>;
+}) satisfies EmailProviderZodSchemaType;
 
 export const routePermission = 'admin email.provider.create';
 
-export function validateDataConfigField(data: z.infer<ZodValidatorType<EmailProvider, 'cacheKey'>>) {
+export function validateDataConfigField(data: z.infer<EmailProviderZodSchemaType>) {
     data.config = configValidators[data.code].parse(data.config);
 }
 
