@@ -1,7 +1,6 @@
 import { redisClient } from '@kcs-project/pack/constants/redis';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type { AdminRoleDocument } from '@kcs-project/pack/models/admin/role';
-import { toObjectIdHexString } from '@kikiutils/mongoose/helpers';
 import type { Types } from 'mongoose';
 
 export async function clearAllAdminPermissionCache() {
@@ -10,7 +9,7 @@ export async function clearAllAdminPermissionCache() {
 }
 
 export async function getAdminPermission(adminId: Types.ObjectId) {
-    let adminPermission = await redisStore.admin.permission.getItem(toObjectIdHexString(adminId));
+    let adminPermission = await redisStore.admin.permission.getItem(adminId.toHexString());
     if (!adminPermission) {
         const admin = await AdminModel
             .findById(adminId)
@@ -41,7 +40,7 @@ export async function getAdminPermission(adminId: Types.ObjectId) {
             };
         }
 
-        await redisStore.admin.permission.setItem(adminPermission, toObjectIdHexString(adminId));
+        await redisStore.admin.permission.setItem(adminPermission, adminId.toHexString());
     }
 
     return adminPermission;

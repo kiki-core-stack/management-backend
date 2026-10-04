@@ -32,7 +32,7 @@ export const jsonSchema = z.object({
     config: z.object({}).catchall(z.any()),
     enabled: z.boolean(),
     name: z.string().trim().min(1).max(64),
-    priority: z.int(),
+    priority: z.int32(),
 }) satisfies SmsProviderZodSchemaType;
 
 export const routePermission = 'admin sms.provider.create';

@@ -13,7 +13,7 @@ export default defineRouteHandlers(async (ctx) => {
     const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
 
-    await mongooseConnections.default!.transaction(async (session) => {
+    await getDefaultMongooseConnection().transaction(async (session) => {
         await getModelDocumentByRouteIdAndDelete(
             ctx,
             AdminModel,
