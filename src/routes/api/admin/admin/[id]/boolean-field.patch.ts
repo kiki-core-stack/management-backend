@@ -7,6 +7,7 @@ import type {
     QueryFilter,
     UpdateQuery,
 } from 'mongoose';
+import type { SetRequired } from 'type-fest';
 
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
@@ -23,7 +24,7 @@ export default defineRouteHandlers(async (ctx) => {
         case 'enabled': {
             if (!value && admin._id.equals(ctx.adminId)) throwApiError(400);
 
-            const updateQuery: UpdateQuery<AdminDocument> = { enabled: value };
+            const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = { $set: { enabled: value } };
             if (!value) updateQuery.$inc = { authenticationRevision: 1 };
 
             await admin.assertUpdateSuccess(updateQuery);

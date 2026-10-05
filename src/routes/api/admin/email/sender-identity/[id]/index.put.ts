@@ -9,8 +9,10 @@ export default defineRouteHandlers(
     async (ctx) => {
         const emailSenderIdentity = await EmailSenderIdentityModel.findByRouteIdOrThrowNotFoundError(ctx);
         await emailSenderIdentity.assertUpdateSuccess({
-            ...assertNotModifiedAndStripData(ctx.req.valid('json'), emailSenderIdentity),
-            editedByAdmin: ctx.adminId,
+            $set: {
+                ...assertNotModifiedAndStripData(ctx.req.valid('json'), emailSenderIdentity),
+                editedByAdmin: ctx.adminId,
+            },
         });
 
         return ctx.createApiSuccessResponse();

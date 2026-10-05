@@ -1,6 +1,7 @@
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProviderDocument } from '@kcs-project/pack/models/email/provider';
 import type { UpdateQuery } from 'mongoose';
+import type { SetRequired } from 'type-fest';
 
 import {
     jsonSchema,
@@ -17,14 +18,20 @@ export default defineRouteHandlers(
         data.code = emailProvider.code;
         validateDataConfigField(data);
 
-        const updateQuery: UpdateQuery<EmailProviderDocument> = data;
-        if (!updateQuery.apiProxyUrl) updateQuery.$unset = { apiProxyUrl: true };
-        await emailProvider.assertUpdateSuccess({
-            ...updateQuery,
-            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
-            editedByAdmin: ctx.adminId,
-        });
+        const updateQuery: SetRequired<UpdateQuery<EmailProviderDocument>, '$set'> = {
+            $set: {
+                ...data,
+                cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
+                editedByAdmin: ctx.adminId,
+            },
+        };
 
+        if (!updateQuery.$set.apiProxyUrl) {
+            delete updateQuery.$set.apiProxyUrl;
+            updateQuery.$unset = { apiProxyUrl: true };
+        }
+
+        await emailProvider.assertUpdateSuccess(updateQuery);
         return ctx.createApiSuccessResponse();
     },
 );

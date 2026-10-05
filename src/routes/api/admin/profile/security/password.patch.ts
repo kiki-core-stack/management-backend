@@ -21,7 +21,7 @@ export default defineRouteHandlers(
         if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
         await admin.assertUpdateSuccess({
             $inc: { authenticationRevision: 1 },
-            password: data.newPassword,
+            $set: { password: data.newPassword },
         });
 
         await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);

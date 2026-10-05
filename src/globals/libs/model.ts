@@ -43,7 +43,7 @@ export async function getModelDocumentByRouteIdAndUpdateBooleanField<
     if (!allowedFields.includes(field)) throwApiError(400);
     // @ts-expect-error Ignore this error.
     await beforeUpdate?.(document, field, !!value);
-    await document.assertUpdateSuccess({ [`${field}`]: !!value });
+    await document.assertUpdateSuccess({ $set: { [`${field}`]: !!value } });
 }
 
 export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(

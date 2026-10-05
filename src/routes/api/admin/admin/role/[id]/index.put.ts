@@ -13,8 +13,10 @@ export default defineRouteHandlers(
         const adminRole = await AdminRoleModel.findByRouteIdOrThrowNotFoundError(ctx);
         const data = assertNotModifiedAndStripData(ctx.req.valid('json'), adminRole);
         await adminRole.assertUpdateSuccess({
-            ...data,
-            editedByAdmin: ctx.adminId,
+            $set: {
+                ...data,
+                editedByAdmin: ctx.adminId,
+            },
         });
 
         if (!isEqual(adminRole.permissions.toSorted(), data.permissions.toSorted())) {

@@ -1,6 +1,7 @@
 import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
 import type { SmsProviderDocument } from '@kcs-project/pack/models/sms/provider';
 import type { UpdateQuery } from 'mongoose';
+import type { SetRequired } from 'type-fest';
 
 import {
     jsonSchema,
@@ -17,14 +18,20 @@ export default defineRouteHandlers(
         data.code = smsProvider.code;
         validateDataConfigField(data);
 
-        const updateQuery: UpdateQuery<SmsProviderDocument> = data;
-        if (!updateQuery.apiProxyUrl) updateQuery.$unset = { apiProxyUrl: true };
-        await smsProvider.assertUpdateSuccess({
-            ...updateQuery,
-            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
-            editedByAdmin: ctx.adminId,
-        });
+        const updateQuery: SetRequired<UpdateQuery<SmsProviderDocument>, '$set'> = {
+            $set: {
+                ...data,
+                cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
+                editedByAdmin: ctx.adminId,
+            },
+        };
 
+        if (!updateQuery.$set.apiProxyUrl) {
+            delete updateQuery.$set.apiProxyUrl;
+            updateQuery.$unset = { apiProxyUrl: true };
+        }
+
+        await smsProvider.assertUpdateSuccess(updateQuery);
         return ctx.createApiSuccessResponse();
     },
 );
