@@ -19,12 +19,10 @@ export const routePermission = 'admin admin.role.create';
 
 export default defineRouteHandlers(
     apiZValidator('json', jsonSchema),
-    async (ctx) => {
-        return ctx.createApiSuccessResponse(
-            await AdminRoleModel.create({
-                ...ctx.req.valid('json'),
-                createdByAdmin: ctx.adminId,
-            }),
-        );
-    },
+    async (ctx) => ctx.createApiSuccessResponse(
+        await AdminRoleModel.create({
+            ...ctx.req.valid('json'),
+            createdByAdmin: ctx.adminId,
+        }),
+    ),
 );

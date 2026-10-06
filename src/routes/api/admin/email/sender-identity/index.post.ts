@@ -10,16 +10,14 @@ export const jsonSchema = z.object({
         .string()
         .trim()
         .min(1)
-        .refine((value) => {
-            return isValid(
-                value,
-                {
-                    allowDisplayText: true,
-                    allowDomainLiteral: false,
-                    minimumSubDomains: 2,
-                },
-            );
-        }),
+        .refine((value) => isValid(
+            value,
+            {
+                allowDisplayText: true,
+                allowDomainLiteral: false,
+                minimumSubDomains: 2,
+            },
+        )),
     key: z.enum(EmailSenderIdentityKey),
 }) satisfies ZodValidatorType<EmailSenderIdentity>;
 

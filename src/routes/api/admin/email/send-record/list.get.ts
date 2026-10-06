@@ -2,19 +2,17 @@ import { EmailSendRecordModel } from '@kcs-project/pack/models/email/send-record
 
 export const routePermission = 'admin email.sendRecord.list';
 
-export default defineRouteHandlers((ctx) => {
-    return paginateModelDataWithApiResponse(
-        ctx,
-        EmailSendRecordModel,
-        undefined,
-        {
-            populate: {
-                path: 'provider',
-                select: [
-                    'code',
-                    'name',
-                ],
-            },
+export default defineRouteHandlers((ctx) => paginateModelDataWithApiResponse(
+    ctx,
+    EmailSendRecordModel,
+    undefined,
+    {
+        populate: {
+            path: 'provider',
+            select: [
+                'code',
+                'name',
+            ],
         },
-    );
-});
+    },
+));

@@ -12,11 +12,9 @@ export const adminAuthenticationSessionStore = createRedisAuthenticationSessionS
 export const adminAuthenticationSession = createHonoAuthenticationSession({
     cookieName: 'admin-token',
     store: adminAuthenticationSessionStore,
-    validatePrincipal: async (_ctx, data) => {
-        return !!await AdminModel.exists({
-            _id: data.principalId,
-            authenticationRevision: data.principalAuthenticationRevision,
-            enabled: true,
-        });
-    },
+    validatePrincipal: async (_ctx, data) => !!await AdminModel.exists({
+        _id: data.principalId,
+        authenticationRevision: data.principalAuthenticationRevision,
+        enabled: true,
+    }),
 });
