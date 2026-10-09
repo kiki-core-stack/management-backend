@@ -5,7 +5,7 @@
     "": {
       "dependencies": {
         "@hono/zod-validator": "^0.9.1",
-        "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#4f2e8d06c91768e64d5622505797b7a9c6b458cb",
+        "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#274243083b2fe42f949b695d382a4aebf1da32c0",
         "@kikiutils/micromatch": "^4.0.9",
         "@kikiutils/mongoose": "^9.0.1",
         "@kikiutils/shared": "^18.2.0",
@@ -39,6 +39,7 @@
         "mlly": "^1.8.2",
         "nodemon": "^3.1.14",
         "openapi3-ts": "^4.6.1",
+        "pretty-bytes": "^7.2.0",
         "type-fest": "^5.10.0",
         "typescript": "^6.0.3",
         "unimport": "^7.0.2",
@@ -186,7 +187,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@kcs-project/pack": ["@kiki-core-stack/pack@github:kiki-core-stack/pack#4f2e8d0", { "peerDependencies": { "@hono/zod-validator": "^0.9.1", "@kikiutils/mongoose": "^8.0.0", "@kikiutils/shared": "^18.2.0", "axios": "^1.20.0", "consola": "^3.4.2", "date-fns": "^4.4.0", "es-toolkit": "^1.52.0", "file-type": "^22.0.2", "hono": "^4.13.5", "http-proxy-agent": "^9.1.0", "https-proxy-agent": "^9.1.0", "lru-cache": "^11.5.2", "mongoose": "^9.9.4", "nanoid": "^6.0.1", "nodemailer": "^10.0.10", "sharp": "^0.35.4", "type-fest": "^5.9.0", "ws.io-client": "^0.4.0", "zod": "^4.5.4" }, "optionalPeers": ["@hono/zod-validator", "@kikiutils/mongoose", "@kikiutils/shared", "axios", "consola", "date-fns", "es-toolkit", "file-type", "hono", "http-proxy-agent", "https-proxy-agent", "lru-cache", "mongoose", "nanoid", "nodemailer", "sharp", "type-fest", "ws.io-client", "zod"] }, "kiki-core-stack-pack-4f2e8d0", "sha512-6Hcp+aq+0P0OMaNiTMnfUdCltToF7dkfaMFxJsMZdO5Ujh6g1J20Lzr/mdwDYqLWhlVpAyIt/M6QRO84xiWyHQ=="],
+    "@kcs-project/pack": ["@kiki-core-stack/pack@github:kiki-core-stack/pack#2742430", { "peerDependencies": { "@hono/zod-validator": "^0.9.1", "@kikiutils/mongoose": "^8.0.0", "@kikiutils/shared": "^18.2.0", "axios": "^1.20.0", "consola": "^3.4.2", "date-fns": "^4.4.0", "es-toolkit": "^1.52.0", "file-type": "^22.0.2", "hono": "^4.13.5", "http-proxy-agent": "^9.1.0", "https-proxy-agent": "^9.1.0", "lru-cache": "^11.5.2", "mongoose": "^9.9.4", "nanoid": "^6.0.1", "nodemailer": "^10.0.10", "sharp": "^0.35.4", "type-fest": "^5.9.0", "ws.io-client": "^0.4.0", "zod": "^4.5.4" }, "optionalPeers": ["@hono/zod-validator", "@kikiutils/mongoose", "@kikiutils/shared", "axios", "consola", "date-fns", "es-toolkit", "file-type", "hono", "http-proxy-agent", "https-proxy-agent", "lru-cache", "mongoose", "nanoid", "nodemailer", "sharp", "type-fest", "ws.io-client", "zod"] }, "kiki-core-stack-pack-2742430", "sha512-MgPS1EhgLiGNRDLKw6pR1fmp39roZeVEdwvgYZhHYhvMCbK7FCMAxorZRufIZGVZ/5xcLS/9X9cPVIxx7HuDrg=="],
 
     "@keyv/bigmap": ["@keyv/bigmap@1.3.1", "", { "dependencies": { "hashery": "^1.4.0", "hookified": "^1.15.0" }, "peerDependencies": { "keyv": "^5.6.0" } }, "sha512-WbzE9sdmQtKy8vrNPa9BRnwZh5UF4s1KTmSK0KUVLo3eff5BlQNNWDnFOouNpKfPKDnms9xynJjsMYjMaT/aFQ=="],
 
@@ -873,6 +874,8 @@
     "postcss-selector-parser": ["postcss-selector-parser@7.1.6", "", { "dependencies": { "cssesc": "^3.0.0", "util-deprecate": "^1.0.2" } }, "sha512-7qASPzhKF2l2KLboRZux8CCTRMdGiV08vWmyKzPz22qZ7ZjQBOeY7rNzNoCLSUiftJ7HUq0GERHmxw/t0dCdMw=="],
 
     "prelude-ls": ["prelude-ls@1.2.1", "", {}, "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="],
+
+    "pretty-bytes": ["pretty-bytes@7.2.0", "", {}, "sha512-T2kroepGB5DRVbkN/nOpW03+VRWqdtJhZNuCW3wYk3chdPjgi4GcTBOaxWfHq1MIM0ypidxsSWbQaAiRpxnXmg=="],
 
     "pstree.remy": ["pstree.remy@1.1.8", "", {}, "sha512-77DZwxQmxKnu3aR542U+X8FypNzbfJ+C5XQDk3uWjWxn6151aIMGthWYRXTqT1E5oJvg+ljaa2OJi+VfvCOQ8w=="],
 

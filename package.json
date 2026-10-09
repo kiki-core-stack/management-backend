@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.1",
-    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#4f2e8d06c91768e64d5622505797b7a9c6b458cb",
+    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#274243083b2fe42f949b695d382a4aebf1da32c0",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^9.0.1",
     "@kikiutils/shared": "^18.2.0",
@@ -50,6 +50,7 @@
     "mlly": "^1.8.2",
     "nodemon": "^3.1.14",
     "openapi3-ts": "^4.6.1",
+    "pretty-bytes": "^7.2.0",
     "type-fest": "^5.10.0",
     "typescript": "^6.0.3",
     "unimport": "^7.0.2"
