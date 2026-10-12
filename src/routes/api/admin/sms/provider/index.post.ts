@@ -4,6 +4,7 @@ import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
 import type { SmsProvider } from '@kcs-project/pack/models/sms/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import type { SmsProviderConfig } from '@kcs-project/pack/types/sms';
+import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 import type {
     AnyRecord,
     ReadonlyRecord,
@@ -48,7 +49,7 @@ export default defineRouteHandlers(
         validateDataConfigField(data);
         await SmsProviderModel.create({
             ...data,
-            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
+            cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
             createdByAdmin: ctx.adminId,
         });
 

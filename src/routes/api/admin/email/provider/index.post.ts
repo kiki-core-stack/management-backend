@@ -4,6 +4,7 @@ import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import type { EmailProviderConfig } from '@kcs-project/pack/types/email';
+import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 import type {
     AnyRecord,
     ReadonlyRecord,
@@ -49,7 +50,7 @@ export default defineRouteHandlers(
         validateDataConfigField(data);
         await EmailProviderModel.create({
             ...data,
-            cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
+            cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
             createdByAdmin: ctx.adminId,
         });
 

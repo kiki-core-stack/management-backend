@@ -1,5 +1,6 @@
 import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
 import type { SmsProviderDocument } from '@kcs-project/pack/models/sms/provider';
+import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 import type { UpdateQuery } from 'mongoose';
 import type { SetRequired } from 'type-fest';
 
@@ -21,7 +22,7 @@ export default defineRouteHandlers(
         const updateQuery: SetRequired<UpdateQuery<SmsProviderDocument>, '$set'> = {
             $set: {
                 ...data,
-                cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
+                cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
                 editedByAdmin: ctx.adminId,
             },
         };

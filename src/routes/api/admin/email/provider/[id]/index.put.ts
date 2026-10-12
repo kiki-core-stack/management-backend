@@ -1,5 +1,6 @@
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProviderDocument } from '@kcs-project/pack/models/email/provider';
+import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 import type { UpdateQuery } from 'mongoose';
 import type { SetRequired } from 'type-fest';
 
@@ -21,7 +22,7 @@ export default defineRouteHandlers(
         const updateQuery: SetRequired<UpdateQuery<EmailProviderDocument>, '$set'> = {
             $set: {
                 ...data,
-                cacheKey: Bun.MD5.hash(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`, 'hex'),
+                cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
                 editedByAdmin: ctx.adminId,
             },
         };
