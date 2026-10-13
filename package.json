@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.1",
-    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#c09c68a1a3781b69dcf7a19fd472a210912e9fd0",
+    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#0d9d1e11fdbdca065cda24738b159525c49c96dd",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^9.0.1",
-    "@kikiutils/shared": "^18.2.0",
+    "@kikiutils/shared": "^18.3.0",
     "@sylke/email-validation": "^1.0.0",
     "consola": "^3.4.2",
     "date-fns": "^4.4.0",

@@ -5,10 +5,10 @@
     "": {
       "dependencies": {
         "@hono/zod-validator": "^0.9.1",
-        "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#c09c68a1a3781b69dcf7a19fd472a210912e9fd0",
+        "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#0d9d1e11fdbdca065cda24738b159525c49c96dd",
         "@kikiutils/micromatch": "^4.0.9",
         "@kikiutils/mongoose": "^9.0.1",
-        "@kikiutils/shared": "^18.2.0",
+        "@kikiutils/shared": "^18.3.0",
         "@sylke/email-validation": "^1.0.0",
         "consola": "^3.4.2",
         "date-fns": "^4.4.0",
@@ -187,7 +187,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@kcs-project/pack": ["@kiki-core-stack/pack@github:kiki-core-stack/pack#c09c68a", { "peerDependencies": { "@hono/zod-validator": "^0.9.1", "@kikiutils/mongoose": "^9.0.1", "@kikiutils/shared": "^18.2.0", "axios": "^1.20.0", "consola": "^3.4.2", "date-fns": "^4.4.0", "es-toolkit": "^1.52.0", "file-type": "^22.1.1", "hono": "^4.13.13", "http-proxy-agent": "^9.1.0", "https-proxy-agent": "^9.1.0", "lru-cache": "^11.5.3", "mongoose": "^9.11.2", "nanoid": "^6.0.2", "nodemailer": "^10.1.0", "sharp": "^0.35.5", "type-fest": "^5.10.0", "ws.io-client": "^0.4.1", "zod": "^4.6.7" }, "optionalPeers": ["@hono/zod-validator", "@kikiutils/mongoose", "@kikiutils/shared", "axios", "consola", "date-fns", "es-toolkit", "file-type", "hono", "http-proxy-agent", "https-proxy-agent", "lru-cache", "mongoose", "nanoid", "nodemailer", "sharp", "type-fest", "ws.io-client", "zod"] }, "kiki-core-stack-pack-c09c68a", "sha512-w/t87COvFULl8jvPCjVtORf99BwVdjUjO0bGCfefIFhKnRoOSRYUVa9IqSWOOretmtaNrkMnYmnynm/G08WK3w=="],
+    "@kcs-project/pack": ["@kiki-core-stack/pack@github:kiki-core-stack/pack#0d9d1e1", { "peerDependencies": { "@hono/zod-validator": "^0.9.1", "@kikiutils/mongoose": "^9.0.1", "@kikiutils/shared": "^18.2.0", "axios": "^1.20.0", "consola": "^3.4.2", "date-fns": "^4.4.0", "es-toolkit": "^1.52.0", "file-type": "^22.1.1", "hono": "^4.13.13", "http-proxy-agent": "^9.1.0", "https-proxy-agent": "^9.1.0", "ipaddr.js": "^2.5.0", "lru-cache": "^11.5.3", "mongoose": "^9.11.2", "nanoid": "^6.0.2", "nodemailer": "^10.1.0", "sharp": "^0.35.5", "type-fest": "^5.10.0", "ws.io-client": "^0.4.1", "zod": "^4.6.7" }, "optionalPeers": ["@hono/zod-validator", "@kikiutils/mongoose", "@kikiutils/shared", "axios", "consola", "date-fns", "es-toolkit", "file-type", "hono", "http-proxy-agent", "https-proxy-agent", "ipaddr.js", "lru-cache", "mongoose", "nanoid", "nodemailer", "sharp", "type-fest", "ws.io-client", "zod"] }, "kiki-core-stack-pack-0d9d1e1", "sha512-okmGG+MOp1fR+UCVRfZ88ittEmrR/ZbQLlQ6Mk1GPiTph/5Jo8Xi1Ksq5ZMs3fwwrXSxIv/Xwtu9GYZDbcjfYQ=="],
 
     "@keyv/bigmap": ["@keyv/bigmap@1.3.1", "", { "dependencies": { "hashery": "^1.4.0", "hookified": "^1.15.0" }, "peerDependencies": { "keyv": "^5.6.0" } }, "sha512-WbzE9sdmQtKy8vrNPa9BRnwZh5UF4s1KTmSK0KUVLo3eff5BlQNNWDnFOouNpKfPKDnms9xynJjsMYjMaT/aFQ=="],
 
@@ -199,7 +199,7 @@
 
     "@kikiutils/mongoose": ["@kikiutils/mongoose@9.0.1", "", { "dependencies": { "decimal.js": "^10.6.0", "es-toolkit": "^1.52.0", "mongoose": "^9.11.0", "mongoose-aggregate-paginate-v2": "^1.1.5", "mongoose-paginate-v2": "^1.9.5", "type-fest": "^5.10.0" } }, "sha512-URuOZ+8beKJxIYy0Q7oEOLNHkfIWFvTkKGuEYbqRE+gKULXn+dtupKa1o60y7Iam1R8lwtxRUCnkcnXLCObCaQ=="],
 
-    "@kikiutils/shared": ["@kikiutils/shared@18.2.0", "", { "peerDependencies": { "@noble/hashes": "^2.3.0", "@types/ssh2": "^1.15.5", "async-validator": "^4.2.5", "bson": "^7.3.2", "consola": "^3.4.2", "date-fns": "^4.4.0", "decimal.js": "^10.6.0", "element-plus": "^2.14.4", "lru-cache": "^11.5.2", "millify": "^6.1.0", "msgpackr": "^2.0.5", "node-ssh": "^13.2.1", "pino": "^10.3.1", "pino-pretty": "^13.1.3", "vue": "^3.5.41", "vue-router": ">= 4.6.4" }, "optionalPeers": ["@noble/hashes", "@types/ssh2", "async-validator", "bson", "consola", "date-fns", "decimal.js", "element-plus", "lru-cache", "millify", "msgpackr", "node-ssh", "pino", "pino-pretty", "vue", "vue-router"] }, "sha512-K+kgWXrSQ40KM/ludTTcUt3ZaAkX+ATevtYujfP7Wzb255DzX3HRDJMaggUJEY0SZtIr8TGpoIryfJb4VIG7uQ=="],
+    "@kikiutils/shared": ["@kikiutils/shared@18.3.0", "", { "peerDependencies": { "@noble/hashes": "^2.3.0", "@types/ssh2": "^1.15.5", "async-validator": "^4.2.5", "bson": "^7.3.2", "consola": "^3.4.2", "date-fns": "^4.4.0", "decimal.js": "^10.6.0", "element-plus": "^2.14.4", "file-type": "^22.1.1", "lru-cache": "^11.5.2", "millify": "^6.1.0", "msgpackr": "^2.0.5", "node-ssh": "^13.2.1", "pino": "^10.3.1", "pino-pretty": "^13.1.3", "vue": "^3.5.41", "vue-router": ">= 4.6.4" }, "optionalPeers": ["@noble/hashes", "@types/ssh2", "async-validator", "bson", "consola", "date-fns", "decimal.js", "element-plus", "file-type", "lru-cache", "millify", "msgpackr", "node-ssh", "pino", "pino-pretty", "vue", "vue-router"] }, "sha512-bLuQHgJSfMKEzCdNAZanYAulbJwlMuhrsujog3c4zcIA955ORcG6iqx40Hvt3UaYwJSzF6VbNnkNA/6wOFXASw=="],
 
     "@kikiutils/tsconfigs": ["@kikiutils/tsconfigs@7.0.0", "", {}, "sha512-9Q/6pX0zUHmqtT77fmgpbovhyJCAI+yx3merJz3oCBvy8xItYg/htrGwxCntaCiB469vJLw6XyJFftPVBEmeqQ=="],
 

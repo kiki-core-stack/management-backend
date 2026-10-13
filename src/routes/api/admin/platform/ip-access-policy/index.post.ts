@@ -6,6 +6,7 @@ import * as z from '@kcs-project/pack/libs/zod';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/ip-access-policy';
 import type { PlatformIpAccessPolicy } from '@kcs-project/pack/models/platform/ip-access-policy';
+import { ipAddressOrCidrSchema } from '@kcs-project/pack/schemas/ip';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 
 const targetSchema = z.union([
@@ -28,16 +29,7 @@ const targetSchema = z.union([
 
 export const jsonSchema = z.object({
     enabled: z.boolean(),
-    ipEntries: z.array(
-        z.string().trim().pipe(
-            z.union([
-                z.ipv4(),
-                z.ipv6(),
-                z.cidrv4(),
-                z.cidrv6(),
-            ]),
-        ),
-    ),
+    ipEntries: z.array(ipAddressOrCidrSchema).min(1),
     mode: z.enum(PlatformIpAccessPolicyMode),
     name: z.string().trim().min(1).max(64),
     note: z.string().trim().optional(),
