@@ -24,7 +24,7 @@ export const adminAuthenticationSessionStore = createRedisAuthenticationSessionS
 export const adminAuthenticationSession = createHonoAuthenticationSession({
     cookieName: 'admin-token',
     store: adminAuthenticationSessionStore,
-    async  validatePrincipal(ctx, data) {
+    async validatePrincipal(ctx, data) {
         if (!await validateAdminAuthenticationSessionPrincipal(data)) return false;
         await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, 'admin', data.principalId);
         return true;
