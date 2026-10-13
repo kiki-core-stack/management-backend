@@ -1,5 +1,5 @@
+import { redisClient } from '@kcs-project/pack/connections/redis';
 import { PlatformIpAccessPolicyScope } from '@kcs-project/pack/constants/platform';
-import { redisClient } from '@kcs-project/pack/constants/redis';
 import { createHonoAuthenticationSession } from '@kcs-project/pack/hono-backend/libs/authentication-session';
 import { createRedisAuthenticationSessionStore } from '@kcs-project/pack/libs/authentication-session/redis-store';
 import { AdminModel } from '@kcs-project/pack/models/admin';

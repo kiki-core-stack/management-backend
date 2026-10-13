@@ -5,7 +5,7 @@
     "": {
       "dependencies": {
         "@hono/zod-validator": "^0.9.1",
-        "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#0d9d1e11fdbdca065cda24738b159525c49c96dd",
+        "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#f3cecb5a3072a6f6604577355fb47a4d8ac1f98f",
         "@kikiutils/micromatch": "^4.0.9",
         "@kikiutils/mongoose": "^9.0.1",
         "@kikiutils/shared": "^18.3.0",
@@ -188,7 +188,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
-    "@kcs-project/pack": ["@kiki-core-stack/pack@github:kiki-core-stack/pack#0d9d1e1", { "peerDependencies": { "@hono/zod-validator": "^0.9.1", "@kikiutils/mongoose": "^9.0.1", "@kikiutils/shared": "^18.2.0", "axios": "^1.20.0", "consola": "^3.4.2", "date-fns": "^4.4.0", "es-toolkit": "^1.52.0", "file-type": "^22.1.1", "hono": "^4.13.13", "http-proxy-agent": "^9.1.0", "https-proxy-agent": "^9.1.0", "ipaddr.js": "^2.5.0", "lru-cache": "^11.5.3", "mongoose": "^9.11.2", "nanoid": "^6.0.2", "nodemailer": "^10.1.0", "sharp": "^0.35.5", "type-fest": "^5.10.0", "ws.io-client": "^0.4.1", "zod": "^4.6.7" }, "optionalPeers": ["@hono/zod-validator", "@kikiutils/mongoose", "@kikiutils/shared", "axios", "consola", "date-fns", "es-toolkit", "file-type", "hono", "http-proxy-agent", "https-proxy-agent", "ipaddr.js", "lru-cache", "mongoose", "nanoid", "nodemailer", "sharp", "type-fest", "ws.io-client", "zod"] }, "kiki-core-stack-pack-0d9d1e1", "sha512-okmGG+MOp1fR+UCVRfZ88ittEmrR/ZbQLlQ6Mk1GPiTph/5Jo8Xi1Ksq5ZMs3fwwrXSxIv/Xwtu9GYZDbcjfYQ=="],
+    "@kcs-project/pack": ["@kiki-core-stack/pack@github:kiki-core-stack/pack#f3cecb5", { "peerDependencies": { "@hono/zod-validator": "^0.9.1", "@kikiutils/mongoose": "^9.0.1", "@kikiutils/shared": "^18.2.0", "axios": "^1.20.0", "consola": "^3.4.2", "date-fns": "^4.4.0", "es-toolkit": "^1.52.0", "file-type": "^22.1.1", "hono": "^4.13.13", "http-proxy-agent": "^9.1.0", "https-proxy-agent": "^9.1.0", "ipaddr.js": "^2.5.0", "lru-cache": "^11.5.3", "mongoose": "^9.11.2", "nanoid": "^6.0.2", "nodemailer": "^10.1.0", "sharp": "^0.35.5", "type-fest": "^5.10.0", "ws.io-client": "^0.4.1", "zod": "^4.6.7" }, "optionalPeers": ["@hono/zod-validator", "@kikiutils/mongoose", "@kikiutils/shared", "axios", "consola", "date-fns", "es-toolkit", "file-type", "hono", "http-proxy-agent", "https-proxy-agent", "ipaddr.js", "lru-cache", "mongoose", "nanoid", "nodemailer", "sharp", "type-fest", "ws.io-client", "zod"] }, "kiki-core-stack-pack-f3cecb5", "sha512-VVinlmcPLxYSZLzSAR08fBnO66pYz/d8IfORvF5AMhg70diu75wqnSxdEGxBmbK8OI4lV8OajRpOqgQayl6Okg=="],
 
     "@keyv/bigmap": ["@keyv/bigmap@1.3.1", "", { "dependencies": { "hashery": "^1.4.0", "hookified": "^1.15.0" }, "peerDependencies": { "keyv": "^5.6.0" } }, "sha512-WbzE9sdmQtKy8vrNPa9BRnwZh5UF4s1KTmSK0KUVLo3eff5BlQNNWDnFOouNpKfPKDnms9xynJjsMYjMaT/aFQ=="],
 

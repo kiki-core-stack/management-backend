@@ -1,4 +1,4 @@
-import { redisClient } from '@kcs-project/pack/constants/redis';
+import { redisClient } from '@kcs-project/pack/connections/redis';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type { AdminRoleDocument } from '@kcs-project/pack/models/admin/role';
 import type { Types } from 'mongoose';
