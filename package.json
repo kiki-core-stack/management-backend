@@ -27,6 +27,7 @@
     "file-type": "^22.1.1",
     "flat": "^6.0.1",
     "hono": "^4.13.13",
+    "ipaddr.js": "^2.5.0",
     "lru-cache": "^11.5.3",
     "mongoose": "^9.11.1",
     "msgpackr": "^2.1.0",

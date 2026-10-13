@@ -2,6 +2,7 @@
 
 if (process.env.NODE_ENV === 'development') await import('./core/logger');
 await import('./core/route');
+await import('./security/ip-access-policy');
 await import('./security/replay-protection');
 
 await import('./context/session');

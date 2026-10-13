@@ -1,11 +1,14 @@
 import { AdminLogType } from '@kcs-project/pack/constants/admin';
+import { PlatformIpAccessPolicyScope } from '@kcs-project/pack/constants/platform';
 import type { AdminDocument } from '@kcs-project/pack/models/admin';
 import { AdminLogModel } from '@kcs-project/pack/models/admin/log';
 import type { Context } from 'hono';
 
 import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
+import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
 
 export async function handleAdminLogin(ctx: Context, admin: AdminDocument, logNote?: string) {
+    await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, 'admin', admin._id);
     const ip = getClientIpFromXForwardedFor(ctx)!;
     await adminAuthenticationSession.create(
         ctx,
