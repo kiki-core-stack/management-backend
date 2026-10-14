@@ -1,3 +1,4 @@
+import { clearPlatformIpAccessPolicyCache } from '@kcs-project/pack/libs/platform/ip-access-policy';
 import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/ip-access-policy';
 import type { PlatformIpAccessPolicy } from '@kcs-project/pack/models/platform/ip-access-policy';
 import type { UpdateQuery } from 'mongoose';
@@ -24,6 +25,7 @@ export default defineRouteHandlers(
         }
 
         await platformIpAccessPolicy.assertUpdateSuccess(updateQuery);
+        await clearPlatformIpAccessPolicyCache().catch(logger.error);
         return ctx.createApiSuccessResponse();
     },
 );

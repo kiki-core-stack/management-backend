@@ -43,7 +43,7 @@ export default defineRouteHandlers(
         }
 
         if (!isEqual(admin!.roles.toSorted(), updateQuery.$set.roles?.toSorted())) {
-            await redisStore.admin.permission.removeItem(adminId);
+            await redisStore.admin.permission.removeItem(adminId).catch(logger.error);
         }
 
         return ctx.createApiSuccessResponse();

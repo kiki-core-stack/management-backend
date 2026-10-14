@@ -1,3 +1,4 @@
+import { clearPlatformConfigCache } from '@kcs-project/pack/libs/platform/config';
 import { PlatformConfigModel } from '@kcs-project/pack/models/platform/config';
 import { platformConfigValidators } from '@kcs-project/pack/schemas/platform/config';
 
@@ -17,6 +18,7 @@ export default defineRouteHandlers(
             },
         });
 
+        await clearPlatformConfigCache(platformConfig.scope).catch(logger.error);
         return ctx.createApiSuccessResponse();
     },
 );

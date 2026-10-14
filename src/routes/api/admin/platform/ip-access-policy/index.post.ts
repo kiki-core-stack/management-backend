@@ -2,6 +2,7 @@ import {
     PlatformIpAccessPolicyMode,
     PlatformIpAccessPolicyScope,
 } from '@kcs-project/pack/constants/platform';
+import { clearPlatformIpAccessPolicyCache } from '@kcs-project/pack/libs/platform/ip-access-policy';
 import * as z from '@kcs-project/pack/libs/zod';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/ip-access-policy';
@@ -49,6 +50,7 @@ export default defineRouteHandlers(
             createdByAdmin: ctx.adminId,
         });
 
+        await clearPlatformIpAccessPolicyCache().catch(logger.error);
         return ctx.createApiSuccessResponse();
     },
 );
