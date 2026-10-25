@@ -1,5 +1,4 @@
 import { EnhancedDate } from '@kikiutils/shared/classes/enhanced-date';
-import type { AnyRecord } from '@kikiutils/shared/types';
 import {
     escapeRegExp,
     isPlainObject,
@@ -19,8 +18,8 @@ function isValidRegexPattern(pattern: string) {
     }
 }
 
-function normalizeApiRequestQueryFilter(filter: AnyRecord) {
-    const normalizedFilter: AnyRecord = {};
+function normalizeApiRequestQueryFilter(filter: Record<string, any>) {
+    const normalizedFilter: Record<string, any> = {};
     Object.entries(filter).forEach(([field, condition]) => {
         if (field.endsWith('At')) {
             normalizedFilter[field] = normalizeApiRequestQueryTypedCondition(condition, 'date');
@@ -34,7 +33,7 @@ function normalizeApiRequestQueryFilter(filter: AnyRecord) {
 
 function normalizeApiRequestQueryTypedCondition(condition: any, type?: 'date' | 'objectId') {
     if (!isPlainObject(condition)) return parseTypedValue(condition, type);
-    const normalizedCondition: AnyRecord = {};
+    const normalizedCondition: Record<string, any> = {};
     if (condition.$eq !== undefined) normalizedCondition.$eq = parseTypedValue(condition.$eq, type);
     if (condition.$gte !== undefined) normalizedCondition.$gte = parseTypedValue(condition.$gte, type);
     if (condition.$gt !== undefined) normalizedCondition.$gt = parseTypedValue(condition.$gt, type);

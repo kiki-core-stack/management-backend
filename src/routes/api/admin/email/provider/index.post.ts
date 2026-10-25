@@ -5,13 +5,13 @@ import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import type { EmailProviderConfig } from '@kcs-project/pack/types/email';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
-import type {
-    AnyRecord,
-    ReadonlyRecord,
-} from '@kikiutils/shared/types';
+import type { ReadonlyRecord } from '@kikiutils/shared/types';
 import type { SetFieldType } from 'type-fest';
 
-type EmailProviderZodSchemaType = ZodValidatorType<SetFieldType<EmailProvider, 'config', AnyRecord>, 'cacheKey'>;
+type EmailProviderZodSchemaType = ZodValidatorType<
+    SetFieldType<EmailProvider, 'config', Record<string, any>>,
+    'cacheKey'
+>;
 
 // Constants/Variables
 const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<EmailProviderConfig>> = {

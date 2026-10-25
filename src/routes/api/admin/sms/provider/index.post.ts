@@ -5,13 +5,10 @@ import type { SmsProvider } from '@kcs-project/pack/models/sms/provider';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import type { SmsProviderConfig } from '@kcs-project/pack/types/sms';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
-import type {
-    AnyRecord,
-    ReadonlyRecord,
-} from '@kikiutils/shared/types';
+import type { ReadonlyRecord } from '@kikiutils/shared/types';
 import type { SetFieldType } from 'type-fest';
 
-type SmsProviderZodSchemaType = ZodValidatorType<SetFieldType<SmsProvider, 'config', AnyRecord>, 'cacheKey'>;
+type SmsProviderZodSchemaType = ZodValidatorType<SetFieldType<SmsProvider, 'config', Record<string, any>>, 'cacheKey'>;
 
 // Constants/Variables
 const configValidators: ReadonlyRecord<SmsProviderCode, z.ZodType<SmsProviderConfig>> = {

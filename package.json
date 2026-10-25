@@ -21,7 +21,6 @@
     "@kikiutils/mongoose": "^9.0.1",
     "@kikiutils/shared": "^19.0.0",
     "@sylke/email-validation": "^1.0.0",
-    "consola": "^3.4.2",
     "date-fns": "^4.4.0",
     "es-toolkit": "^1.53.0",
     "file-type": "^22.2.0",

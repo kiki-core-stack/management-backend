@@ -1,10 +1,8 @@
-import type { AnyRecord } from '@kikiutils/shared/types';
-
 declare global {
     interface ParsedApiRequestQueryParams {
         endIndex: number;
         fields: string[];
-        filter: AnyRecord;
+        filter: Record<string, any>;
         limit: number;
         page: number;
         projection: Record<string, boolean>;
