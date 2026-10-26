@@ -1,5 +1,4 @@
 import { AdminRoleModel } from '@kcs-project/pack/models/admin/role';
-import { isEqual } from 'es-toolkit';
 
 import { clearAllAdminPermissionCache } from '@/libs/admin/permission';
 

@@ -3,7 +3,6 @@ import type {
     Admin,
     AdminDocument,
 } from '@kcs-project/pack/models/admin';
-import { isEqual } from 'es-toolkit';
 import type {
     QueryFilter,
     UpdateQuery,
