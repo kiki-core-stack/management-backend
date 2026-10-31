@@ -35,7 +35,9 @@ export const jsonSchema = z.object({
 
 export const routePermission = 'admin sms.provider.create';
 
-export function validateDataConfigField(data: z.infer<SmsProviderZodSchemaType>) {
+export function validateDataConfigField<T extends z.infer<SmsProviderZodSchemaType>>(
+    data: T,
+): asserts data is T & { config: SmsProviderConfig } {
     data.config = configValidators[data.code].parse(data.config);
 }
 

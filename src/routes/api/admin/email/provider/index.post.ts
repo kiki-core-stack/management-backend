@@ -39,7 +39,9 @@ export const jsonSchema = z.object({
 
 export const routePermission = 'admin email.provider.create';
 
-export function validateDataConfigField(data: z.infer<EmailProviderZodSchemaType>) {
+export function validateDataConfigField<T extends z.infer<EmailProviderZodSchemaType>>(
+    data: T,
+): asserts data is T & { config: EmailProviderConfig } {
     data.config = configValidators[data.code].parse(data.config);
 }
 
