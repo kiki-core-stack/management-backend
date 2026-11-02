@@ -102,6 +102,9 @@ function parseTypedValue(value: any, type?: 'date' | 'objectId') {
             if (Types.ObjectId.isValid(value)) return new Types.ObjectId(value);
             break;
         }
+
+        case undefined:
+            return value;
     }
 
     return value;

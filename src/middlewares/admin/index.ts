@@ -23,7 +23,7 @@ async function getAdmin(this: Context) {
 honoApp.use(
     '/api/admin/*',
     async (ctx, next) => {
-        if (!ctx.routeHandler?.isHandler) return await next();
+        if (!ctx.routeHandler?.isHandler) return next();
 
         const session = await adminAuthenticationSession.authenticate(ctx, { ip: getClientIpFromXForwardedFor(ctx)! });
         if (session) {

@@ -105,6 +105,8 @@ export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethod
 
     return {
         count: paginatedResult.totalDocs,
-        list: paginatedResult.docs as MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>[],
+        list: paginatedResult.docs as Array<
+            MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>
+        >,
     };
 }

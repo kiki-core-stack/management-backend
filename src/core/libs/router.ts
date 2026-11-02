@@ -72,6 +72,7 @@ export async function registerRoute(
             case 'admin':
                 if (!allAdminPermissions.has(permissionKey)) allAdminPermissions.add(permissionKey);
                 else logger.warn(`Duplicate admin permission ${permissionKey} at path ${path}`);
+
                 break;
             default: throw new Error(`Unsupported system type ${systemType} at path ${path}`);
         }
