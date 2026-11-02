@@ -2,7 +2,7 @@ import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 
 export const routePermission = 'admin email.provider.list';
 
-export default defineRouteHandlers((ctx) => paginateModelDataWithApiResponse(
+export default defineRouteHandlers(async (ctx) => await paginateModelDataWithApiResponse(
     ctx,
     EmailProviderModel,
     undefined,

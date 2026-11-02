@@ -2,7 +2,7 @@ import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/i
 
 export const routePermission = 'admin platform.ipAccessPolicy.list';
 
-export default defineRouteHandlers((ctx) => paginateModelDataWithApiResponse(
+export default defineRouteHandlers(async (ctx) => await paginateModelDataWithApiResponse(
     ctx,
     PlatformIpAccessPolicyModel,
     undefined,

@@ -2,7 +2,7 @@ import { AdminLogModel } from '@kcs-project/pack/models/admin/log';
 
 export const routePermission = 'admin admin.log.list';
 
-export default defineRouteHandlers((ctx) => paginateModelDataWithApiResponse(
+export default defineRouteHandlers(async (ctx) => await paginateModelDataWithApiResponse(
     ctx,
     AdminLogModel,
     undefined,

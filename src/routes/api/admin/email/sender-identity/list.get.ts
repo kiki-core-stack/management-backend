@@ -2,7 +2,7 @@ import { EmailSenderIdentityModel } from '@kcs-project/pack/models/email/sender-
 
 export const routePermission = 'admin email.senderIdentity.list';
 
-export default defineRouteHandlers((ctx) => paginateModelDataWithApiResponse(
+export default defineRouteHandlers(async (ctx) => await paginateModelDataWithApiResponse(
     ctx,
     EmailSenderIdentityModel,
     undefined,

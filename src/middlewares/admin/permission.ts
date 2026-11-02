@@ -9,10 +9,10 @@ honoApp.use(
             !ctx.routeHandler?.isHandler
             || ctx.routeHandler.noLoginRequired
             || ctx.routeHandler.permission === 'ignore'
-        ) return next();
+        ) return await next();
 
         const { isSuperAdmin, permissions } = await getAdminPermission(ctx.adminId!);
-        if (isSuperAdmin || micromatch(permissions, ctx.routeHandler.permission).length) return next();
+        if (isSuperAdmin || micromatch(permissions, ctx.routeHandler.permission).length) return await next();
         throwApiError(403);
     },
 );

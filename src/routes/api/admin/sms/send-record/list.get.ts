@@ -2,7 +2,7 @@ import { SmsSendRecordModel } from '@kcs-project/pack/models/sms/send-record';
 
 export const routePermission = 'admin sms.sendRecord.list';
 
-export default defineRouteHandlers((ctx) => paginateModelDataWithApiResponse(
+export default defineRouteHandlers(async (ctx) => await paginateModelDataWithApiResponse(
     ctx,
     SmsSendRecordModel,
     undefined,

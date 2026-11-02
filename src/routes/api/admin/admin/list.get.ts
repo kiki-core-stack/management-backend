@@ -7,7 +7,7 @@ export const routePermission = 'admin admin.list';
 export default defineRouteHandlers(async (ctx) => {
     const parsedApiRequestQueryParams = parseApiRequestQueryParams(ctx);
     if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) parsedApiRequestQueryParams.filter.isSuperAdmin = false;
-    return paginateModelDataWithApiResponse(
+    return await paginateModelDataWithApiResponse(
         ctx,
         AdminModel,
         parsedApiRequestQueryParams,
