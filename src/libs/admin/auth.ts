@@ -1,7 +1,7 @@
 import { AdminLogType } from '@kcs-project/pack/constants/admin';
 import { PlatformIpAccessPolicyScope } from '@kcs-project/pack/constants/platform';
+import { createAdminLog } from '@kcs-project/pack/libs/admin';
 import type { AdminDocument } from '@kcs-project/pack/models/admin';
-import { AdminLogModel } from '@kcs-project/pack/models/admin/log';
 import type { Context } from 'hono';
 
 import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
@@ -25,12 +25,10 @@ export async function handleAdminLogin(ctx: Context, admin: AdminDocument, logNo
 
 export async function recordAdminLogin(ctx: Context, adminId: string, note?: string) {
     const ip = getClientIpFromXForwardedFor(ctx)!;
-    await AdminLogModel
-        .create({
-            admin: adminId,
-            ip,
-            note,
-            type: AdminLogType.LoginSuccess,
-        })
-        .catch(logger.error);
+    createAdminLog({
+        admin: adminId,
+        ip,
+        note,
+        type: AdminLogType.LoginSuccess,
+    }).catch(logger.error);
 }

@@ -2,31 +2,15 @@ import { EmailProviderCode } from '@kcs-project/pack/constants/email';
 import * as z from '@kcs-project/pack/libs/zod';
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
+import { parseEmailProviderConfig } from '@kcs-project/pack/schemas/email';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
-import type { EmailProviderConfig } from '@kcs-project/pack/types/email';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
-import type { ReadonlyRecord } from '@kikiutils/shared/types';
 import type { SetFieldType } from 'type-fest';
 
 type EmailProviderZodSchemaType = ZodValidatorType<
     SetFieldType<EmailProvider, 'config', Record<string, any>>,
     'cacheKey'
 >;
-
-// Constants/Variables
-const configValidators: ReadonlyRecord<EmailProviderCode, z.ZodType<EmailProviderConfig>> = {
-    [EmailProviderCode.Smtp]: z.object({
-        host: z.hostname().trim(),
-        password: z.string().min(1).optional(),
-        port: z.int().min(1).max(65535),
-        secure: z.boolean(),
-        tls: z.object({
-            rejectUnauthorized: z.boolean(),
-            required: z.boolean(),
-        }),
-        username: z.string().min(1).optional(),
-    }),
-};
 
 export const jsonSchema = z.object({
     apiProxyUrl: z.url().trim().optional(),
@@ -39,20 +23,15 @@ export const jsonSchema = z.object({
 
 export const routePermission = 'admin email.provider.create';
 
-export function validateDataConfigField<T extends z.infer<EmailProviderZodSchemaType>>(
-    data: T,
-): asserts data is T & { config: EmailProviderConfig } {
-    data.config = configValidators[data.code].parse(data.config);
-}
-
 export default defineRouteHandlers(
     apiZValidator('json', jsonSchema),
     async (ctx) => {
         const data = ctx.req.valid('json');
-        validateDataConfigField(data);
+        const config = await parseEmailProviderConfig(data.code, data.config);
         await EmailProviderModel.create({
             ...data,
-            cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
+            cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(config)}`),
+            config,
             createdByAdmin: ctx.adminId,
         });
 
