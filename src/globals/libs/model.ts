@@ -8,6 +8,10 @@ import type {
     QueryFilter,
     QueryOptions,
 } from 'mongoose';
+import {
+    objectEntries,
+    objectKeys,
+} from 'ts-extras';
 
 export async function getModelDocumentByRouteIdAndDelete<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
     ctx: Context,
@@ -65,10 +69,12 @@ export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethod
 
     if (paginateOptions?.select) {
         if (Array.isArray(paginateOptions.select)) queryParams.fields.push(...paginateOptions.select);
-        else {
-            Object
-                .entries(paginateOptions.select)
-                .forEach(([key, value]) => queryParams.fields.push(value ? key : `-${key}`));
+        else if (typeof paginateOptions.select === 'string') {
+            queryParams.fields.push(...paginateOptions.select.split(/\s+/).filter(Boolean));
+        } else {
+            objectEntries(paginateOptions.select).forEach(
+                ([key, value]) => queryParams.fields.push(value ? key : `-${key}`),
+            );
         }
     }
 
@@ -81,7 +87,7 @@ export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethod
     }
 
     let finalSort;
-    const rawSort = Object.keys(queryParams.sort).length ? queryParams.sort : paginateOptions?.sort;
+    const rawSort = objectKeys(queryParams.sort).length ? queryParams.sort : paginateOptions?.sort;
     if (rawSort === undefined) finalSort = { _id: -1 };
     else {
         if (typeof rawSort === 'object') {

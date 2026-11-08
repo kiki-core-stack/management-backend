@@ -1,5 +1,6 @@
 import type { Context } from 'hono';
 import { Types } from 'mongoose';
+import { objectEntries } from 'ts-extras';
 
 const isValidRegexFlags = (flags: string) => /^[gimsuy]*$/.test(flags);
 
@@ -15,7 +16,7 @@ function isValidRegexPattern(pattern: string) {
 
 function normalizeApiRequestQueryFilter(filter: Record<string, any>) {
     const normalizedFilter: Record<string, any> = {};
-    Object.entries(filter).forEach(([field, condition]) => {
+    objectEntries(filter).forEach(([field, condition]) => {
         if (field.endsWith('At')) {
             normalizedFilter[field] = normalizeApiRequestQueryTypedCondition(condition, 'date');
         } else if (field.endsWith('ObjectId')) {

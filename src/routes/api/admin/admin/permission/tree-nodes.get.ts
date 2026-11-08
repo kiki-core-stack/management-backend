@@ -1,4 +1,5 @@
 import { unflatten } from 'flat';
+import { objectEntries } from 'ts-extras';
 
 import { allAdminPermissions } from '@/constants/admin';
 
@@ -12,7 +13,7 @@ export const routePermission = 'ignore';
 
 function convertToTreeNode(object: any, prefix: string): TreeNode {
     return {
-        children: Object.entries(object).map(([key, value]) => {
+        children: objectEntries(object).map(([key, value]) => {
             if (typeof value === 'object') return convertToTreeNode(value, `${prefix}.${key}`);
             return {
                 label: `${prefix}.${key}`,
@@ -50,6 +51,6 @@ export default defineRouteHandlers((ctx) => {
         { object: true },
     );
 
-    const treeNodes = Object.entries(nestedPermissions).map(([key, value]) => convertToTreeNode(value, key));
+    const treeNodes = objectEntries(nestedPermissions).map(([key, value]) => convertToTreeNode(value, key));
     return ctx.createApiSuccessResponse(sortTreeNodes(treeNodes));
 });
