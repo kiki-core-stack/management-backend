@@ -1,11 +1,14 @@
 import { glob } from 'node:fs/promises';
 
-import type { WritableDeep } from 'type-fest';
+import type {
+    ArrayValues,
+    WritableDeep,
+} from 'type-fest';
 
 import { allAdminPermissions } from '@/constants/admin';
 
 import { honoApp } from '../app';
-import { routesDirPath } from '../constants/paths';
+import * as corePaths from '../constants/paths';
 import {
     allowedRouteHttpMethods,
     allRoutes,
@@ -23,17 +26,17 @@ export const normalizeRouteHandlers = (handlers: any) => [handlers].flat().filte
 export async function discoverRouteDefinitions() {
     const envSuffix = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
     const filePattern = new RegExp(
-        `^${routesDirPath}(.*?)(/index)?\\.(${allowedRouteHttpMethods.join('|')})(\\.${envSuffix})?\\.(mj|t)s$`,
+        `^${corePaths.routesDir}(.*?)(/index)?\\.(${allowedRouteHttpMethods.join('|')})(\\.${envSuffix})?\\.(mj|t)s$`,
     );
 
     const routeDefinitions: RouteDefinition[] = [];
-    for await (const filePath of glob(`${routesDirPath}/**/*.{mj,t}s`, {})) {
+    for await (const filePath of glob(`${corePaths.routesDir}/**/*.{mj,t}s`, {})) {
         const matches = filePath.match(filePattern);
         if (!matches) continue;
         const normalizedRoutePath = matches[1]!.replaceAll(/\/+/g, '/') || '/';
         routeDefinitions.push({
             filePath,
-            method: matches[3] as typeof allowedRouteHttpMethods[number],
+            method: matches[3] as ArrayValues<typeof allowedRouteHttpMethods>,
             openApiPath: normalizedRoutePath.replaceAll(/\[([^/]+)\]/g, '{$1}'),
             path: normalizedRoutePath.replaceAll(/\[([^/]+)\]/g, ':$1'),
         });
