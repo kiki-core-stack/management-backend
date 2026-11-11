@@ -15,7 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.9.1",
+    "@hono/standard-validator": "^0.4.1",
     "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#f28a30b63a945da22173d2df5006ba1d220b2d84",
     "@kikiutils/micromatch": "^4.0.9",
     "@kikiutils/mongoose": "^9.0.3",
@@ -24,6 +24,7 @@
     "es-toolkit": "^1.53.2",
     "flat": "^6.0.1",
     "hono": "^4.13.17",
+    "hono-openapi": "^1.5.0",
     "mongoose": "^9.12.1",
     "nanoid": "^6.0.2",
     "node-ciphers": "^6.1.5",
@@ -34,7 +35,6 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^10.0.0",
-    "@asteasolutions/zod-to-openapi": "^9.1.0",
     "@hono/swagger-ui": "^0.6.2",
     "@kikiutils/eslint-config": "^11.0.1",
     "@kikiutils/tsconfigs": "^7.0.0",
@@ -45,7 +45,6 @@
     "knip": "^6.44.2",
     "mlly": "^1.8.2",
     "nodemon": "^3.1.14",
-    "openapi3-ts": "^4.6.2",
     "pretty-bytes": "^7.2.0",
     "type-fest": "^5.10.0",
     "typescript": "^6.0.3",

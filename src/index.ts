@@ -1,11 +1,8 @@
-import '@kcs-project/pack/hono-backend/setups/mongoose-model-statics/find-by-route-id-or-throw-not-found-error';
-import '@kcs-project/pack/hono-backend/setups/mongoose-model-statics';
+import '@/setups';
 
 import type { Server } from 'bun';
 import { writeSync } from 'node:fs';
 import { inspect } from 'node:util';
-
-import { setupHonoAppErrorHandling } from '@kcs-project/pack/hono-backend/setups/error-handling';
 
 import { honoApp } from '@/core/app';
 import {
@@ -38,9 +35,6 @@ process.once('unhandledRejection', handleFatalError);
 // Used for applying side effects like dev-only tooling, schema extensions, etc.
 await import(`@/runtime-inits/${process.env.NODE_ENV}`);
 
-// Setup error handling
-setupHonoAppErrorHandling(honoApp, logger);
-
 // Initialize system startup
 await (await import('@kcs-project/pack/init')).initializeSystemStartup();
 
@@ -57,6 +51,8 @@ if (!isShuttingDown()) {
     server = Bun.serve({
         fetch: honoApp.fetch,
         hostname: process.env.SERVER_HOST || '127.0.0.1',
+        idleTimeout: 10,
+        maxRequestBodySize: 128 * 1024 * 1024,
         port: Number(process.env.SERVER_PORT) || 8080,
         reusePort: true,
     });
