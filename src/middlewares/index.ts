@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'development') await import('./core/logger');
 
 await import('./security/ip-access-policy');
 
-await import('./context/session');
+await import('./context/cookie-session');
 
 await import('./admin');
 await import('./admin/permission');
