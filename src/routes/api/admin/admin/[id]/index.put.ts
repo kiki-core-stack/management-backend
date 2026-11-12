@@ -14,7 +14,7 @@ import { getAdminPermission } from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
 
-export default defineRoute({ permission: adminPermissions.admin.update })(
+export default defineRoute({ permission: adminPermissions.admin.account.update })(
     apiValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
         const filter: QueryFilter<Admin> = {};

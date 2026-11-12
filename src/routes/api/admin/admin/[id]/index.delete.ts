@@ -5,7 +5,7 @@ import type { QueryFilter } from 'mongoose';
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
-export default defineRoute({ permission: adminPermissions.admin.delete })(async (ctx) => {
+export default defineRoute({ permission: adminPermissions.admin.account.delete })(async (ctx) => {
     let adminId: string | undefined;
 
     const filter: QueryFilter<Admin> = {};

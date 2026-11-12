@@ -12,7 +12,7 @@ import type { SetRequired } from 'type-fest';
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
-export default defineRoute({ permission: adminPermissions.admin.toggle })(async (ctx) => {
+export default defineRoute({ permission: adminPermissions.admin.account.toggle })(async (ctx) => {
     const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 

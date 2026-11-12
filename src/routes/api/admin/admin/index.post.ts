@@ -11,7 +11,7 @@ export const jsonSchema = z.object({
     roles: z.array(z.objectId().refine((_id) => AdminRoleModel.exists({ _id }))),
 }) satisfies ZodValidatorType<Admin, 'isSuperAdmin'>;
 
-export default defineRoute({ permission: adminPermissions.admin.create })(
+export default defineRoute({ permission: adminPermissions.admin.account.create })(
     apiValidator('json', jsonSchema.extend({ password: z.string().trim().min(1) })),
     async (ctx) => ctx.createApiSuccessResponse(await AdminModel.create(ctx.req.valid('json'))),
 );

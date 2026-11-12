@@ -7,8 +7,8 @@ declare module '@/core/types/route' {
         noLoginRequired?: true;
 
         /**
-         * Permission required by the route (e.g. `adminPermissions.admin.create`), or `ignore` to skip the check.
-         * The key must belong to the catalog of the principal type in the route path (`/api/<principal>/*`).
+         * Permission required by the route (e.g. `adminPermissions.admin.account.create`), or `ignore` to skip the
+         * check. The key must belong to the catalog of the principal type in the route path (`/api/<principal>/*`).
          */
         permission: 'ignore' | PermissionKey;
     }
