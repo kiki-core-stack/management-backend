@@ -14,11 +14,11 @@ const jsonSchema = z.object({
 }) satisfies ZodValidatorType<AdminLoginFormData>;
 
 const missingAdminPasswordHash = await hashPasswordWithArgon2('missing-admin');
-export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
-export const routePermission = 'ignore';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({
+    noLoginRequired: true,
+    permission: 'ignore',
+})(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         const data = ctx.req.valid('json');
         const admin = await AdminModel.findOne({
@@ -30,7 +30,7 @@ export default defineRouteHandlers(
             ? await admin.verifyPassword(data.password)
             : await verifyPasswordWithArgon2(missingAdminPasswordHash, data.password);
 
-        if (!admin || !passwordVerified) throwApiError(404);
+        if (!admin || !passwordVerified) throwApiError(apiErrors.common.notFound);
         await handleAdminLogin(ctx, admin);
         return ctx.createApiSuccessResponse();
     },

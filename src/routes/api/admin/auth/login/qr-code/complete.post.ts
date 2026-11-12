@@ -2,22 +2,22 @@ import { adminAuthenticationSession } from '@/constants/admin/authentication-ses
 import { recordAdminLogin } from '@/libs/admin/auth';
 
 const jsonSchema = z.object({ completionToken: z.string().trim().min(1) });
-export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
-export const routePermission = 'ignore';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({
+    noLoginRequired: true,
+    permission: 'ignore',
+})(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         const completed = await adminAuthenticationSession.completeQrCodeLogin(
             ctx,
             {
                 completionToken: ctx.req.valid('json').completionToken,
-                ip: getClientIpFromXForwardedFor(ctx)!,
+                ip: getClientIp(ctx)!,
                 userAgent: ctx.req.header('user-agent'),
             },
         );
 
-        if (!completed) throwApiError(410);
+        if (!completed) throwApiError(apiErrors.common.gone);
         if (completed.state === 'completed') await recordAdminLogin(ctx, completed.session.principalId, 'QR Code 登入');
         return ctx.createApiSuccessResponse({ state: completed.state });
     },

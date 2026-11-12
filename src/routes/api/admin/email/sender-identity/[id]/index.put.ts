@@ -2,10 +2,8 @@ import { EmailSenderIdentityModel } from '@kcs-project/pack/models/email/sender-
 
 import { jsonSchema } from '../index.post';
 
-export const routePermission = 'admin email.senderIdentity.update';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
+export default defineRoute({ permission: adminPermissions.email.senderIdentity.update })(
+    apiValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
         const emailSenderIdentity = await EmailSenderIdentityModel.findByRouteIdOrThrowNotFoundError(ctx);
         await emailSenderIdentity.assertUpdateSuccess({

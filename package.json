@@ -15,7 +15,6 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@hono/standard-validator": "^0.4.1",
     "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#71f728e335479940ed377b92f951de3812671aeb",
     "@kikiutils/mongoose": "^9.0.3",
     "@kikiutils/shared": "^20.1.1",

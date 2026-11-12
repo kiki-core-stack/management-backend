@@ -14,13 +14,11 @@ import { getAdminPermission } from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
 
-export const routePermission = 'admin admin.update';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
+export default defineRoute({ permission: adminPermissions.admin.update })(
+    apiValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
         const filter: QueryFilter<Admin> = {};
-        if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
+        if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 
         const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
 

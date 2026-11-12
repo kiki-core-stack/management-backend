@@ -7,10 +7,8 @@ import type { SetRequired } from 'type-fest';
 
 import { jsonSchema } from '../index.post';
 
-export const routePermission = 'admin email.provider.update';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema.omit({ code: true }).extend({ updatedAt: z.strictIsoDateString() })),
+export default defineRoute({ permission: adminPermissions.email.provider.update })(
+    apiValidator('json', jsonSchema.omit({ code: true }).extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
         const emailProvider = await EmailProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
         const data = assertNotModifiedAndStripData(ctx.req.valid('json'), emailProvider);

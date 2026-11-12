@@ -1,6 +1,9 @@
-import { allAdminPermissions } from '@/constants/admin';
+import { adminPermissionCatalog } from '@/constants/permissions/admin';
 
-export const routeHandlerOptions = defineRouteHandlerOptions({ properties: { noLoginRequired: true } });
-export const routePermission = 'ignore';
-
-export default defineRouteHandlers((ctx) => ctx.createApiSuccessResponse([...allAdminPermissions].toSorted()));
+export default defineRoute({
+    noLoginRequired: true,
+    permission: 'ignore',
+})((ctx) => ctx.createApiSuccessResponse({
+    groups: adminPermissionCatalog.groups,
+    keys: adminPermissionCatalog.keys,
+}));

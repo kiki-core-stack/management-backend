@@ -1,16 +1,14 @@
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import { AdminRoleModel } from '@kcs-project/pack/models/admin/role';
 
-export const routePermission = 'admin admin.role.delete';
-
-export default defineRouteHandlers(async (ctx) => {
+export default defineRoute({ permission: adminPermissions.admin.role.delete })(async (ctx) => {
     await getModelDocumentByRouteIdAndDelete(
         ctx,
         AdminRoleModel,
         undefined,
         undefined,
         async (adminRole) => {
-            if (await AdminModel.exists({ roles: adminRole._id })) throwApiError(409);
+            if (await AdminModel.exists({ roles: adminRole._id })) throwApiError(apiErrors.common.conflict);
         },
     );
 

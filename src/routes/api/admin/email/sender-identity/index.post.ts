@@ -21,10 +21,8 @@ export const jsonSchema = z.object({
     key: z.enum(EmailSenderIdentityKey),
 }) satisfies ZodValidatorType<EmailSenderIdentity>;
 
-export const routePermission = 'admin email.senderIdentity.create';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({ permission: adminPermissions.email.senderIdentity.create })(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         await EmailSenderIdentityModel.create({
             ...ctx.req.valid('json'),

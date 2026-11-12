@@ -11,14 +11,12 @@ const jsonSchema = z.object({
     oldPassword: z.string().trim().min(1),
 }) satisfies ZodValidatorType<AdminChangePasswordData>;
 
-export const routePermission = 'ignore';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({ permission: 'ignore' })(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         const admin = await ctx.getAdmin();
         const data = ctx.req.valid('json');
-        if (!await admin.verifyPassword(data.oldPassword)) throwApiError(400);
+        if (!await admin.verifyPassword(data.oldPassword)) throwApiError(apiErrors.common.badRequest);
         await admin.assertUpdateSuccess({
             $inc: { authenticationRevision: 1 },
             $set: { password: data.newPassword },

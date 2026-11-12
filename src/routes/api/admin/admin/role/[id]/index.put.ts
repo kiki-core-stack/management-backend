@@ -4,10 +4,8 @@ import { clearAllAdminPermissionCache } from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
 
-export const routePermission = 'admin admin.role.update';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
+export default defineRoute({ permission: adminPermissions.admin.role.update })(
+    apiValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
     async (ctx) => {
         const adminRole = await AdminRoleModel.findByRouteIdOrThrowNotFoundError(ctx);
         const data = assertNotModifiedAndStripData(ctx.req.valid('json'), adminRole);

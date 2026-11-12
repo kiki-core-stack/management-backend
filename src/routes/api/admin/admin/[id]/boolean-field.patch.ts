@@ -12,17 +12,15 @@ import type { SetRequired } from 'type-fest';
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
-export const routePermission = 'admin admin.toggle';
-
-export default defineRouteHandlers(async (ctx) => {
+export default defineRoute({ permission: adminPermissions.admin.toggle })(async (ctx) => {
     const filter: QueryFilter<Admin> = {};
-    if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
+    if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 
     const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
     const { field, value } = await ctx.req.json<{ field: 'enabled'; value: boolean }>();
     switch (field) {
         case 'enabled': {
-            if (!value && admin._id.equals(ctx.adminId)) throwApiError(400);
+            if (!value && admin._id.equals(ctx.adminId)) throwApiError(apiErrors.common.badRequest);
 
             const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = { $set: { enabled: value } };
             if (!value) updateQuery.$inc = { authenticationRevision: 1 };
@@ -32,7 +30,7 @@ export default defineRouteHandlers(async (ctx) => {
             break;
         }
 
-        default: throwApiError(400);
+        default: throwApiError(apiErrors.common.badRequest);
     }
 
     return ctx.createApiSuccessResponse();

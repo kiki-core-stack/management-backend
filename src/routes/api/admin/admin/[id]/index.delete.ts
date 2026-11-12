@@ -5,13 +5,11 @@ import type { QueryFilter } from 'mongoose';
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
 import { getAdminPermission } from '@/libs/admin/permission';
 
-export const routePermission = 'admin admin.delete';
-
-export default defineRouteHandlers(async (ctx) => {
+export default defineRoute({ permission: adminPermissions.admin.delete })(async (ctx) => {
     let adminId: string | undefined;
 
     const filter: QueryFilter<Admin> = {};
-    if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) filter.isSuperAdmin = false;
+    if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 
     await getDefaultMongooseConnection().transaction(async (session) => {
         await getModelDocumentByRouteIdAndDelete(
@@ -20,8 +18,11 @@ export default defineRouteHandlers(async (ctx) => {
             filter,
             { session },
             async (admin) => {
-                if (admin._id.equals(ctx.adminId)) throwApiError(409);
-                if (await AdminModel.countDocuments(undefined, { session }) === 1) throwApiError(409);
+                if (admin._id.equals(ctx.adminId)) throwApiError(apiErrors.common.conflict);
+                if (await AdminModel.countDocuments(undefined, { session }) === 1) {
+                    throwApiError(apiErrors.common.conflict);
+                }
+
                 adminId = admin._id.toHexString();
             },
         );

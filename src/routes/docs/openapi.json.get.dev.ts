@@ -1,6 +1,6 @@
 import { createOpenApiDocumentHandler } from '@/core/libs/openapi';
 
-export default defineRoute()(
+export default defineRoute({ permission: 'ignore' })(
     createOpenApiDocumentHandler({
         documentation: {
             info: {

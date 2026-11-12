@@ -2,11 +2,9 @@ import { AdminModel } from '@kcs-project/pack/models/admin';
 
 import { getAdminPermission } from '@/libs/admin/permission';
 
-export const routePermission = 'admin admin.list';
-
-export default defineRouteHandlers(async (ctx) => {
+export default defineRoute({ permission: adminPermissions.admin.list })(async (ctx) => {
     const parsedApiRequestQueryParams = parseApiRequestQueryParams(ctx);
-    if (!(await getAdminPermission(ctx.adminId!)).isSuperAdmin) parsedApiRequestQueryParams.filter.isSuperAdmin = false;
+    if (!(await getAdminPermission(ctx.adminId!)).unrestricted) parsedApiRequestQueryParams.filter.isSuperAdmin = false;
     return await paginateModelDataWithApiResponse(
         ctx,
         AdminModel,

@@ -18,10 +18,8 @@ export const jsonSchema = z.object({
     priority: z.int32(),
 }) satisfies SmsProviderZodSchemaType;
 
-export const routePermission = 'admin sms.provider.create';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({ permission: adminPermissions.sms.provider.create })(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         const data = ctx.req.valid('json');
         const config = await parseSmsProviderConfig(data.code, data.config);

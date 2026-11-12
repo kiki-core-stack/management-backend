@@ -40,10 +40,8 @@ export const jsonSchema = z.object({
     ),
 }) satisfies ZodValidatorType<PlatformIpAccessPolicy>;
 
-export const routePermission = 'admin platform.ipAccessPolicy.create';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({ permission: adminPermissions.platform.ipAccessPolicy.create })(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         await PlatformIpAccessPolicyModel.create({
             ...ctx.req.valid('json'),

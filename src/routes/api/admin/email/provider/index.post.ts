@@ -21,10 +21,8 @@ export const jsonSchema = z.object({
     priority: z.int32(),
 }) satisfies EmailProviderZodSchemaType;
 
-export const routePermission = 'admin email.provider.create';
-
-export default defineRouteHandlers(
-    apiZValidator('json', jsonSchema),
+export default defineRoute({ permission: adminPermissions.email.provider.create })(
+    apiValidator('json', jsonSchema),
     async (ctx) => {
         const data = ctx.req.valid('json');
         const config = await parseEmailProviderConfig(data.code, data.config);

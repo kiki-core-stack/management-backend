@@ -1,18 +1,18 @@
 import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/ip-access-policy';
 
-export const routePermission = 'admin platform.ipAccessPolicy.list';
-
-export default defineRouteHandlers(async (ctx) => await paginateModelDataWithApiResponse(
-    ctx,
-    PlatformIpAccessPolicyModel,
-    undefined,
-    {
-        populate: [
-            ...populateCreatedAndEditedByAdminOptions,
-            {
-                path: 'targets.principalIds',
-                select: ['account'],
-            },
-        ],
-    },
-));
+export default defineRoute({ permission: adminPermissions.platform.ipAccessPolicy.list })(
+    async (ctx) => await paginateModelDataWithApiResponse(
+        ctx,
+        PlatformIpAccessPolicyModel,
+        undefined,
+        {
+            populate: [
+                ...populateCreatedAndEditedByAdminOptions,
+                {
+                    path: 'targets.principalIds',
+                    select: ['account'],
+                },
+            ],
+        },
+    ),
+);
