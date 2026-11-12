@@ -1,18 +1,12 @@
-import { honoApp } from '@/core/app';
+import { assertPermission } from '@kcs-project/pack/hono-backend/libs/permission';
+
 import { getAdminPermission } from '@/libs/admin/permission';
-import { micromatch } from '@/utils/micromatch';
 
-honoApp.use(
+useRouteMiddleware(
     '/api/admin/*',
-    async (ctx, next) => {
-        if (
-            !ctx.routeHandler?.isHandler
-            || ctx.routeHandler.noLoginRequired
-            || ctx.routeHandler.permission === 'ignore'
-        ) return await next();
-
-        const { isSuperAdmin, permissions } = await getAdminPermission(ctx.adminId!);
-        if (isSuperAdmin || micromatch(permissions, ctx.routeHandler.permission).length) return await next();
-        throwApiError(403);
+    async (ctx, route, next) => {
+        if (route.meta.noLoginRequired || route.meta.permission === 'ignore') return await next();
+        assertPermission(await getAdminPermission(ctx.adminId!), route.meta.permission);
+        await next();
     },
 );

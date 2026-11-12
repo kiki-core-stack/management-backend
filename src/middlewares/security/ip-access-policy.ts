@@ -1,11 +1,9 @@
-import { honoApp } from '@/core/app';
 import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
 
-honoApp.use(
+useRouteMiddleware(
     '/api/*',
-    async (ctx, next) => {
-        if (!ctx.routeHandler?.isHandler) return await next();
+    async (ctx, _route, next) => {
         await assertPlatformIpAccessPolicy(ctx);
-        return await next();
+        await next();
     },
 );

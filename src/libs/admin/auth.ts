@@ -9,7 +9,7 @@ import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
 
 export async function handleAdminLogin(ctx: Context, admin: AdminDocument, logNote?: string) {
     await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, 'admin', admin._id);
-    const ip = getClientIpFromXForwardedFor(ctx)!;
+    const ip = getClientIp(ctx)!;
     await adminAuthenticationSession.create(
         ctx,
         {
@@ -24,7 +24,7 @@ export async function handleAdminLogin(ctx: Context, admin: AdminDocument, logNo
 }
 
 export async function recordAdminLogin(ctx: Context, adminId: string, note?: string) {
-    const ip = getClientIpFromXForwardedFor(ctx)!;
+    const ip = getClientIp(ctx)!;
     createAdminLog({
         admin: adminId,
         ip,

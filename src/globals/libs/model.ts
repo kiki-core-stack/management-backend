@@ -44,7 +44,7 @@ export async function getModelDocumentByRouteIdAndUpdateBooleanField<
 ) {
     const document = await model.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, options);
     const { field, value } = await ctx.req.json<{ field: string; value: boolean }>();
-    if (!allowedFields.includes(field)) throwApiError(400);
+    if (!allowedFields.includes(field)) throwApiError(apiErrors.common.badRequest);
     // @ts-expect-error Ignore this error.
     await beforeUpdate?.(document, field, !!value);
     await document.assertUpdateSuccess({ $set: { [`${field}`]: !!value } });

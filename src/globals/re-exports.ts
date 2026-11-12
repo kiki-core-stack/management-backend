@@ -1,5 +1,6 @@
 export * as apiErrors from '@/api-errors';
 export * as commonZodSchemas from '@/constants/common-zod-schemas';
+export { adminPermissions } from '@/constants/permissions/admin';
 
 export * as WsIoEventNames from '@kcs-project/pack/constants/ws.io-event-names';
 export { apiErrorResponses } from '@kcs-project/pack/hono-backend/libs/api/docs';

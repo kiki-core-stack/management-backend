@@ -11,11 +11,11 @@ export async function assertPlatformIpAccessPolicy(
     principalId?: string | Types.ObjectId,
 ) {
     const platformIpAccessPolicyCheckResult = await checkPlatformIpAccessPolicy(
-        getClientIpFromXForwardedFor(ctx),
+        getClientIp(ctx),
         scope,
         principalType,
         principalId?.toString(),
     );
 
-    if (!platformIpAccessPolicyCheckResult.allowed) throwApiError(403);
+    if (!platformIpAccessPolicyCheckResult.allowed) throwApiError(apiErrors.common.forbidden);
 }

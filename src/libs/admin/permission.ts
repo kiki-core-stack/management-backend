@@ -1,6 +1,7 @@
 import { redisClient } from '@kcs-project/pack/connections/redis';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type { AdminRoleDocument } from '@kcs-project/pack/models/admin/role';
+import type { PrincipalPermissions } from '@kcs-project/pack/types/permission';
 import type { Types } from 'mongoose';
 
 export async function clearAllAdminPermissionCache() {
@@ -8,7 +9,7 @@ export async function clearAllAdminPermissionCache() {
     if (keys.length) await redisClient.del(...keys);
 }
 
-export async function getAdminPermission(adminId: Types.ObjectId) {
+export async function getAdminPermission(adminId: Types.ObjectId): Promise<PrincipalPermissions> {
     let adminPermission = await redisStore.admin.permission.getItem(adminId);
     if (!adminPermission) {
         const admin = await AdminModel
@@ -20,10 +21,10 @@ export async function getAdminPermission(adminId: Types.ObjectId) {
             ]);
 
         if (!admin) throw new Error('Admin not found');
-        if (admin?.isSuperAdmin) {
+        if (admin.isSuperAdmin) {
             adminPermission = {
-                isSuperAdmin: true,
                 permissions: [],
+                unrestricted: true,
             };
         } else {
             const populatedAdmin = await admin.populate<{ roles: AdminRoleDocument[] }>(
@@ -35,8 +36,8 @@ export async function getAdminPermission(adminId: Types.ObjectId) {
             );
 
             adminPermission = {
-                isSuperAdmin: false,
                 permissions: [...new Set(populatedAdmin.roles.map((role) => role.permissions).flat())],
+                unrestricted: false,
             };
         }
 
