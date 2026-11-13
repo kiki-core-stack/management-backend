@@ -10,7 +10,7 @@ import { handleAdminLogin } from '@/libs/admin/auth';
 
 const jsonSchema = z.object({
     account: z.string().trim().min(1),
-    password: z.string().trim().min(1),
+    password: z.string().min(1),
 }) satisfies ZodValidatorType<AdminLoginFormData>;
 
 const missingAdminPasswordHash = await hashPasswordWithArgon2('missing-admin');
@@ -30,7 +30,7 @@ export default defineRoute({
             ? await admin.verifyPassword(data.password)
             : await verifyPasswordWithArgon2(missingAdminPasswordHash, data.password);
 
-        if (!admin || !passwordVerified) throwApiError(apiErrors.common.notFound);
+        if (!admin || !passwordVerified) throwApiError(apiErrors.auth.invalidCredentials);
         await handleAdminLogin(ctx, admin);
         return ctx.createApiSuccessResponse();
     },

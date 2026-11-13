@@ -6,4 +6,5 @@ export default defineRoute({
 })((ctx) => ctx.createApiSuccessResponse({
     groups: adminPermissionCatalog.groups,
     keys: adminPermissionCatalog.keys,
+    labels: adminPermissionCatalog.labels,
 }));

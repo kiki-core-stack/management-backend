@@ -22,12 +22,12 @@ export default defineRoute({ permission: adminPermissions.admin.account.update }
 
         const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
 
-        const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = { $set: assertNotModifiedAndStripData(ctx.req.valid('json'), admin) };
+        const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = buildUpdateQuery(
+            assertNotModifiedAndStripData(ctx.req.valid('json'), admin),
+            ['email'],
+        );
+
         updateQuery.$set.enabled = updateQuery.$set.enabled || admin._id.equals(ctx.adminId);
-        if (!updateQuery.$set.email) {
-            delete updateQuery.$set.email;
-            updateQuery.$unset = { email: true };
-        }
 
         const adminId = admin._id.toHexString();
         const shouldRevokeAuthenticationSessions = !updateQuery.$set.enabled || updateQuery.$set.password !== undefined;

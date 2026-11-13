@@ -1,34 +1,40 @@
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
-import type { EmailProviderDocument } from '@kcs-project/pack/models/email/provider';
-import { parseEmailProviderConfig } from '@kcs-project/pack/schemas/email';
+import { createEmailProviderInputSchema } from '@kcs-project/pack/schemas/email';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
-import type { UpdateQuery } from 'mongoose';
-import type { SetRequired } from 'type-fest';
 
-import { jsonSchema } from '../index.post';
+import { jsonSchemaShape } from '../index.post';
 
 export default defineRoute({ permission: adminPermissions.email.provider.update })(
-    apiValidator('json', jsonSchema.omit({ code: true }).extend({ updatedAt: z.strictIsoDateString() })),
+    apiValidator(
+        'json',
+        createEmailProviderInputSchema({
+            ...jsonSchemaShape,
+            updatedAt: z.strictIsoDateString(),
+        }),
+    ),
     async (ctx) => {
         const emailProvider = await EmailProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
         const data = assertNotModifiedAndStripData(ctx.req.valid('json'), emailProvider);
-        const config = await parseEmailProviderConfig(emailProvider.code, data.config);
-
-        const updateQuery: SetRequired<UpdateQuery<EmailProviderDocument>, '$set'> = {
-            $set: {
-                ...data,
-                cacheKey: cryptoMd5(`${emailProvider.code}${data.apiProxyUrl}${JSON.stringify(config)}`),
-                config,
-                editedByAdmin: ctx.adminId,
-            },
-        };
-
-        if (!updateQuery.$set.apiProxyUrl) {
-            delete updateQuery.$set.apiProxyUrl;
-            updateQuery.$unset = { apiProxyUrl: true };
+        if (data.code !== emailProvider.code) {
+            throwFieldValidationError(
+                ctx,
+                ['code'],
+                {
+                    'en': 'The provider cannot be changed',
+                    'zh-TW': '不能變更服務商',
+                },
+            );
         }
 
-        await emailProvider.assertUpdateSuccess(updateQuery);
+        await emailProvider.assertUpdateSuccess(buildUpdateQuery(
+            {
+                ...data,
+                cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
+                editedByAdmin: ctx.adminId,
+            },
+            ['apiProxyUrl'],
+        ));
+
         return ctx.createApiSuccessResponse();
     },
 );

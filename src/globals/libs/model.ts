@@ -26,30 +26,6 @@ export async function getModelDocumentByRouteIdAndDelete<RawDocType, QueryHelper
     await document.deleteOne(options || undefined);
 }
 
-export async function getModelDocumentByRouteIdAndUpdateBooleanField<
-    RawDocType,
-    QueryHelpers,
-    InstanceMethodsAndOverrides,
->(
-    ctx: Context,
-    model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
-    allowedFields: string[],
-    filter?: QueryFilter<RawDocType>,
-    options?: null | QueryOptions<RawDocType>,
-    beforeUpdate?: (
-        document: MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>,
-        field: string,
-        value: boolean,
-    ) => any,
-) {
-    const document = await model.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, options);
-    const { field, value } = await ctx.req.json<{ field: string; value: boolean }>();
-    if (!allowedFields.includes(field)) throwApiError(apiErrors.common.badRequest);
-    // @ts-expect-error Ignore this error.
-    await beforeUpdate?.(document, field, !!value);
-    await document.assertUpdateSuccess({ $set: { [`${field}`]: !!value } });
-}
-
 export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
     ctx: Context,
     model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
