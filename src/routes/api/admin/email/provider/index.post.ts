@@ -12,7 +12,7 @@ export const jsonSchemaShape = {
 };
 
 const jsonSchema = createEmailProviderInputSchema(jsonSchemaShape) satisfies ZodValidatorType<EmailProvider, 'cacheKey'>;
- 
+
 export default defineRoute({ permission: adminPermissions.email.provider.create })(
     apiValidator('json', jsonSchema),
     async (ctx) => {

@@ -6,33 +6,37 @@ export const sms = {
             children: {
                 create: {
                     label: {
-                        'en': 'Create SMS providers',
-                        'zh-TW': '建立簡訊服務商',
+                        'en': 'Create',
+                        'zh-TW': '建立',
                     },
+                    requires: ['list'],
                 },
                 delete: {
                     label: {
-                        'en': 'Delete SMS providers',
-                        'zh-TW': '刪除簡訊服務商',
+                        'en': 'Delete',
+                        'zh-TW': '刪除',
                     },
+                    requires: ['list'],
                 },
                 list: {
                     label: {
-                        'en': 'List SMS providers',
-                        'zh-TW': '查看簡訊服務商列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
                 toggle: {
                     label: {
-                        'en': 'Enable or disable SMS providers',
-                        'zh-TW': '切換簡訊服務商狀態',
+                        'en': 'Enable or disable',
+                        'zh-TW': '啟用／停用',
                     },
+                    requires: ['list'],
                 },
                 update: {
                     label: {
-                        'en': 'Update SMS providers',
-                        'zh-TW': '更新簡訊服務商',
+                        'en': 'Update',
+                        'zh-TW': '更新',
                     },
+                    requires: ['list'],
                 },
             },
             label: {
@@ -44,8 +48,8 @@ export const sms = {
             children: {
                 list: {
                     label: {
-                        'en': 'List SMS send records',
-                        'zh-TW': '查看簡訊發送紀錄列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
             },

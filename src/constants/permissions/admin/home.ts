@@ -6,8 +6,8 @@ export const home = {
             children: {
                 view: {
                     label: {
-                        'en': 'View home dashboard',
-                        'zh-TW': '查看首頁儀表板',
+                        'en': 'View',
+                        'zh-TW': '查看',
                     },
                 },
             },

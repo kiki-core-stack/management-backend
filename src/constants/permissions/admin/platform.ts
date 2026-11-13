@@ -6,15 +6,16 @@ export const platform = {
             children: {
                 list: {
                     label: {
-                        'en': 'List platform configs',
-                        'zh-TW': '查看平台設定列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
                 update: {
                     label: {
-                        'en': 'Update platform configs',
-                        'zh-TW': '更新平台設定',
+                        'en': 'Update',
+                        'zh-TW': '更新',
                     },
+                    requires: ['list'],
                 },
             },
             label: {
@@ -26,33 +27,43 @@ export const platform = {
             children: {
                 create: {
                     label: {
-                        'en': 'Create IP access policies',
-                        'zh-TW': '建立IP 存取規則',
+                        'en': 'Create',
+                        'zh-TW': '建立',
                     },
+                    requires: [
+                        'list',
+                        'admin.account.list',
+                    ],
                 },
                 delete: {
                     label: {
-                        'en': 'Delete IP access policies',
-                        'zh-TW': '刪除IP 存取規則',
+                        'en': 'Delete',
+                        'zh-TW': '刪除',
                     },
+                    requires: ['list'],
                 },
                 list: {
                     label: {
-                        'en': 'List IP access policies',
-                        'zh-TW': '查看IP 存取規則列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
                 toggle: {
                     label: {
-                        'en': 'Enable or disable IP access policies',
-                        'zh-TW': '切換IP 存取規則狀態',
+                        'en': 'Enable or disable',
+                        'zh-TW': '啟用／停用',
                     },
+                    requires: ['list'],
                 },
                 update: {
                     label: {
-                        'en': 'Update IP access policies',
-                        'zh-TW': '更新IP 存取規則',
+                        'en': 'Update',
+                        'zh-TW': '更新',
                     },
+                    requires: [
+                        'list',
+                        'admin.account.list',
+                    ],
                 },
             },
             label: {

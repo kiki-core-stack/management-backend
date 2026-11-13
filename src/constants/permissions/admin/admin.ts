@@ -6,33 +6,43 @@ export const admin = {
             children: {
                 create: {
                     label: {
-                        'en': 'Create admin accounts',
-                        'zh-TW': '建立管理員帳號',
+                        'en': 'Create',
+                        'zh-TW': '建立',
                     },
+                    requires: [
+                        'list',
+                        'admin.role.list',
+                    ],
                 },
                 delete: {
                     label: {
-                        'en': 'Delete admin accounts',
-                        'zh-TW': '刪除管理員帳號',
+                        'en': 'Delete',
+                        'zh-TW': '刪除',
                     },
+                    requires: ['list'],
                 },
                 list: {
                     label: {
-                        'en': 'List admin accounts',
-                        'zh-TW': '查看管理員帳號列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
                 toggle: {
                     label: {
-                        'en': 'Enable or disable admin accounts',
-                        'zh-TW': '切換管理員帳號狀態',
+                        'en': 'Enable or disable',
+                        'zh-TW': '啟用／停用',
                     },
+                    requires: ['list'],
                 },
                 update: {
                     label: {
-                        'en': 'Update admin accounts',
-                        'zh-TW': '更新管理員帳號',
+                        'en': 'Update',
+                        'zh-TW': '更新',
                     },
+                    requires: [
+                        'list',
+                        'admin.role.list',
+                    ],
                 },
             },
             label: {
@@ -44,8 +54,8 @@ export const admin = {
             children: {
                 list: {
                     label: {
-                        'en': 'List admin logs',
-                        'zh-TW': '查看管理員日誌列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
             },
@@ -58,27 +68,30 @@ export const admin = {
             children: {
                 create: {
                     label: {
-                        'en': 'Create admin roles',
-                        'zh-TW': '建立管理員身分組',
+                        'en': 'Create',
+                        'zh-TW': '建立',
                     },
+                    requires: ['list'],
                 },
                 delete: {
                     label: {
-                        'en': 'Delete admin roles',
-                        'zh-TW': '刪除管理員身分組',
+                        'en': 'Delete',
+                        'zh-TW': '刪除',
                     },
+                    requires: ['list'],
                 },
                 list: {
                     label: {
-                        'en': 'List admin roles',
-                        'zh-TW': '查看管理員身分組列表',
+                        'en': 'View list',
+                        'zh-TW': '查看列表',
                     },
                 },
                 update: {
                     label: {
-                        'en': 'Update admin roles',
-                        'zh-TW': '更新管理員身分組',
+                        'en': 'Update',
+                        'zh-TW': '更新',
                     },
+                    requires: ['list'],
                 },
             },
             label: {

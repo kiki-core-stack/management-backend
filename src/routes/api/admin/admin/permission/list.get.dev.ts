@@ -7,4 +7,5 @@ export default defineRoute({
     groups: adminPermissionCatalog.groups,
     keys: adminPermissionCatalog.keys,
     labels: adminPermissionCatalog.labels,
+    requirements: adminPermissionCatalog.requirements,
 }));

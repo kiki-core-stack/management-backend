@@ -15,7 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#7962e588b143ede96e738befd405829504120f9c",
+    "@kcs-project/pack": "git+https://github.com/kiki-core-stack/pack#207baba9d67ebd56fdd2170206efa954973d5a19",
     "@kikiutils/mongoose": "^9.0.3",
     "@kikiutils/shared": "^20.1.2",
     "@sylke/email-validation": "^1.0.0",
