@@ -1,6 +1,6 @@
 # management-backend 架構
 
-總管理後台 API（`/api/admin/*`），在 base-backend（[docs/base-backend.md](./base-backend.md)）之上增加管理員、身分組與權限、email／sms、平台設定。框架核心見 [docs/auto-hono.md](./auto-hono.md)，共用規則（錯誤碼、多語系、權限）見 pack README。以下只說明本 repo 增加的部分。
+總管理後台 API（`/api/admin/*`），在 base-backend（[docs/base-backend.md](./base-backend.md)）之上增加管理員、身分組與權限、email／sms、平台設定。框架核心見 [docs/auto-hono.md](./auto-hono.md)，共用規則（錯誤碼、多語系、權限）見 [pack README](https://github.com/kiki-core-stack/pack)。以下只說明本 repo 增加的部分。
 
 ## 啟動
 
