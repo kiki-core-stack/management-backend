@@ -3,7 +3,6 @@ import {
     PlatformIpAccessPolicyScope,
 } from '@kcs-project/pack/constants/platform';
 import { clearPlatformIpAccessPolicyCache } from '@kcs-project/pack/libs/platform/ip-access-policy';
-import { AdminModel } from '@kcs-project/pack/models/admin';
 import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/ip-access-policy';
 import type { PlatformIpAccessPolicy } from '@kcs-project/pack/models/platform/ip-access-policy';
 import { ipAddressOrCidrSchema } from '@kcs-project/pack/schemas/ip';
@@ -22,13 +21,7 @@ const targetSchema = z.union([
     }),
     z.object({
         principalIds: z
-            .array(z.objectId().refine(
-                (_id) => AdminModel.exists({ _id }),
-                z.i18nIssue({
-                    'en': 'The admin does not exist',
-                    'zh-TW': '管理員不存在',
-                }),
-            ))
+            .array(commonZodSchemas.admin.existingId)
             .min(1)
             .nullable(),
         principalType: z.literal('admin'),

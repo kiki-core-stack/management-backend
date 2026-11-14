@@ -12,6 +12,7 @@
 - routes/api/admin/：總後台路由，依領域分資料夾（`admin`、`auth`、`email`、`home`、`platform`、`profile`、`sms`）。
   - CRUD 慣例：`list.get.ts`、`index.post.ts`（匯出 `jsonSchema` 供更新共用）、`[id]/index.put.ts`（帶讀取時的 `updatedAt`，見下方「更新」）、`[id]/index.delete.ts`、`[id]/enabled.patch.ts`（`{ enabled }`）。
   - `*.dev.ts`：只在開發環境載入，例如前端 codegen 使用的 `admin/permission/list.get.dev.ts`。
+- constants/common-zod-schemas/：路由共用的 zod schema，每個領域一個檔案，`index.ts` 以 `export * as <領域>` 組成並自動匯入為 `commonZodSchemas`（如 `commonZodSchemas.admin.existingId` 驗證管理員存在）。
 - constants/permissions/：權限定義。
   - admin/：總後台的權限樹，每個領域一個檔案，在 `admin/index.ts` 以 `definePermissions` 組成 `adminPermissionCatalog`。
   - action.ts：共用的動作名稱（`permissionActionLabels`）。
@@ -36,7 +37,7 @@
 
 1. 在 `routes/api/admin/<領域>/` 新增路由檔，`defineRoute({ permission: adminPermissions.<...> })`；不需權限的寫 `'ignore'`。
 2. 新權限加在 `constants/permissions/admin/<領域>.ts`：`label` 用 `permissionActionLabels` 或自訂的 `LocalizedMessages`；動作需要其他權限才能使用時寫 `requires`（同層動作名稱或其他節點的完整 key）。新領域另加檔案並列入 `admin/index.ts`。
-3. 輸入驗證用 `apiValidator('json', schema)`；需要訊息的自訂規則用 `z.i18nIssue({...})`。
+3. 輸入驗證用 `apiValidator('json', schema)`；需要訊息的自訂規則用 `z.i18nIssue({...})`；多個路由共用的 schema 放進 `constants/common-zod-schemas/<領域>.ts`。
 4. 前端重新跑 dev（或其產生腳本）取得新的權限與錯誤碼。
 
 ## 更新
