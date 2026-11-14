@@ -1,41 +1,26 @@
 import type { PermissionGroupNode } from '@kcs-project/pack/types/permission';
 
+import { permissionActionLabels } from '../action';
+
 export const sms = {
     children: {
         provider: {
             children: {
                 create: {
-                    label: {
-                        'en': 'Create',
-                        'zh-TW': '建立',
-                    },
+                    label: permissionActionLabels.create,
                     requires: ['list'],
                 },
                 delete: {
-                    label: {
-                        'en': 'Delete',
-                        'zh-TW': '刪除',
-                    },
+                    label: permissionActionLabels.delete,
                     requires: ['list'],
                 },
-                list: {
-                    label: {
-                        'en': 'View list',
-                        'zh-TW': '查看列表',
-                    },
-                },
+                list: { label: permissionActionLabels.list },
                 toggle: {
-                    label: {
-                        'en': 'Enable or disable',
-                        'zh-TW': '啟用／停用',
-                    },
+                    label: permissionActionLabels.toggle,
                     requires: ['list'],
                 },
                 update: {
-                    label: {
-                        'en': 'Update',
-                        'zh-TW': '更新',
-                    },
+                    label: permissionActionLabels.update,
                     requires: ['list'],
                 },
             },
@@ -45,14 +30,7 @@ export const sms = {
             },
         },
         sendRecord: {
-            children: {
-                list: {
-                    label: {
-                        'en': 'View list',
-                        'zh-TW': '查看列表',
-                    },
-                },
-            },
+            children: { list: { label: permissionActionLabels.list } },
             label: {
                 'en': 'SMS send records',
                 'zh-TW': '簡訊發送紀錄',

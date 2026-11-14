@@ -1,16 +1,11 @@
 import type { PermissionGroupNode } from '@kcs-project/pack/types/permission';
 
+import { permissionActionLabels } from '../action';
+
 export const home = {
     children: {
         dashboard: {
-            children: {
-                view: {
-                    label: {
-                        'en': 'View',
-                        'zh-TW': '查看',
-                    },
-                },
-            },
+            children: { view: { label: permissionActionLabels.view } },
             label: {
                 'en': 'Home dashboard',
                 'zh-TW': '首頁儀表板',
