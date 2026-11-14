@@ -1,5 +1,5 @@
 import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
-import { createSmsProviderInputSchema } from '@kcs-project/pack/schemas/sms';
+import { smsProviderConfigVariants } from '@kcs-project/pack/schemas/sms';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 
 import { jsonSchemaShape } from '../index.post';
@@ -7,7 +7,7 @@ import { jsonSchemaShape } from '../index.post';
 export default defineRoute({ permission: adminPermissions.sms.provider.update })(
     apiValidator(
         'json',
-        createSmsProviderInputSchema({
+        smsProviderConfigVariants.inputSchema({
             ...jsonSchemaShape,
             ...notModifiedInputShape,
         }),

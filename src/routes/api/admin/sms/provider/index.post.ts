@@ -1,6 +1,6 @@
 import { SmsProviderModel } from '@kcs-project/pack/models/sms/provider';
 import type { SmsProvider } from '@kcs-project/pack/models/sms/provider';
-import { createSmsProviderInputSchema } from '@kcs-project/pack/schemas/sms';
+import { smsProviderConfigVariants } from '@kcs-project/pack/schemas/sms';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 
@@ -11,7 +11,7 @@ export const jsonSchemaShape = {
     priority: z.int32(),
 };
 
-const jsonSchema = createSmsProviderInputSchema(jsonSchemaShape) satisfies ZodValidatorType<SmsProvider, 'cacheKey'>;
+const jsonSchema = smsProviderConfigVariants.inputSchema(jsonSchemaShape) satisfies ZodValidatorType<SmsProvider, 'cacheKey'>;
 
 export default defineRoute({ permission: adminPermissions.sms.provider.create })(
     apiValidator('json', jsonSchema),

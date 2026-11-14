@@ -1,5 +1,5 @@
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
-import { createEmailProviderInputSchema } from '@kcs-project/pack/schemas/email';
+import { emailProviderConfigVariants } from '@kcs-project/pack/schemas/email';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 
 import { jsonSchemaShape } from '../index.post';
@@ -7,7 +7,7 @@ import { jsonSchemaShape } from '../index.post';
 export default defineRoute({ permission: adminPermissions.email.provider.update })(
     apiValidator(
         'json',
-        createEmailProviderInputSchema({
+        emailProviderConfigVariants.inputSchema({
             ...jsonSchemaShape,
             ...notModifiedInputShape,
         }),

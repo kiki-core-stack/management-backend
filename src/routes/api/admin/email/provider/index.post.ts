@@ -1,6 +1,6 @@
 import { EmailProviderModel } from '@kcs-project/pack/models/email/provider';
 import type { EmailProvider } from '@kcs-project/pack/models/email/provider';
-import { createEmailProviderInputSchema } from '@kcs-project/pack/schemas/email';
+import { emailProviderConfigVariants } from '@kcs-project/pack/schemas/email';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import { cryptoMd5 } from '@kikiutils/shared/crypto-hash';
 
@@ -11,7 +11,7 @@ export const jsonSchemaShape = {
     priority: z.int32(),
 };
 
-const jsonSchema = createEmailProviderInputSchema(jsonSchemaShape) satisfies ZodValidatorType<EmailProvider, 'cacheKey'>;
+const jsonSchema = emailProviderConfigVariants.inputSchema(jsonSchemaShape) satisfies ZodValidatorType<EmailProvider, 'cacheKey'>;
 
 export default defineRoute({ permission: adminPermissions.email.provider.create })(
     apiValidator('json', jsonSchema),
