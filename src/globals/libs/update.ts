@@ -1,13 +1,10 @@
 import { objectKeys } from 'ts-extras';
 
-export function assertNotModifiedAndStripData<T extends { updatedAt: string }>(
-    payload: T,
-    document: { updatedAt: Date },
-) {
-    const { updatedAt, ...data } = payload;
-    if (updatedAt !== document.updatedAt.toISOString()) throwApiError(apiErrors.common.conflict);
-    return data;
-}
+/**
+ * Input field for updates checked against concurrent changes: the `updatedAt` the client read, passed to
+ * `document.assertUpdateIfNotModified` (pack) so a stale update is rejected with `conflict`.
+ */
+export const notModifiedInputShape = { updatedAt: z.strictIsoDateString() };
 
 /**
  * Update query that sets the defined fields of `data` and unsets the listed optional fields left absent (e.g. a cleared

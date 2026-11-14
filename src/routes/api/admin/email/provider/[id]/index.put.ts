@@ -9,12 +9,12 @@ export default defineRoute({ permission: adminPermissions.email.provider.update 
         'json',
         createEmailProviderInputSchema({
             ...jsonSchemaShape,
-            updatedAt: z.strictIsoDateString(),
+            ...notModifiedInputShape,
         }),
     ),
     async (ctx) => {
         const emailProvider = await EmailProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
-        const data = assertNotModifiedAndStripData(ctx.req.valid('json'), emailProvider);
+        const { updatedAt, ...data } = ctx.req.valid('json');
         if (data.code !== emailProvider.code) {
             throwFieldValidationError(
                 ctx,
@@ -26,14 +26,17 @@ export default defineRoute({ permission: adminPermissions.email.provider.update 
             );
         }
 
-        await emailProvider.assertUpdateSuccess(buildUpdateQuery(
-            {
-                ...data,
-                cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
-                editedByAdmin: ctx.adminId,
-            },
-            ['apiProxyUrl'],
-        ));
+        await emailProvider.assertUpdateIfNotModified(
+            updatedAt,
+            buildUpdateQuery(
+                {
+                    ...data,
+                    cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
+                    editedByAdmin: ctx.adminId,
+                },
+                ['apiProxyUrl'],
+            ),
+        );
 
         return ctx.createApiSuccessResponse();
     },

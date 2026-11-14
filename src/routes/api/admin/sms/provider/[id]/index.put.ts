@@ -9,12 +9,12 @@ export default defineRoute({ permission: adminPermissions.sms.provider.update })
         'json',
         createSmsProviderInputSchema({
             ...jsonSchemaShape,
-            updatedAt: z.strictIsoDateString(),
+            ...notModifiedInputShape,
         }),
     ),
     async (ctx) => {
         const smsProvider = await SmsProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
-        const data = assertNotModifiedAndStripData(ctx.req.valid('json'), smsProvider);
+        const { updatedAt, ...data } = ctx.req.valid('json');
         if (data.code !== smsProvider.code) {
             throwFieldValidationError(
                 ctx,
@@ -26,14 +26,17 @@ export default defineRoute({ permission: adminPermissions.sms.provider.update })
             );
         }
 
-        await smsProvider.assertUpdateSuccess(buildUpdateQuery(
-            {
-                ...data,
-                cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
-                editedByAdmin: ctx.adminId,
-            },
-            ['apiProxyUrl'],
-        ));
+        await smsProvider.assertUpdateIfNotModified(
+            updatedAt,
+            buildUpdateQuery(
+                {
+                    ...data,
+                    cacheKey: cryptoMd5(`${data.code}${data.apiProxyUrl}${JSON.stringify(data.config)}`),
+                    editedByAdmin: ctx.adminId,
+                },
+                ['apiProxyUrl'],
+            ),
+        );
 
         return ctx.createApiSuccessResponse();
     },

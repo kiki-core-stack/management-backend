@@ -15,17 +15,15 @@ import { getAdminPermission } from '@/libs/admin/permission';
 import { jsonSchema } from '../index.post';
 
 export default defineRoute({ permission: adminPermissions.admin.account.update })(
-    apiValidator('json', jsonSchema.extend({ updatedAt: z.strictIsoDateString() })),
+    apiValidator('json', jsonSchema.extend(notModifiedInputShape)),
     async (ctx) => {
         const filter: QueryFilter<Admin> = {};
         if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 
         const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
 
-        const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = buildUpdateQuery(
-            assertNotModifiedAndStripData(ctx.req.valid('json'), admin),
-            ['email'],
-        );
+        const { updatedAt, ...data } = ctx.req.valid('json');
+        const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = buildUpdateQuery(data, ['email']);
 
         updateQuery.$set.enabled = updateQuery.$set.enabled || admin._id.equals(ctx.adminId);
 
@@ -33,7 +31,7 @@ export default defineRoute({ permission: adminPermissions.admin.account.update }
         const shouldRevokeAuthenticationSessions = !updateQuery.$set.enabled || updateQuery.$set.password !== undefined;
         if (shouldRevokeAuthenticationSessions) updateQuery.$inc = { authenticationRevision: 1 };
 
-        await admin.assertUpdateSuccess(updateQuery);
+        await admin.assertUpdateIfNotModified(updatedAt, updateQuery);
         if (shouldRevokeAuthenticationSessions) {
             await adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
         }
