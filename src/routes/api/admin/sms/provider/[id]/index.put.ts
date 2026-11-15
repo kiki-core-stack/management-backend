@@ -17,7 +17,6 @@ export default defineRoute({ permission: adminPermissions.sms.provider.update })
         const { updatedAt, ...data } = ctx.req.valid('json');
         if (data.code !== smsProvider.code) {
             throwFieldValidationError(
-                ctx,
                 ['code'],
                 {
                     'en': 'The provider cannot be changed',

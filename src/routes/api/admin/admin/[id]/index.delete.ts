@@ -6,29 +6,18 @@ import { adminAuthenticationSessionStore } from '@/constants/admin/authenticatio
 import { getAdminPermission } from '@/libs/admin/permission';
 
 export default defineRoute({ permission: adminPermissions.admin.account.delete })(async (ctx) => {
-    let adminId: string | undefined;
-
     const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 
-    await getDefaultMongooseConnection().transaction(async (session) => {
-        await getModelDocumentByRouteIdAndDelete(
-            ctx,
-            AdminModel,
-            filter,
-            { session },
-            async (admin) => {
-                if (admin._id.equals(ctx.adminId)) throwApiError(apiErrors.common.conflict);
-                if (await AdminModel.countDocuments(undefined, { session }) === 1) {
-                    throwApiError(apiErrors.common.conflict);
-                }
-
-                adminId = admin._id.toHexString();
-            },
-        );
+    const adminId = await getDefaultMongooseConnection().transaction(async (session) => {
+        const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, { session });
+        if (admin._id.equals(ctx.adminId)) throwApiError(apiErrors.common.conflict);
+        if (await AdminModel.countDocuments(undefined, { session }) === 1) throwApiError(apiErrors.common.conflict);
+        await admin.deleteOne({ session });
+        return admin._id.toHexString();
     });
 
-    adminAuthenticationSessionStore.revokeAll(adminId!).catch(logger.error);
-    redisStore.admin.permission.removeItem(adminId!).catch(logger.error);
+    adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
+    redisStore.admin.permission.removeItem(adminId).catch(logger.error);
     return ctx.createApiSuccessResponse();
 });

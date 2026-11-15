@@ -4,27 +4,10 @@ import type {
 } from '@kikiutils/mongoose/types';
 import type { PaginateOptions } from '@kikiutils/mongoose/types/paginate';
 import type { Context } from 'hono';
-import type {
-    QueryFilter,
-    QueryOptions,
-} from 'mongoose';
 import {
     objectEntries,
     objectKeys,
 } from 'ts-extras';
-
-export async function getModelDocumentByRouteIdAndDelete<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
-    ctx: Context,
-    model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
-    filter?: QueryFilter<RawDocType>,
-    options?: null | QueryOptions<RawDocType>,
-    beforeDelete?: (document: MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>) => any,
-) {
-    const document = await model.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, options);
-    // @ts-expect-error Ignore this error.
-    await beforeDelete?.(document);
-    await document.deleteOne(options || undefined);
-}
 
 export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
     ctx: Context,

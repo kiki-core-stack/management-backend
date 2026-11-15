@@ -22,7 +22,6 @@ export default defineRoute({ permission: adminPermissions.admin.account.toggle }
         const { enabled } = ctx.req.valid('json');
         if (!enabled && admin._id.equals(ctx.adminId)) {
             throwFieldValidationError(
-                ctx,
                 ['enabled'],
                 {
                     'en': 'You cannot disable your own account',

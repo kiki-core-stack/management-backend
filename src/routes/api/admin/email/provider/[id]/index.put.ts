@@ -17,7 +17,6 @@ export default defineRoute({ permission: adminPermissions.email.provider.update 
         const { updatedAt, ...data } = ctx.req.valid('json');
         if (data.code !== emailProvider.code) {
             throwFieldValidationError(
-                ctx,
                 ['code'],
                 {
                     'en': 'The provider cannot be changed',

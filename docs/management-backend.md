@@ -26,8 +26,7 @@
   - permission.ts：`checkRoutePermissionWiring`，開發時檢查路由權限都在對應身分的 catalog 內，並列出沒有路由使用的權限。
 - globals/：自動匯入的 helper。
   - libs/update.ts：`notModifiedInputShape`（更新輸入的 `updatedAt`）、`buildUpdateQuery`（清空的選填欄位會 `$unset`）。
-  - libs/validation.ts：`throwFieldValidationError`（需要查資料才能判斷的欄位錯誤）。
-  - libs/model.ts、request.ts、response.ts：分頁、查詢參數解析與回應。
+  - libs/model.ts、request.ts、response.ts：分頁、查詢參數解析與回應；刪除單筆資料直接用 `Model.findByRouteIdOrThrowNotFoundError(ctx)` 後 `deleteOne()`。
   - re-exports.ts：`adminPermissions`、`apiErrors`、`z` 等。
 - setups/：`admin-context.ts`（`ctx.getAdmin()`）；`index.ts` 另啟用 pack 的 `findByRouteIdOrThrowNotFoundError`。
 - types/route.ts：`RouteMeta` 擴充（`permission` 必填、`noLoginRequired`）。

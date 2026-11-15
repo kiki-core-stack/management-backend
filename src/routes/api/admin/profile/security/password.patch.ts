@@ -19,7 +19,6 @@ export default defineRoute({ permission: 'ignore' })(
         const data = ctx.req.valid('json');
         if (!await admin.verifyPassword(data.oldPassword)) {
             throwFieldValidationError(
-                ctx,
                 ['oldPassword'],
                 {
                     'en': 'Incorrect password',
