@@ -1,4 +1,4 @@
-import { adminPasswordSchema } from '@kcs-project/pack/schemas/admin';
+import { strongPasswordSchema } from '@kcs-project/pack/schemas/password';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import type { AdminChangePasswordData } from '@kcs-project/pack/types/data/admin';
 
@@ -8,7 +8,7 @@ import {
 } from '@/constants/admin/authentication-session';
 
 const jsonSchema = z.object({
-    newPassword: adminPasswordSchema,
+    newPassword: strongPasswordSchema,
     oldPassword: z.string().min(1),
 }) satisfies ZodValidatorType<AdminChangePasswordData>;
 
