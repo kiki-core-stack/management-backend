@@ -7,7 +7,7 @@ import type { Context } from 'hono';
 import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
 import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
 
-export async function handleAdminLogin(ctx: Context, admin: AdminDocument, logNote?: string) {
+export async function loginAdmin(ctx: Context, admin: AdminDocument, logNote?: string) {
     await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, 'admin', admin._id);
     const ip = getClientIp(ctx)!;
     await adminAuthenticationSession.create(

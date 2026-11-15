@@ -48,11 +48,11 @@ apiValidator('json', jsonSchema.extend(notModifiedInputShape)),
 async (ctx) => {
     const doc = await XxxModel.findByRouteIdOrThrowNotFoundError(ctx); // 404 與需要查資料的檢查
     const { updatedAt, ...data } = ctx.req.valid('json');
-    await doc.assertUpdateIfNotModified(updatedAt, buildUpdateQuery(data));
+    await doc.assertUpdateIfNotModified(updatedAt, { $set: data });
 }
 ```
 
-`assertUpdateIfNotModified`（pack）在同一個 `updateOne` 比對 `updatedAt` 並寫入，資料已被他人修改或刪除時回 `conflict`；任何經由 mongoose 的寫入都會更新 `updatedAt`。`PATCH /:id/enabled` 這類單一欄位設定不需要比對。
+`assertUpdateIfNotModified`（pack）在同一個 `updateOne` 比對 `updatedAt` 並寫入，資料已被他人修改或刪除時回 `conflict`；任何經由 mongoose 的寫入都會更新 `updatedAt`。mongoose 會略過 `undefined` 的欄位，所以清空選填欄位要用 `buildUpdateQuery(data, ['欄位'])` 產生 `$unset`；沒有要清空的欄位就直接 `{ $set: data }`。`PATCH /:id/enabled` 這類單一欄位設定不需要比對。
 
 ## 新增身分
 

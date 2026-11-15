@@ -7,22 +7,18 @@ import { objectKeys } from 'ts-extras';
 export const notModifiedInputShape = { updatedAt: z.strictIsoDateString() };
 
 /**
- * Update query that sets the defined fields of `data` and unsets the listed optional fields left absent (e.g. a cleared
- * optional input), so clearing a field removes it instead of keeping the old value.
+ * Update query that sets `data` and unsets the listed optional fields left absent (e.g. a cleared optional input), so
+ * clearing a field removes it instead of keeping the old value: Mongoose skips `undefined` keys in updates. Without
+ * fields to unset, use `{ $set: data }` directly.
  */
-export function buildUpdateQuery<T extends object>(data: T, unsetFieldsWhenAbsent: ReadonlyArray<keyof T> = []) {
-    const $set: Partial<T> = {};
-    for (const field in data) {
-        if (data[field] !== undefined) $set[field] = data[field];
-    }
-
+export function buildUpdateQuery<T extends object>(data: T, unsetFieldsWhenAbsent: ReadonlyArray<keyof T>) {
     const $unset: Partial<Record<keyof T, true>> = {};
     for (const field of unsetFieldsWhenAbsent) {
         if (data[field] === undefined) $unset[field] = true;
     }
 
     return {
-        $set,
+        $set: data,
         ...objectKeys($unset).length ? { $unset } : {},
     };
 }
