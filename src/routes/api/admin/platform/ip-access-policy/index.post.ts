@@ -11,20 +11,13 @@ import type { ZodValidatorType } from '@kcs-project/pack/types';
 const targetSchema = z.union([
     z.object({
         principalIds: z.null(),
-        principalType: z.null(),
         scope: z.null(),
-    }),
-    z.object({
-        principalIds: z.null(),
-        principalType: z.null(),
-        scope: z.enum(PlatformIpAccessPolicyScope),
     }),
     z.object({
         principalIds: z
             .array(commonZodSchemas.admin.existingId)
             .min(1)
             .nullable(),
-        principalType: z.literal('admin'),
         scope: z.literal(PlatformIpAccessPolicyScope.AdminManagement),
     }),
 ]);

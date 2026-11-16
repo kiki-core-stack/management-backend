@@ -26,7 +26,7 @@ export const adminAuthenticationSession = createHonoAuthenticationSession({
     store: adminAuthenticationSessionStore,
     async validatePrincipal(ctx, data) {
         if (!await validateAdminAuthenticationSessionPrincipal(data)) return false;
-        await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, 'admin', data.principalId);
+        await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, data.principalId);
         return true;
     },
 });

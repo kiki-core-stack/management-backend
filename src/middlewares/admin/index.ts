@@ -16,7 +16,6 @@ useRouteMiddleware(
         await assertPlatformIpAccessPolicy(
             ctx,
             PlatformIpAccessPolicyScope.AdminManagement,
-            'admin',
             session?.principalId,
         );
 

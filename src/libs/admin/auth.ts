@@ -8,7 +8,7 @@ import { adminAuthenticationSession } from '@/constants/admin/authentication-ses
 import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
 
 export async function loginAdmin(ctx: Context, admin: AdminDocument, logNote?: string) {
-    await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, 'admin', admin._id);
+    await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, admin._id);
     const ip = getClientIp(ctx)!;
     await adminAuthenticationSession.create(
         ctx,
