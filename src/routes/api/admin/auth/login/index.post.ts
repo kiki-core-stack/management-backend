@@ -1,7 +1,4 @@
-import {
-    hashPasswordWithArgon2,
-    verifyPasswordWithArgon2,
-} from '@kcs-project/pack/libs/password-argon2';
+import { verifyPasswordWithArgon2 } from '@kcs-project/pack/libs/password-argon2';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type { ZodValidatorType } from '@kcs-project/pack/types';
 import type { AdminLoginFormData } from '@kcs-project/pack/types/data/admin';
@@ -13,7 +10,6 @@ const jsonSchema = z.object({
     password: z.string().min(1),
 }) satisfies ZodValidatorType<AdminLoginFormData>;
 
-const missingAdminPasswordHash = await hashPasswordWithArgon2('missing-admin');
 export default defineRoute({
     noLoginRequired: true,
     permission: 'ignore',
@@ -28,7 +24,7 @@ export default defineRoute({
 
         const passwordVerified = admin
             ? await admin.verifyPassword(data.password)
-            : await verifyPasswordWithArgon2(missingAdminPasswordHash, data.password);
+            : await verifyPasswordWithArgon2(undefined, data.password);
 
         if (!admin || !passwordVerified) throwApiError(apiErrors.auth.invalidCredentials);
         await loginAdmin(ctx, admin);
