@@ -3,7 +3,10 @@ import type { Admin } from '@kcs-project/pack/models/admin';
 import type { QueryFilter } from 'mongoose';
 
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
-import { getAdminPermission } from '@/libs/admin/permission';
+import {
+    clearAdminPermissionCache,
+    getAdminPermission,
+} from '@/libs/admin/permission';
 
 export default defineRoute({ permission: adminPermissions.admin.account.delete })(async (ctx) => {
     const filter: QueryFilter<Admin> = {};
@@ -18,6 +21,6 @@ export default defineRoute({ permission: adminPermissions.admin.account.delete }
     });
 
     adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
-    redisStore.admin.permission.removeItem(adminId).catch(logger.error);
+    clearAdminPermissionCache(adminId).catch(logger.error);
     return ctx.createApiSuccessResponse();
 });

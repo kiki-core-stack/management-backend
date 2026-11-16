@@ -10,7 +10,10 @@ import type {
 import type { SetRequired } from 'type-fest';
 
 import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
-import { getAdminPermission } from '@/libs/admin/permission';
+import {
+    clearAdminPermissionCache,
+    getAdminPermission,
+} from '@/libs/admin/permission';
 
 import { jsonSchema } from '../index.post';
 
@@ -37,7 +40,7 @@ export default defineRoute({ permission: adminPermissions.admin.account.update }
         }
 
         if (!isEqual(admin.roles.toSorted(), updateQuery.$set.roles?.toSorted())) {
-            await redisStore.admin.permission.removeItem(adminId).catch(logger.error);
+            await clearAdminPermissionCache(adminId).catch(logger.error);
         }
 
         return ctx.createApiSuccessResponse();
