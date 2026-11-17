@@ -1,5 +1,5 @@
 import { redisClient } from '@kcs-project/pack/connections/redis';
-import { PlatformIpAccessPolicyScope } from '@kcs-project/pack/constants/platform';
+import { PlatformScope } from '@kcs-project/pack/constants/platform';
 import { createHonoAuthenticationSession } from '@kcs-project/pack/hono-backend/libs/authentication-session';
 import { createRedisAuthenticationSessionStore } from '@kcs-project/pack/libs/authentication-session/redis-store';
 import { AdminModel } from '@kcs-project/pack/models/admin';
@@ -26,7 +26,7 @@ export const adminAuthenticationSession = createHonoAuthenticationSession({
     store: adminAuthenticationSessionStore,
     async validatePrincipal(ctx, data) {
         if (!await validateAdminAuthenticationSessionPrincipal(data)) return false;
-        await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, data.principalId);
+        await assertPlatformIpAccessPolicy(ctx, PlatformScope.AdminManagement, data.principalId);
         return true;
     },
 });

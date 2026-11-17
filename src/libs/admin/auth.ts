@@ -1,5 +1,5 @@
 import { AdminLogType } from '@kcs-project/pack/constants/admin';
-import { PlatformIpAccessPolicyScope } from '@kcs-project/pack/constants/platform';
+import { PlatformScope } from '@kcs-project/pack/constants/platform';
 import { createAdminLog } from '@kcs-project/pack/libs/admin';
 import type { AdminDocument } from '@kcs-project/pack/models/admin';
 import type { Context } from 'hono';
@@ -8,7 +8,7 @@ import { adminAuthenticationSession } from '@/constants/admin/authentication-ses
 import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
 
 export async function loginAdmin(ctx: Context, admin: AdminDocument, logNote?: string) {
-    await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, admin._id);
+    await assertPlatformIpAccessPolicy(ctx, PlatformScope.AdminManagement, admin._id);
     const ip = getClientIp(ctx)!;
     await adminAuthenticationSession.create(
         ctx,

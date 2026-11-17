@@ -1,6 +1,6 @@
 import {
     PlatformIpAccessPolicyMode,
-    PlatformIpAccessPolicyScope,
+    PlatformScope,
 } from '@kcs-project/pack/constants/platform';
 import { clearPlatformIpAccessPolicyCache } from '@kcs-project/pack/libs/platform/ip-access-policy';
 import { PlatformIpAccessPolicyModel } from '@kcs-project/pack/models/platform/ip-access-policy';
@@ -11,14 +11,14 @@ import type { ZodValidatorType } from '@kcs-project/pack/types';
 const targetSchema = z.union([
     z.object({
         principalIds: z.null(),
-        scope: z.null(),
+        scope: z.literal(PlatformScope.System),
     }),
     z.object({
         principalIds: z
             .array(commonZodSchemas.admin.existingId)
             .min(1)
             .nullable(),
-        scope: z.literal(PlatformIpAccessPolicyScope.AdminManagement),
+        scope: z.literal(PlatformScope.AdminManagement),
     }),
 ]);
 
@@ -29,10 +29,10 @@ export const jsonSchema = z.object({
     name: z.string().trim().min(1).max(64),
     note: z.blankToUndefined(z.string().trim()),
     targets: z.array(targetSchema).min(1).refine(
-        (targets) => targets.length === 1 || targets.every((target) => target.scope !== null),
+        (targets) => targets.length === 1 || targets.every((target) => target.scope !== PlatformScope.System),
         z.i18nIssue({
-            'en': 'A global target cannot be combined with other targets',
-            'zh-TW': '全域 API 目標不能與其他目標同時設定',
+            'en': 'A system-wide target cannot be combined with other targets',
+            'zh-TW': '全系統目標不能與其他目標同時設定',
         }),
     ),
 }) satisfies ZodValidatorType<PlatformIpAccessPolicy>;

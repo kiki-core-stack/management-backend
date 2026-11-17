@@ -1,4 +1,4 @@
-import { PlatformIpAccessPolicyScope } from '@kcs-project/pack/constants/platform';
+import { PlatformScope } from '@kcs-project/pack/constants/platform';
 import { Types } from 'mongoose';
 
 import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
@@ -13,7 +13,7 @@ useRouteMiddleware(
             ctx.adminId = new Types.ObjectId(session.principalId);
         }
 
-        await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, session?.principalId);
+        await assertPlatformIpAccessPolicy(ctx, PlatformScope.AdminManagement, session?.principalId);
         if (!route.meta.noLoginRequired && !ctx.adminId) throwApiError(apiErrors.common.unauthorized);
         await next();
     },
