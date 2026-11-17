@@ -4,7 +4,7 @@
 
 ## 啟動
 
-1. 複製 `.env.development` 為 `.env.development.local`，填入 `ADMIN_AUTH_ORIGINS`（admin-frontend 的 origin，逗號分隔；也是 WebAuthn 的 origin）與金鑰（`AUTH_SECRET_ENCRYPTION_KEYS`、`COOKIE_SESSION_KEYS`，格式見檔內註解），並確認 `MONGODB_URI`（需 replica set）、`REDIS_URL`。正式環境的 `.env.production` 需要 `ADMIN_AUTH_ORIGINS` 與 `COOKIE_SESSION_KEYS`；`AUTH_SECRET_ENCRYPTION_KEYS` 與 `MONGODB_URI`、`REDIS_URL` 是全專案共用的秘密，由 main 的 compose secret 提供。
+1. 複製 `.env.development` 為 `.env.development.local`，填入 `ADMIN_AUTH_ORIGINS`（admin-frontend 的 origin，逗號分隔；也是 WebAuthn 的 origin）與金鑰（`AUTH_SECRET_ENCRYPTION_KEYS`、`COOKIE_SESSION_KEYS`，格式見檔內註解），並確認 `MONGODB_URI`（需 replica set）、`REDIS_URL`。正式環境的 `.env.production` 需要 `COOKIE_SESSION_KEYS`；`ADMIN_AUTH_ORIGINS` 由 main 的 compose 以環境變數提供，`AUTH_SECRET_ENCRYPTION_KEYS` 與 `MONGODB_URI`、`REDIS_URL` 是全專案共用的秘密，由 main 的 compose secret 提供（值都寫在 main 的 `.env`）。
 2. `bun run dev`。啟動時會建立預設管理員與平台設定（pack `init`），並檢查路由與權限的對應（見下方）。
 
 ## 結構
