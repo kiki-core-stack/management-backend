@@ -13,12 +13,7 @@ useRouteMiddleware(
             ctx.adminId = new Types.ObjectId(session.principalId);
         }
 
-        await assertPlatformIpAccessPolicy(
-            ctx,
-            PlatformIpAccessPolicyScope.AdminManagement,
-            session?.principalId,
-        );
-
+        await assertPlatformIpAccessPolicy(ctx, PlatformIpAccessPolicyScope.AdminManagement, session?.principalId);
         if (!route.meta.noLoginRequired && !ctx.adminId) throwApiError(apiErrors.common.unauthorized);
         await next();
     },
