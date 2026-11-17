@@ -13,7 +13,7 @@ import { getAdminPermission } from '@/libs/admin/permission';
 // Constants
 export const adminAuthRealm = defineAuthRealm<AdminDocument>({
     cookieName: '__Host-admin-session',
-    displayName: 'Kiki Core Stack Admin',
+    displayName: 'kcs admin',
     findPrincipalByIdentifier: async (account) => await AdminModel.findOne({ account }),
     getPrincipalDisplayName: (admin) => admin.account,
     isPrincipalActive: (admin) => admin.enabled,
