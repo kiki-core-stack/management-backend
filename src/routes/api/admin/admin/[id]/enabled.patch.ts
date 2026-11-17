@@ -1,15 +1,9 @@
+import { revokeAllAuthSessions } from '@kcs-project/pack/libs/auth/session';
 import { AdminModel } from '@kcs-project/pack/models/admin';
-import type {
-    Admin,
-    AdminDocument,
-} from '@kcs-project/pack/models/admin';
-import type {
-    QueryFilter,
-    UpdateQuery,
-} from 'mongoose';
-import type { SetRequired } from 'type-fest';
+import type { Admin } from '@kcs-project/pack/models/admin';
+import type { QueryFilter } from 'mongoose';
 
-import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
+import { adminAuthRealm } from '@/constants/admin/auth';
 import { getAdminPermission } from '@/libs/admin/permission';
 
 export default defineRoute({ permission: adminPermissions.admin.account.toggle })(
@@ -30,11 +24,8 @@ export default defineRoute({ permission: adminPermissions.admin.account.toggle }
             );
         }
 
-        const updateQuery: SetRequired<UpdateQuery<AdminDocument>, '$set'> = { $set: { enabled } };
-        if (!enabled) updateQuery.$inc = { authenticationRevision: 1 };
-
-        await admin.assertUpdateSuccess(updateQuery);
-        if (!enabled) await adminAuthenticationSessionStore.revokeAll(admin._id.toHexString()).catch(logger.error);
+        await admin.assertUpdateSuccess({ $set: { enabled } });
+        if (!enabled) await revokeAllAuthSessions(adminAuthRealm, admin.id);
         return ctx.createApiSuccessResponse();
     },
 );

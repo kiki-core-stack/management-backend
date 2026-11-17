@@ -1,3 +1,6 @@
+import { AuthEventType } from '@kcs-project/pack/constants/auth';
+import { recordAuthEvent } from '@kcs-project/pack/libs/auth/event';
+import { revokeAllAuthSessions } from '@kcs-project/pack/libs/auth/session';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type {
     Admin,
@@ -9,7 +12,7 @@ import type {
 } from 'mongoose';
 import type { SetRequired } from 'type-fest';
 
-import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
+import { adminAuthRealm } from '@/constants/admin/auth';
 import {
     clearAdminPermissionCache,
     getAdminPermission,
@@ -31,12 +34,29 @@ export default defineRoute({ permission: adminPermissions.admin.account.update }
         updateQuery.$set.enabled = updateQuery.$set.enabled || admin._id.equals(ctx.adminId);
 
         const adminId = admin._id.toHexString();
-        const shouldRevokeAuthenticationSessions = !updateQuery.$set.enabled || updateQuery.$set.password !== undefined;
-        if (shouldRevokeAuthenticationSessions) updateQuery.$inc = { authenticationRevision: 1 };
-
         await admin.assertUpdateIfNotModified(updatedAt, updateQuery);
-        if (shouldRevokeAuthenticationSessions) {
-            await adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
+        // Disabling the account or changing its password revokes all of its sessions.
+        if (!updateQuery.$set.enabled || updateQuery.$set.password !== undefined) {
+            await revokeAllAuthSessions(adminAuthRealm, adminId);
+        }
+
+        if (updateQuery.$set.password !== undefined) {
+            await recordAuthEvent(
+                adminAuthRealm,
+                {
+                    actor: {
+                        principalId: ctx.adminId!.toHexString(),
+                        realm: adminAuthRealm.name,
+                    },
+                    principalId: adminId,
+                    request: {
+                        ip: getClientIp(ctx),
+                        userAgent: ctx.req.header('user-agent'),
+                    },
+                    sessionId: ctx.authSession?.id,
+                    type: AuthEventType.PasswordChanged,
+                },
+            );
         }
 
         if (!isEqual(admin.roles.toSorted(), updateQuery.$set.roles?.toSorted())) {

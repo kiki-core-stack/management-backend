@@ -18,6 +18,13 @@ export const admin = {
                     requires: ['list'],
                 },
                 list: { label: permissionActionLabels.list },
+                manageSecurity: {
+                    label: {
+                        'en': 'Manage sessions and two-factor authentication',
+                        'zh-TW': '管理工作階段與雙重驗證',
+                    },
+                    requires: ['list'],
+                },
                 toggle: {
                     label: permissionActionLabels.toggle,
                     requires: ['list'],

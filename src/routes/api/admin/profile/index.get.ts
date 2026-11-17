@@ -8,5 +8,7 @@ export default defineRoute({
     return ctx.createApiSuccessResponse({
         id: ctx.adminId,
         permission: await getAdminPermission(ctx.adminId),
+        // A restricted session may only set up two-factor authentication.
+        restricted: ctx.authSession!.restricted,
     });
 });

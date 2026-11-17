@@ -1,8 +1,9 @@
+import { deleteAuthPrincipalData } from '@kcs-project/pack/libs/auth/principal';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type { Admin } from '@kcs-project/pack/models/admin';
 import type { QueryFilter } from 'mongoose';
 
-import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
+import { adminAuthRealm } from '@/constants/admin/auth';
 import {
     clearAdminPermissionCache,
     getAdminPermission,
@@ -20,7 +21,7 @@ export default defineRoute({ permission: adminPermissions.admin.account.delete }
         return admin._id.toHexString();
     });
 
-    adminAuthenticationSessionStore.revokeAll(adminId).catch(logger.error);
+    await deleteAuthPrincipalData(adminAuthRealm, adminId);
     clearAdminPermissionCache(adminId).catch(logger.error);
     return ctx.createApiSuccessResponse();
 });

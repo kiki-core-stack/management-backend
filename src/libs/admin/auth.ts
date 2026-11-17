@@ -1,34 +1,22 @@
-import { AdminLogType } from '@kcs-project/pack/constants/admin';
-import { PlatformScope } from '@kcs-project/pack/constants/platform';
-import { createAdminLog } from '@kcs-project/pack/libs/admin';
-import type { AdminDocument } from '@kcs-project/pack/models/admin';
-import type { Context } from 'hono';
+import type { AuthRouteDefinition } from '@kcs-project/pack/hono-backend/types/auth';
 
-import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
-import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
+import type { RouteMeta } from '@/core/types/route';
 
-export async function loginAdmin(ctx: Context, admin: AdminDocument, logNote?: string) {
-    await assertPlatformIpAccessPolicy(ctx, PlatformScope.AdminManagement, admin._id);
-    const ip = getClientIp(ctx)!;
-    await adminAuthenticationSession.create(
-        ctx,
-        {
-            ip,
-            principalAuthenticationRevision: admin.authenticationRevision,
-            principalId: admin._id.toHexString(),
-            userAgent: ctx.req.header('user-agent'),
-        },
-    );
+// Functions
 
-    await recordAdminLogin(ctx, admin._id.toHexString(), logNote);
+/**
+ * Forwards a pack auth management route; requires the permission to manage admin accounts' security.
+ */
+export function defineAdminAuthManagementRoute(route: AuthRouteDefinition) {
+    return defineAdminAuthRoute(route, adminPermissions.admin.account.manageSecurity);
 }
 
-export async function recordAdminLogin(ctx: Context, adminId: string, note?: string) {
-    const ip = getClientIp(ctx)!;
-    createAdminLog({
-        admin: adminId,
-        ip,
-        note,
-        type: AdminLogType.LoginSuccess,
-    }).catch(logger.error);
+/**
+ * Forwards a pack auth route from a route file: `export default defineAdminAuthRoute(adminAuth.routes.logout)`.
+ */
+export function defineAdminAuthRoute(route: AuthRouteDefinition, permission: RouteMeta['permission'] = 'ignore') {
+    return defineRoute({
+        ...route.meta,
+        permission,
+    })(...route.handlers as [AuthRouteDefinition['handlers'][number]]);
 }

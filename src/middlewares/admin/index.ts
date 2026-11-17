@@ -1,20 +1,12 @@
-import { PlatformScope } from '@kcs-project/pack/constants/platform';
 import { Types } from 'mongoose';
 
-import { adminAuthenticationSession } from '@/constants/admin/authentication-session';
-import { assertPlatformIpAccessPolicy } from '@/libs/platform/ip-access-policy';
+import { adminAuth } from '@/constants/admin/auth';
 
 useRouteMiddleware(
     '/api/admin/*',
     async (ctx, route, next) => {
-        const session = await adminAuthenticationSession.authenticate(ctx, { ip: getClientIp(ctx)! });
-        if (session) {
-            ctx.adminAuthenticationSession = session;
-            ctx.adminId = new Types.ObjectId(session.principalId);
-        }
-
-        await assertPlatformIpAccessPolicy(ctx, PlatformScope.AdminManagement, session?.principalId);
-        if (!route.meta.noLoginRequired && !ctx.adminId) throwApiError(apiErrors.common.unauthorized);
+        await adminAuth.authenticate(ctx, route.meta);
+        if (ctx.authSession) ctx.adminId = new Types.ObjectId(ctx.authSession.principalId);
         await next();
     },
 );

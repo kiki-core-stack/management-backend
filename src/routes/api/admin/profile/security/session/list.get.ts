@@ -1,13 +1,4 @@
-import { adminAuthenticationSessionStore } from '@/constants/admin/authentication-session';
+import { adminAuth } from '@/constants/admin/auth';
+import { defineAdminAuthRoute } from '@/libs/admin/auth';
 
-export default defineRoute({ permission: 'ignore' })(async (ctx) => {
-    const sessions = await adminAuthenticationSessionStore.list({
-        currentSessionId: ctx.adminAuthenticationSession!.id,
-        principalId: ctx.adminId!.toHexString(),
-    });
-
-    return ctx.createApiSuccessResponse({
-        count: sessions.length,
-        list: sessions,
-    });
-});
+export default defineAdminAuthRoute(adminAuth.routes.security.listSessions);
