@@ -1,6 +1,6 @@
 import { AuthEventType } from '@kcs-project/pack/constants/auth';
 import { recordAuthEvent } from '@kcs-project/pack/libs/auth/event';
-import { revokeAllAuthSessions } from '@kcs-project/pack/libs/auth/session';
+import { revokeAllAuthSessionsAround } from '@kcs-project/pack/libs/auth/session';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type {
     Admin,
@@ -34,11 +34,11 @@ export default defineRoute({ permission: adminPermissions.admin.account.update }
         updateQuery.$set.enabled = updateQuery.$set.enabled || admin._id.equals(ctx.adminId);
 
         const adminId = admin._id.toHexString();
-        await admin.assertUpdateIfNotModified(updatedAt, updateQuery);
-        // Disabling the account or changing its password revokes all of its sessions.
+        const update = async () => await admin.assertUpdateIfNotModified(updatedAt, updateQuery);
+        // Disabling the account or changing its password revokes all of its sessions, before and after the write.
         if (!updateQuery.$set.enabled || updateQuery.$set.password !== undefined) {
-            await revokeAllAuthSessions(adminAuthRealm, adminId);
-        }
+            await revokeAllAuthSessionsAround(adminAuthRealm, adminId, update);
+        } else await update();
 
         if (updateQuery.$set.password !== undefined) {
             await recordAuthEvent(
