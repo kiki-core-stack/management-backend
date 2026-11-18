@@ -61,19 +61,19 @@ async (ctx) => {
 使用 pack 的 auth（[pack docs/auth.md](https://github.com/kiki-core-stack/pack/blob/main/docs/auth.md)），本 repo 只定義 realm 與轉接路由：
 
 - `constants/admin/auth.ts`：
-  - `adminAuthRealm`：`defineAuthRealm`，scope 為 `PlatformScope.AdminManagement`，以 `account` 登入、`enabled` 判斷啟用，cookie `__Host-admin-session`，origins 取自 `ADMIN_AUTH_ORIGINS`，支援 passkey。
+  - `adminAuthRealm`：`defineAuthRealm`，scope 為 `PlatformScope.AdminManagement`，以 `account` 登入、`enabled` 判斷啟用，cookie `__Host-admin-session`，origins 取自 `ADMIN_AUTH_ORIGINS`，支援 passkey。沒有寄送通道（`messenger`）：不支援驗證碼與未登入的重設密碼，變更密碼必須輸入目前密碼。
   - `adminAuth`：`createHonoAuth(adminAuthRealm, { getClientIp })`。
   - `adminAuthManagementRoutes`：管理管理員的安全性（含自己）；操作者為目前管理員，需在自己的工作階段通過高危驗證；非 unrestricted 的管理員不能管理超級管理員（找不到時回 `notFound`）。
 - `libs/admin/auth.ts`：
   - `defineAdminAuthRoute(route, permission = 'ignore')`：把 pack 的路由處理函式轉成本 repo 的路由，meta 併入 `RouteMeta`。`defineAdminAuthManagementRoute(route)` 同上，權限固定為 `admin.account.manageSecurity`。
 - 路由檔只有一行轉接，例如 `export default defineAdminAuthRoute(adminAuth.routes.logout)`：
-  - `routes/api/admin/auth/`：登入（密碼、第二因子、passkey、QR Code 的建立／查詢／核准／拒絕／輪詢）、登出、高危操作驗證。
+  - `routes/api/admin/auth/`：登入（密碼、第二因子、passkey、QR Code 的建立／查詢／核准／拒絕／輪詢）、登出、高危操作驗證（含寄送驗證碼的 `verification/send-code`；realm 沒有寄送通道時回 `verificationCodeUnavailable`，補上 `messenger` 即可使用）。未轉接 `passwordReset`。
   - `routes/api/admin/profile/security/`：本人的安全性總覽、密碼、passkey、TOTP、救援碼、雙重驗證開關與工作階段。驗證事件列表（`event/list.get.ts`）是本 repo 自己的路由：以 `paginateModelDataWithApiResponse` 查詢 `AuthEventModel`，並強制限定為目前管理員自己的事件。
   - `routes/api/admin/admin/[id]/security/`：管理員安全性管理（總覽、工作階段列表與踢除、強制雙重驗證、重設雙重驗證），權限 `admin.account.manageSecurity`；對象可以是自己。
 - `profile` 回傳 `restricted`，前端據此在受限工作階段（需要雙重驗證但尚未綁定）只顯示綁定畫面。
-- 停用管理員或由管理端變更密碼時呼叫 `revokeAllAuthSessions(adminAuthRealm, id)`，變更密碼另寫入 `PasswordChanged` 事件（操作者為目前管理員）；刪除管理員時呼叫 `deleteAuthPrincipalData(adminAuthRealm, id)`。
+- 管理端編輯管理員（`admin/[id]/index.put.ts`）變更密碼或停用時，以 `revokeAllAuthSessionsAround(adminAuthRealm, id, change)` 包住寫入，變更密碼另寫入 `PasswordReset` 事件（操作者為目前管理員）；只切換啟用狀態（`enabled.patch.ts`）停用時呼叫 `revokeAllAuthSessions(adminAuthRealm, id)`；刪除管理員時呼叫 `deleteAuthPrincipalData(adminAuthRealm, id)`。
 - 自訂需要高危驗證的路由：在 `defineRoute` 的 meta 寫 `verification: '<操作名稱>'`（或以 `ctx` 產生帶目標 ID 的名稱），或在 handler 內呼叫 `adminAuth.assertVerification(ctx, operation)`。
 
 ## 新增身分
 
-在 `constants/permissions/<principal>/` 建立該身分的權限 catalog，列入 `constants/permissions/index.ts` 的 `permissionCatalogs`；路由放在 `routes/api/<principal>/`。登入比照 admin：以 `defineAuthRealm` 定義 realm（scope 需有含 `auth` 區塊的平台設定）、`createHonoAuth` 取得綁定、在 `/api/<principal>/*` 的 route middleware 呼叫 `authenticate`，並轉接路由。
+在 `constants/permissions/<principal>/` 建立該身分的權限 catalog，列入 `constants/permissions/index.ts` 的 `permissionCatalogs`；路由放在 `routes/api/<principal>/`。登入比照 admin：以 `defineAuthRealm` 定義 realm（scope 需有含 `auth` 區塊的平台設定）、`createHonoAuth` 取得綁定、在 `/api/<principal>/*` 的 route middleware 呼叫 `authenticate`，並轉接路由。需要驗證碼、未登入的重設密碼、無密碼帳號或外部身分登入時，見 pack `docs/auth.md` 的 `messenger`、`passwordReset` 路由與 `loginWithExternalIdentity`。

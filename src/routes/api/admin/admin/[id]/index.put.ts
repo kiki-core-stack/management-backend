@@ -54,7 +54,7 @@ export default defineRoute({ permission: adminPermissions.admin.account.update }
                         userAgent: ctx.req.header('user-agent'),
                     },
                     sessionId: ctx.authSession?.id,
-                    type: AuthEventType.PasswordChanged,
+                    type: AuthEventType.PasswordReset,
                 },
             );
         }
