@@ -13,7 +13,7 @@ import { getAdminPermission } from '@/libs/admin/permission';
 // Constants
 export const adminAuthRealm = defineAuthRealm<AdminDocument>({
     cookieName: '__Host-admin-session',
-    displayName: 'kcs admin',
+    displayName: 'kcs總後台',
     findPrincipalByIdentifier: async (account) => await AdminModel.findOne({ account }),
     getPrincipalDisplayName: (admin) => admin.account,
     isPrincipalActive: (admin) => admin.enabled,
