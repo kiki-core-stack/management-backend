@@ -19,6 +19,10 @@ export const adminAuthRealm = defineAuthRealm<AdminDocument>({
     isPrincipalActive: (admin) => admin.enabled,
     model: AdminModel,
     name: 'admin',
+    // The ws.io server closes the connections bound to the revoked sessions.
+    onSessionsRevoked: (principalId, sessionIds) => {
+        wsIoClient.emit(WsIoEventNames.ToServer.AuthSessionsRevoked, adminAuthRealm.name, principalId, sessionIds);
+    },
     origins: checkAndGetEnvValue('ADMIN_AUTH_ORIGINS'),
     scope: PlatformScope.AdminManagement,
     webauthn: {},

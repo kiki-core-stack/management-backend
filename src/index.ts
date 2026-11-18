@@ -49,6 +49,9 @@ if (process.env.NODE_ENV === 'development') (await import('@/libs/permission')).
 
 // Do not open a listener if a signal arrived while startup imports were pending.
 if (!isShuttingDown()) {
+    // Connect ws.io
+    await wsIoClient.connect();
+
     // Start server
     logger.info('Starting server...');
     server = Bun.serve({

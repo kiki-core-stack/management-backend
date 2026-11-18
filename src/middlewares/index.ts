@@ -14,3 +14,5 @@ await import('./context/cookie-session');
 
 await import('./admin');
 await import('./admin/permission');
+
+await import('./internal/ws.io');
