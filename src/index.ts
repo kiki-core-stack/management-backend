@@ -33,7 +33,11 @@ process.once('unhandledRejection', handleFatalError);
 
 // Environment-specific side effects, e.g. dev-only tooling or schema extensions.
 await import(`@/runtime-inits/${process.env.NODE_ENV}`);
-await (await import('@kcs-project/pack/init')).initializeSystemStartup();
+
+// Production runs `--initialize-only` once from docker-entrypoint.sh before starting the workers (`--is-subprocess`).
+if (!Bun.argv.includes('--is-subprocess')) await (await import('@kcs-project/pack/init')).initializeSystem();
+if (Bun.argv.includes('--initialize-only')) process.exit(0);
+
 await import('@/middlewares');
 await import(`@/core/loaders/routes/${process.env.NODE_ENV}`);
 
