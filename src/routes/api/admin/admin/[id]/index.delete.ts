@@ -13,15 +13,10 @@ export default defineRoute({ permission: adminPermissions.admin.account.delete }
     const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
 
-    const adminId = await getDefaultMongooseConnection().transaction(async (session) => {
-        const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter, undefined, { session });
-        if (admin._id.equals(ctx.adminId)) throwApiError(apiErrors.common.conflict);
-        if (await AdminModel.countDocuments(undefined, { session }) === 1) throwApiError(apiErrors.common.conflict);
-        await admin.deleteOne({ session });
-        return admin._id.toHexString();
-    });
-
-    await deleteAuthPrincipalData(adminAuthRealm, adminId);
-    clearAdminPermissionCache(adminId).catch(logger.error);
+    const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
+    if (admin._id.equals(ctx.adminId)) throwApiError(apiErrors.common.conflict);
+    await admin.deleteOne();
+    await deleteAuthPrincipalData(adminAuthRealm, admin.id);
+    clearAdminPermissionCache(admin.id).catch(logger.error);
     return ctx.createApiSuccessResponse();
 });
