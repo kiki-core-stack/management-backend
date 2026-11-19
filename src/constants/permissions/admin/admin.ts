@@ -20,8 +20,8 @@ export const admin = {
                 list: { label: permissionActionLabels.list },
                 manageSecurity: {
                     label: {
-                        'en': 'Manage sessions and two-factor authentication',
-                        'zh-TW': '管理工作階段與雙重驗證',
+                        'en': 'View security events, manage signed-in devices and two-factor authentication',
+                        'zh-TW': '查看安全性紀錄、管理登入裝置與雙重驗證',
                     },
                     requires: ['list'],
                 },

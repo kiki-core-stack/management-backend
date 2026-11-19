@@ -2,13 +2,9 @@ import { PlatformScope } from '@kcs-project/pack/constants/platform';
 import { createHonoAuth } from '@kcs-project/pack/hono-backend/libs/auth';
 import { defineAuthRealm } from '@kcs-project/pack/libs/auth/realm';
 import { AdminModel } from '@kcs-project/pack/models/admin';
-import type {
-    Admin,
-    AdminDocument,
-} from '@kcs-project/pack/models/admin';
-import type { QueryFilter } from 'mongoose';
+import type { AdminDocument } from '@kcs-project/pack/models/admin';
 
-import { getAdminPermission } from '@/libs/admin/permission';
+import { getSecurityManageableAdminId } from '@/libs/admin/auth';
 
 // Constants
 export const adminAuthRealm = defineAuthRealm<AdminDocument>({
@@ -31,7 +27,7 @@ export const adminAuthRealm = defineAuthRealm<AdminDocument>({
 export const adminAuth = createHonoAuth(adminAuthRealm, { getClientIp });
 
 /**
- * Routes for admins managing admins' security, their own included; only unrestricted admins may manage super admins.
+ * Routes for admins managing admins' security; see `getSecurityManageableAdminId` for the manageable ones.
  */
 export const adminAuthManagementRoutes = adminAuth.createManagementRoutes({
     assertActorVerification: adminAuth.assertVerification,
@@ -39,9 +35,5 @@ export const adminAuthManagementRoutes = adminAuth.createManagementRoutes({
         principalId: ctx.adminId!.toHexString(),
         realm: adminAuthRealm.name,
     }),
-    async getTargetPrincipalId(ctx) {
-        const filter: QueryFilter<Admin> = {};
-        if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
-        return (await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter)).id;
-    },
+    getTargetPrincipalId: getSecurityManageableAdminId,
 });
