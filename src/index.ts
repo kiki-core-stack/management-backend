@@ -31,17 +31,10 @@ process.once('unhandledRejection', handleFatalError);
 
 // Start
 
-// Import environment-specific runtime initializers.
-// Used for applying side effects like dev-only tooling, schema extensions, etc.
+// Environment-specific side effects, e.g. dev-only tooling or schema extensions.
 await import(`@/runtime-inits/${process.env.NODE_ENV}`);
-
-// Initialize system startup
 await (await import('@kcs-project/pack/init')).initializeSystemStartup();
-
-// Load middlewares
 await import('@/middlewares');
-
-// Load routes
 await import(`@/core/loaders/routes/${process.env.NODE_ENV}`);
 
 if (process.env.NODE_ENV === 'development') (await import('@/libs/permission')).checkRoutePermissionWiring();
@@ -50,7 +43,6 @@ if (process.env.NODE_ENV === 'development') (await import('@/libs/permission')).
 if (!isShuttingDown()) {
     await wsIoClient.connect();
 
-    // Start server
     logger.info('Starting server...');
     server = Bun.serve({
         fetch: honoApp.fetch,
