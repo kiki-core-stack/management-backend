@@ -19,9 +19,9 @@ export const adminAuthRealm = defineAuthRealm<AdminDocument>({
     onSessionsRevoked: (principalId, sessionIds) => {
         wsIoClient.emit(WsIoEventNames.ToServer.AuthSessionsRevoked, adminAuthRealm.name, principalId, sessionIds);
     },
-    origins: checkAndGetEnvValue('ADMIN_AUTH_ORIGINS'),
+    origin: checkAndGetEnvValue('ADMIN_AUTH_ORIGIN'),
     scope: PlatformScope.AdminManagement,
-    webauthn: {},
+    webauthn: true,
 });
 
 export const adminAuth = createHonoAuth(adminAuthRealm, { getClientIp });

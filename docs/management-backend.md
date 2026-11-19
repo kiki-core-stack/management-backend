@@ -4,7 +4,7 @@
 
 ## 啟動
 
-1. 複製 `.env.development` 為 `.env.development.local`，填入 `ADMIN_AUTH_ORIGINS`（admin-frontend 的 origin；也是 WebAuthn 的 origin，因此只能填一個）、金鑰（`AUTH_SECRET_ENCRYPTION_KEYS`、`COOKIE_SESSION_KEYS`，格式見檔內註解）與 ws.io-server 連線（`WS_IO_SERVER_BASE_URL`；`WS_IO_AUTH_KEY`、`WS_IO_INTROSPECTION_TOKEN` 須與 ws.io-server 的 `MANAGEMENT_BACKEND_AUTH_KEY`、`MANAGEMENT_BACKEND_API_INTROSPECTION_TOKEN` 相同，後者至少 32 bytes），並確認 `MONGODB_URI`（需 replica set）、`REDIS_URL`。正式環境的 `.env.production.local`（範例 `.env.production`，建置時複製進 image）需要 `COOKIE_SESSION_KEYS`；其餘由 main 的 compose 提供（`ADMIN_AUTH_ORIGINS`、`WS_IO_SERVER_BASE_URL` 為環境變數，秘密為 compose secret，值都寫在 main 的 `.env`）。
+1. 複製 `.env.development` 為 `.env.development.local`，填入 `ADMIN_AUTH_ORIGIN`（admin-frontend 的 origin）、金鑰（`AUTH_SECRET_ENCRYPTION_KEYS`、`COOKIE_SESSION_KEYS`，格式見檔內註解）與 ws.io-server 連線（`WS_IO_SERVER_BASE_URL`；`WS_IO_AUTH_KEY`、`WS_IO_INTROSPECTION_TOKEN` 須與 ws.io-server 的 `MANAGEMENT_BACKEND_AUTH_KEY`、`MANAGEMENT_BACKEND_API_INTROSPECTION_TOKEN` 相同，後者至少 32 bytes），並確認 `MONGODB_URI`（需 replica set）、`REDIS_URL`。正式環境的 `.env.production.local`（範例 `.env.production`，建置時複製進 image）需要 `COOKIE_SESSION_KEYS`；其餘由 main 的 compose 提供（`ADMIN_AUTH_ORIGIN`、`WS_IO_SERVER_BASE_URL` 為環境變數，秘密為 compose secret，值都寫在 main 的 `.env`）。
 2. `bun run dev`。啟動時會建立預設管理員與平台設定（pack `init`）、檢查路由與權限的對應（見下方），並連線 ws.io-server。
 
 ## 結構
@@ -46,7 +46,7 @@ async (ctx) => {
 
 使用 pack 的 auth（[pack docs/auth.md](https://github.com/kiki-core-stack/pack/blob/main/docs/auth.md)），本 repo 只定義 realm 與轉接路由：
 
-- `adminAuthRealm`（`constants/admin/auth.ts`）：origins 取自 `ADMIN_AUTH_ORIGINS`；工作階段被撤銷時以 `wsIoClient` 通知 ws.io-server 讓對應連線登出。沒有寄送通道（`messenger`）：不支援驗證碼與未登入的重設密碼（未轉接 `passwordReset`；`verification/send-code` 回 `verificationCodeUnavailable`，補上 `messenger` 即可使用），變更密碼必須輸入目前密碼。
+- `adminAuthRealm`（`constants/admin/auth.ts`）：origin 取自 `ADMIN_AUTH_ORIGIN`；工作階段被撤銷時以 `wsIoClient` 通知 ws.io-server 讓對應連線登出。沒有寄送通道（`messenger`）：不支援驗證碼與未登入的重設密碼（未轉接 `passwordReset`；`verification/send-code` 回 `verificationCodeUnavailable`，補上 `messenger` 即可使用），變更密碼必須輸入目前密碼。
 - 路由檔只有一行轉接，例如 `export default defineAdminAuthRoute(adminAuth.routes.logout)`；權限預設 `'ignore'`。
 - 管理管理員安全性的路由（`routes/api/admin/admin/[id]/security/`，用 `defineAdminAuthManagementRoute`）需要 `admin.account.manageSecurity`，對象可以是自己；操作者需在自己的工作階段驗證身分；非 unrestricted 的管理員不能管理超級管理員（找不到時回 `notFound`）。
 - 安全性紀錄列表（兩個 `security/event/list.get.ts`）是本 repo 自己的路由，查詢條件強制限定為目標管理員的事件。
