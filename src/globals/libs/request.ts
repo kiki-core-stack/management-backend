@@ -62,7 +62,9 @@ export function parseApiRequestQueryParams(ctx: Context): ParsedApiRequestQueryP
     if (queries.filter?.[0]) {
         try {
             filter = normalizeApiRequestQueryFilter(JSON.parse(queries.filter[0]));
-        } catch {}
+        } catch {
+            // 無法解析或正規化時，保留預設的空 filter。
+        }
     }
 
     const limit = Math.min(Math.abs(Number(queries.limit?.[0]) || 10), 1000);
