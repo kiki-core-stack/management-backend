@@ -44,12 +44,10 @@ await import('@/middlewares');
 // Load routes
 await import(`@/core/loaders/routes/${process.env.NODE_ENV}`);
 
-// Development-only wiring checks.
 if (process.env.NODE_ENV === 'development') (await import('@/libs/permission')).checkRoutePermissionWiring();
 
 // Do not open a listener if a signal arrived while startup imports were pending.
 if (!isShuttingDown()) {
-    // Connect ws.io
     await wsIoClient.connect();
 
     // Start server

@@ -8,10 +8,6 @@ import type { RouteMeta } from '@/core/types/route';
 import { getAdminPermission } from '@/libs/admin/permission';
 
 // Functions
-
-/**
- * Forwards a pack auth management route; requires the permission to manage admin accounts' security.
- */
 export function defineAdminAuthManagementRoute(route: AuthRouteDefinition) {
     return defineAdminAuthRoute(route, adminPermissions.admin.account.manageSecurity);
 }
