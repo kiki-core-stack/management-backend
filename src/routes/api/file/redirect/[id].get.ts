@@ -1,4 +1,4 @@
-import { getPublicFilePath } from '@kcs-project/pack/libs/file';
+import { getPublicFilePath } from '@kcs-project/pack/libs/file/public';
 import { FileModel } from '@kcs-project/pack/models/file';
 
 // Files never change, so browsers may cache the redirect.

@@ -1,4 +1,4 @@
-import { getPublicFilePath } from '@kcs-project/pack/libs/file';
+import { getPublicFilePath } from '@kcs-project/pack/libs/file/public';
 import { uploadImageAndCreateFileDocument } from '@kcs-project/pack/libs/image';
 
 const formDataSchema = z.object({ file: z.customFile().commonImages().gif().maxSizeMb(8) });
