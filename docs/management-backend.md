@@ -4,7 +4,7 @@
 
 ## 啟動
 
-1. `.env.development.local` 由 main 的開發 profile 產生（見 main 的 docs），不要手改。`WS_IO_AUTH_KEY`、`WS_IO_INTROSPECTION_TOKEN` 與 ws.io-server 的 `MANAGEMENT_BACKEND_AUTH_KEY`、`MANAGEMENT_BACKEND_API_INTROSPECTION_TOKEN` 來自 profile 的同一個值；`MONGODB_URI` 需 replica set。正式環境的設定全部由 main 的 compose 提供。
+1. `.env.development.local` 由 main 的開發 profile 產生，不要手改。
 2. `bun run dev`。啟動時會建立預設管理員與平台設定（pack `init`）、檢查路由與權限的對應（見下方），並連線 ws.io-server。
 
 系統初始化（pack `initializeSystem`）只由本服務執行，其他服務不執行：正式環境由 `docker-entrypoint.sh` 在啟動 supervisor 前以 `index.js --initialize-only` 執行一次，失敗則不啟動；workers（`--is-subprocess`）不執行；開發時由單一行程直接執行。
