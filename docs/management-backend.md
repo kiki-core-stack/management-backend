@@ -4,7 +4,7 @@
 
 ## 啟動
 
-1. 複製 `.env.development` 為 `.env.development.local`，填入 `ADMIN_AUTH_ORIGIN`（admin-frontend 的 origin）、金鑰（`AUTH_SECRET_ENCRYPTION_KEYS`、`COOKIE_SESSION_KEYS`，格式見檔內註解）與 ws.io-server 連線（`WS_IO_SERVER_BASE_URL`；`WS_IO_AUTH_KEY`、`WS_IO_INTROSPECTION_TOKEN` 須與 ws.io-server 的 `MANAGEMENT_BACKEND_AUTH_KEY`、`MANAGEMENT_BACKEND_API_INTROSPECTION_TOKEN` 相同，後者至少 32 bytes），並確認 `MONGODB_URI`（需 replica set）、`REDIS_URL`。正式環境的 `.env.production.local`（範例 `.env.production`，建置時複製進 image）需要 `COOKIE_SESSION_KEYS`；其餘由 main 的 compose 提供（`ADMIN_AUTH_ORIGIN`、`WS_IO_SERVER_BASE_URL` 為環境變數，秘密為 compose secret，值都寫在 main 的 `.env`）。
+1. `.env.development.local` 由 main 的開發 profile 產生（見 main 的 docs），不要手改。`WS_IO_AUTH_KEY`、`WS_IO_INTROSPECTION_TOKEN` 與 ws.io-server 的 `MANAGEMENT_BACKEND_AUTH_KEY`、`MANAGEMENT_BACKEND_API_INTROSPECTION_TOKEN` 來自 profile 的同一個值；`MONGODB_URI` 需 replica set。正式環境的設定全部由 main 的 compose 提供。
 2. `bun run dev`。啟動時會建立預設管理員與平台設定（pack `init`）、檢查路由與權限的對應（見下方），並連線 ws.io-server。
 
 系統初始化（pack `initializeSystem`）只由本服務執行，其他服務不執行：正式環境由 `docker-entrypoint.sh` 在啟動 supervisor 前以 `index.js --initialize-only` 執行一次，失敗則不啟動；workers（`--is-subprocess`）不執行；開發時由單一行程直接執行。
