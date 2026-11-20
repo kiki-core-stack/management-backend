@@ -9,62 +9,68 @@ import {
     objectKeys,
 } from 'ts-extras';
 
+import type { GetListQuery } from '@/globals/libs/get-list-query';
+
+// The request's sort, else the route's default, always ending with `_id` so pages stay stable.
+function buildSort(sort: GetListQuery['sort'], defaultSort: PaginateOptions['sort']) {
+    const rawSort = objectKeys(sort).length ? sort : defaultSort;
+    if (rawSort === undefined) return { _id: -1 };
+    if (typeof rawSort === 'object') {
+        return {
+            ...rawSort,
+            _id: -1,
+        };
+    }
+
+    return /\b-?_id\b/.test(rawSort) ? rawSort : `${rawSort.trim()} -_id`;
+}
+
+/**
+ * Paginates the model by the request's list query (parsed here unless given). When `fields` is requested, only the
+ * populates of the requested paths (and of their sub-paths) are kept.
+ */
 export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
     ctx: Context,
     model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
-    queryParams?: ParsedApiRequestQueryParams,
+    query?: GetListQuery,
     paginateOptions?: PaginateOptions,
 ) {
-    if (!queryParams) queryParams = parseApiRequestQueryParams(ctx);
-    if (paginateOptions?.populate && queryParams.fields.length) {
-        const populates = Array.isArray(paginateOptions.populate)
-            ? paginateOptions.populate
-            : [paginateOptions.populate];
-
-        paginateOptions.populate = populates.filter(
-            (populate) => queryParams.fields.includes(typeof populate === 'object' ? populate.path : populate),
-        ) as typeof paginateOptions.populate;
+    query ??= parseGetListQuery(ctx, model);
+    const fields = [...query.fields];
+    let populate = paginateOptions?.populate;
+    if (populate && fields.length) {
+        const requestedPaths = fields.filter((field) => !field.startsWith('-'));
+        populate = (Array.isArray(populate) ? populate : [populate]).filter((option) => {
+            const path = typeof option === 'object' ? option.path : option;
+            return requestedPaths.some((field) => path === field || path.startsWith(`${field}.`));
+        }) as typeof populate;
     }
 
     if (paginateOptions?.select) {
-        if (Array.isArray(paginateOptions.select)) queryParams.fields.push(...paginateOptions.select);
+        if (Array.isArray(paginateOptions.select)) fields.push(...paginateOptions.select);
         else if (typeof paginateOptions.select === 'string') {
-            queryParams.fields.push(...paginateOptions.select.split(/\s+/).filter(Boolean));
+            fields.push(...paginateOptions.select.split(/\s+/).filter(Boolean));
         } else {
-            objectEntries(paginateOptions.select).forEach(
-                ([key, value]) => queryParams.fields.push(value ? key : `-${key}`),
-            );
+            objectEntries(paginateOptions.select).forEach(([key, value]) => fields.push(value ? key : `-${key}`));
         }
     }
 
-    if (queryParams.fields.some((field) => field.startsWith('-'))) {
-        const filteredFields = queryParams.fields.filter(
-            (field) => !field.startsWith('-') && !queryParams.fields.includes(`-${field}`),
-        );
-
-        if (filteredFields.length) queryParams.fields = filteredFields;
-    }
-
-    let finalSort;
-    const rawSort = objectKeys(queryParams.sort).length ? queryParams.sort : paginateOptions?.sort;
-    if (rawSort === undefined) finalSort = { _id: -1 };
-    else {
-        if (typeof rawSort === 'object') {
-            finalSort = {
-                ...rawSort,
-                _id: -1,
-            };
-        } else if (/\b-?_id\b/.test(rawSort)) finalSort = `${rawSort.trim()} -_id`;
+    // A projection cannot mix inclusions and exclusions; with any inclusion, keep only the included paths.
+    let select = fields;
+    if (fields.some((field) => field.startsWith('-'))) {
+        const includedFields = fields.filter((field) => !field.startsWith('-') && !fields.includes(`-${field}`));
+        if (includedFields.length) select = includedFields;
     }
 
     const paginatedResult = await model.paginate(
-        queryParams.filter,
+        query.filter,
         {
             ...paginateOptions,
-            limit: queryParams.limit,
-            page: queryParams.page,
-            select: queryParams.fields,
-            sort: finalSort,
+            limit: query.limit,
+            page: query.page,
+            populate,
+            select,
+            sort: buildSort(query.sort, paginateOptions?.sort),
         },
     );
 

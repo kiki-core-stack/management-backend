@@ -4,9 +4,17 @@ import { adminAuthRealm } from '@/constants/admin/auth';
 import { getSecurityManageableAdminId } from '@/libs/admin/auth';
 
 export default defineRoute({ permission: adminPermissions.admin.account.manageSecurity })(async (ctx) => {
-    const parsedApiRequestQueryParams = parseApiRequestQueryParams(ctx);
     // Always limited to the managed admin's events, whatever the request filters by.
-    parsedApiRequestQueryParams.filter.principalId = await getSecurityManageableAdminId(ctx);
-    parsedApiRequestQueryParams.filter.realm = adminAuthRealm.name;
-    return await paginateModelDataWithApiResponse(ctx, AuthEventModel, parsedApiRequestQueryParams);
+    const query = parseGetListQuery(
+        ctx,
+        AuthEventModel,
+        {
+            scope: {
+                principalId: await getSecurityManageableAdminId(ctx),
+                realm: adminAuthRealm.name,
+            },
+        },
+    );
+
+    return await paginateModelDataWithApiResponse(ctx, AuthEventModel, query);
 });
