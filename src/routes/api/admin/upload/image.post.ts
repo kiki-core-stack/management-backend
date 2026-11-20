@@ -1,3 +1,4 @@
+import { getPublicFilePath } from '@kcs-project/pack/libs/file';
 import { uploadImageAndCreateFileDocument } from '@kcs-project/pack/libs/image';
 
 const formDataSchema = z.object({ file: z.customFile().commonImages().gif().maxSizeMb(8) });
@@ -19,6 +20,9 @@ export default defineRoute({ permission: 'ignore' })(
         }
 
         const fileDocument = await uploadImageAndCreateFileDocument({ image: file });
-        return ctx.createApiSuccessResponse({ id: fileDocument._id.toHexString() });
+        return ctx.createApiSuccessResponse({
+            id: fileDocument._id.toHexString(),
+            path: getPublicFilePath(fileDocument),
+        });
     },
 );
