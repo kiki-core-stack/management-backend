@@ -14,13 +14,12 @@
 - routes/api/admin/：總後台路由，依領域分資料夾。
   - CRUD 慣例：`list.get.ts`、`index.post.ts`（匯出 `jsonSchema`，有設定變體的服務商則匯出 `jsonSchemaShape`，供更新共用）、`[id]/index.put.ts`（見下方「更新」）、`[id]/index.delete.ts`、`[id]/enabled.patch.ts`（`{ enabled }`）。
   - `*.dev.ts` 只在開發環境載入，例如前端 codegen 使用的 `admin/permission/list.get.dev.ts`。
+- routes/api/admin/upload/image.post.ts、routes/api/file/redirect/[id].get.ts：圖片上傳回傳 `{ id, path }`。只存 File id 的欄位（例如列表縮圖）以 `/api/file/redirect/<id>` 顯示，301 轉到 `/files/<key>` 並可被瀏覽器快取；富文字等直接寫進內容的網址存回傳的 `path`，不經過 redirect。
 - routes/api/internal/ws-io/：ws.io-server 呼叫的內部路由（見 main 的 docs），gateway 不對外開放；以 `x-ws-io-introspection-token` 標頭比對 `WS_IO_INTROSPECTION_TOKEN`，不經平台 IP 存取規則。
 - constants/：權限 catalog（`permissions/`）、admin realm（`admin/auth.ts`）、路由共用的 zod schema（`common-zod-schemas/`，自動匯入為 `commonZodSchemas`）。
 - middlewares/：平台 IP 存取規則（只查 system scope，各 realm 驗證工作階段時另查自己的）、admin 工作階段驗證（設定 `ctx.adminId`）與權限檢查、內部路由的 token 檢查。
 - libs/：admin auth 路由轉接、管理員權限快取（Redis versioned cache；變更管理員的身分組或刪除管理員時要清除該管理員的快取，更新身分組時要清除全部）、開發時的路由權限檢查。
 - globals/：自動匯入的 helper（分頁、查詢參數、更新、`wsIoClient`）；刪除單筆資料直接用 `Model.findByRouteIdOrThrowNotFoundError(ctx)` 後 `deleteOne()`。
-- setups/：`ctx.getAdmin()`，並啟用 pack 的 `findByRouteIdOrThrowNotFoundError`。
-- types/route.ts：`RouteMeta` 的 `permission` 必填，並繼承 pack 的 `AuthRouteMeta`。
 
 ## 新增路由與權限
 
