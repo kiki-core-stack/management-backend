@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
 import { timingSafeEqual } from 'node:crypto';
 
-const introspectionToken = checkAndGetEnvValue('WS_IO_INTROSPECTION_TOKEN');
+const introspectionToken = getRequiredEnv('WS_IO_INTROSPECTION_TOKEN');
 if (Buffer.byteLength(introspectionToken) < 32) {
     throw new TypeError('WS_IO_INTROSPECTION_TOKEN must contain at least 32 bytes');
 }

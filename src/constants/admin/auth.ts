@@ -19,7 +19,7 @@ export const adminAuthRealm = defineAuthRealm<AdminDocument>({
     onSessionsRevoked: (principalId, sessionIds) => {
         wsIoClient.emit(WsIoEventNames.ToServer.AuthSessionsRevoked, adminAuthRealm.name, principalId, sessionIds);
     },
-    origin: checkAndGetEnvValue('ADMIN_AUTH_ORIGIN'),
+    origin: getRequiredEnv('ADMIN_AUTH_ORIGIN'),
     scope: PlatformScope.AdminManagement,
     webauthn: true,
 });
