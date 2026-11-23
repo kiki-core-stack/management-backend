@@ -1,3 +1,5 @@
+import { selectLocaleCatalogs } from '@kcs-project/pack/i18n/catalogs';
+
 import { adminPermissionCatalog } from '@/constants/permissions/admin';
 
 export default defineRoute({
@@ -6,6 +8,6 @@ export default defineRoute({
 })((ctx) => ctx.createApiSuccessResponse({
     groups: adminPermissionCatalog.groups,
     keys: adminPermissionCatalog.keys,
-    labels: adminPermissionCatalog.labels,
+    labels: selectLocaleCatalogs(appLocaleCatalogs, (messages) => messages.permissions.admin),
     requirements: adminPermissionCatalog.requirements,
 }));

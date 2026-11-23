@@ -16,13 +16,7 @@ export default defineRoute({ permission: adminPermissions.sms.provider.update })
         const smsProvider = await SmsProviderModel.findByRouteIdOrThrowNotFoundError(ctx);
         const { updatedAt, ...data } = ctx.req.valid('json');
         if (data.code !== smsProvider.code) {
-            throwFieldValidationError(
-                ['code'],
-                {
-                    'en': 'The provider cannot be changed',
-                    'zh-TW': '不能變更服務商',
-                },
-            );
+            throwFieldValidationError(['code'], appLocaleCatalogs, (messages) => messages.validation.provider.codeImmutable);
         }
 
         await smsProvider.assertUpdateIfNotModified(

@@ -19,10 +19,7 @@ export const jsonSchema = z.object({
                     minimumSubDomains: 2,
                 },
             ),
-            z.i18nIssue({
-                'en': 'Enter a valid sender address',
-                'zh-TW': '請輸入有效的寄件地址',
-            }),
+            z.i18nIssue(appLocaleCatalogs, (messages) => messages.validation.email.invalidSenderAddress),
         ),
     key: z.enum(EmailSenderIdentityKey),
 }) satisfies ZodValidatorType<EmailSenderIdentity>;

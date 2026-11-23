@@ -15,13 +15,7 @@ export default defineRoute({ permission: adminPermissions.admin.account.toggle }
         const admin = await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
         const { enabled } = ctx.req.valid('json');
         if (!enabled && admin._id.equals(ctx.adminId)) {
-            throwFieldValidationError(
-                ['enabled'],
-                {
-                    'en': 'You cannot disable your own account',
-                    'zh-TW': '不能停用自己的帳號',
-                },
-            );
+            throwFieldValidationError(['enabled'], appLocaleCatalogs, (messages) => messages.validation.admin.cannotDisableSelf);
         }
 
         await admin.assertUpdateSuccess({ $set: { enabled } });

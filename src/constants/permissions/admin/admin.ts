@@ -1,78 +1,35 @@
 import type { PermissionGroupNode } from '@kcs-project/pack/types/permission';
 
-import { permissionActionLabels } from '../action';
-
 export const admin = {
     children: {
         account: {
             children: {
                 create: {
-                    label: permissionActionLabels.create,
                     requires: [
                         'list',
                         'admin.role.list',
                     ],
                 },
-                delete: {
-                    label: permissionActionLabels.delete,
-                    requires: ['list'],
-                },
-                list: { label: permissionActionLabels.list },
-                manageSecurity: {
-                    label: {
-                        'en': 'View security events, manage signed-in devices and two-factor authentication',
-                        'zh-TW': '查看安全性紀錄、管理登入裝置與雙重驗證',
-                    },
-                    requires: ['list'],
-                },
-                toggle: {
-                    label: permissionActionLabels.toggle,
-                    requires: ['list'],
-                },
+                delete: { requires: ['list'] },
+                list: {},
+                manageSecurity: { requires: ['list'] },
+                toggle: { requires: ['list'] },
                 update: {
-                    label: permissionActionLabels.update,
                     requires: [
                         'list',
                         'admin.role.list',
                     ],
                 },
             },
-            label: {
-                'en': 'Admin accounts',
-                'zh-TW': '管理員帳號',
-            },
         },
-        log: {
-            children: { list: { label: permissionActionLabels.list } },
-            label: {
-                'en': 'Admin logs',
-                'zh-TW': '管理員日誌',
-            },
-        },
+        log: { children: { list: {} } },
         role: {
             children: {
-                create: {
-                    label: permissionActionLabels.create,
-                    requires: ['list'],
-                },
-                delete: {
-                    label: permissionActionLabels.delete,
-                    requires: ['list'],
-                },
-                list: { label: permissionActionLabels.list },
-                update: {
-                    label: permissionActionLabels.update,
-                    requires: ['list'],
-                },
-            },
-            label: {
-                'en': 'Admin roles',
-                'zh-TW': '管理員身分組',
+                create: { requires: ['list'] },
+                delete: { requires: ['list'] },
+                list: {},
+                update: { requires: ['list'] },
             },
         },
-    },
-    label: {
-        'en': 'Admins',
-        'zh-TW': '管理員',
     },
 } as const satisfies PermissionGroupNode;

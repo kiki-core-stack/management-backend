@@ -12,10 +12,7 @@ export const jsonSchema = z.object({
     roles: z.array(
         z.objectId().refine(
             (_id) => AdminRoleModel.exists({ _id }),
-            z.i18nIssue({
-                'en': 'The role does not exist',
-                'zh-TW': '身分組不存在',
-            }),
+            z.i18nIssue(appLocaleCatalogs, (messages) => messages.validation.admin.roleNotFound),
         ),
     ),
 }) satisfies ZodValidatorType<Admin, 'isSuperAdmin'>;

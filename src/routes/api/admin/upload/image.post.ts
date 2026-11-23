@@ -10,13 +10,7 @@ export default defineRoute({ permission: 'ignore' })(
     async (ctx) => {
         const { file } = ctx.req.valid('form');
         if (!ctx.req.valid('query').allowGif && file.type.endsWith('gif')) {
-            throwFieldValidationError(
-                ['file'],
-                {
-                    'en': 'GIF images are not allowed',
-                    'zh-TW': '不允許上傳 GIF 圖片',
-                },
-            );
+            throwFieldValidationError(['file'], appLocaleCatalogs, (messages) => messages.validation.upload.gifNotAllowed);
         }
 
         const fileDocument = await uploadImageAndCreateFileDocument({ image: file });

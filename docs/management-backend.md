@@ -24,8 +24,8 @@
 ## 新增路由與權限
 
 1. 在 `routes/api/admin/<領域>/` 新增路由檔，`defineRoute({ permission: adminPermissions.<...> })`；不需權限的寫 `'ignore'`。
-2. 新權限加在 `constants/permissions/admin/<領域>.ts`：`label` 用 `permissionActionLabels` 或自訂的 `LocalizedMessages`；動作需要其他權限才能使用時寫 `requires`（同層動作名稱或其他節點的完整 key）。新領域另加檔案並列入 `admin/index.ts`。
-3. 輸入驗證用 `apiValidator('json', schema)`；需要訊息的自訂規則用 `z.i18nIssue({...})`；多個路由共用的 schema 放進 `constants/common-zod-schemas/<領域>.ts`。
+2. 新權限加在 `constants/permissions/admin/<領域>.ts`，動作需要其他權限才能使用時寫 `requires`（同層動作名稱或其他節點的完整 key）；新領域另加檔案並列入 `admin/index.ts`。名稱加在 `i18n/messages/<locale>.ts` 的 `permissions.admin`，共用動作用檔案內的 `permissionActions`。
+3. 輸入驗證用 `apiValidator('json', schema)`；需要訊息的自訂規則用 `z.i18nIssue(appLocaleCatalogs, (m) => m.validation.<...>)`，訊息加在 `i18n/messages/<locale>.ts`；多個路由共用的 schema 放進 `constants/common-zod-schemas/<領域>.ts`。
 4. 前端重新跑 dev（或其產生腳本）取得新的權限與錯誤碼。
 
 ## 更新

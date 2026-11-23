@@ -30,10 +30,7 @@ export const jsonSchema = z.object({
     note: z.blankToUndefined(z.string().trim()),
     targets: z.array(targetSchema).min(1).refine(
         (targets) => targets.length === 1 || targets.every((target) => target.scope !== PlatformScope.System),
-        z.i18nIssue({
-            'en': 'A system-wide target cannot be combined with other targets',
-            'zh-TW': '全系統目標不能與其他目標同時設定',
-        }),
+        z.i18nIssue(appLocaleCatalogs, (messages) => messages.validation.platform.systemTargetNotAlone),
     ),
 }) satisfies ZodValidatorType<PlatformIpAccessPolicy>;
 
