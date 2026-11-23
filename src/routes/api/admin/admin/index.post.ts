@@ -11,7 +11,7 @@ export const jsonSchema = z.object({
     password: z.blankToUndefined(strongPasswordSchema),
     roles: z.array(
         z.objectId().refine(
-            (_id) => AdminRoleModel.exists({ _id }),
+            async (_id) => !!await AdminRoleModel.exists({ _id }),
             z.i18nIssue(appLocaleCatalogs, (messages) => messages.validation.admin.roleNotFound),
         ),
     ),
