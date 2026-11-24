@@ -2,24 +2,18 @@
 
 總管理後台 API（`/api/admin/*`），在 base-backend（[docs/base-backend.md](./base-backend.md)）之上增加管理員、身分組與權限、email／sms、平台設定。框架核心見 [docs/auto-hono.md](./auto-hono.md)，共用規則（錯誤碼、多語系、權限）見 [pack docs](https://github.com/kiki-core-stack/pack/blob/main/docs/pack.md)。以下只說明本 repo 增加的部分。
 
-## 啟動
+## 啟動與初始化
 
-1. `.env.development.local` 由 main 的開發 profile 產生，不要手改。
-2. `bun run dev`。啟動時會建立預設管理員與平台設定（pack `init`）、檢查路由與權限的對應（見下方），並連線 ws.io-server。
+`.env.development.local` 由 main 的開發 profile 產生，不要手改。
 
 系統初始化（pack `initializeSystem`）只由本服務執行，其他服務不執行：正式環境由 `docker-entrypoint.sh` 在啟動 supervisor 前以 `index.js --initialize-only` 執行一次，失敗則不啟動；workers（`--is-subprocess`）不執行；開發時由單一行程直接執行。
 
-## 結構
+## 設計要點
 
-- routes/api/admin/：總後台路由，依領域分資料夾。
-  - CRUD 慣例：`list.get.ts`、`index.post.ts`（匯出 `jsonSchema`，有設定變體的服務商則匯出 `jsonSchemaShape`，供更新共用）、`[id]/index.put.ts`（見下方「更新」）、`[id]/index.delete.ts`、`[id]/enabled.patch.ts`（`{ enabled }`）。
-  - `*.dev.ts` 只在開發環境載入，例如前端 codegen 使用的 `admin/permission/list.get.dev.ts`。
-- routes/api/admin/upload/image.post.ts、routes/api/file/redirect/[id].get.ts：圖片上傳回傳 `{ id, path }`。只存 File id 的欄位（例如列表縮圖）以 `/api/file/redirect/<id>` 顯示，301 轉到 `/files/<key>` 並可被瀏覽器快取；富文字等直接寫進內容的網址存回傳的 `path`，不經過 redirect。
-- routes/api/internal/ws-io/：ws.io-server 呼叫的內部路由（見 main 的 docs），gateway 不對外開放；以 `x-ws-io-introspection-token` 標頭比對 `WS_IO_INTROSPECTION_TOKEN`，不經平台 IP 存取規則。
-- constants/：權限 catalog（`permissions/`）、admin realm（`admin/auth.ts`）、路由共用的 zod schema（`common-zod-schemas/`，自動匯入為 `commonZodSchemas`）。
-- middlewares/：平台 IP 存取規則（只查 system scope，各 realm 驗證工作階段時另查自己的）、admin 工作階段驗證（設定 `ctx.adminId`）與權限檢查、內部路由的 token 檢查。
-- libs/：admin auth 路由轉接、管理員權限快取（Redis versioned cache；變更管理員的身分組或刪除管理員時要清除該管理員的快取，更新身分組時要清除全部）、開發時的路由權限檢查。
-- globals/：自動匯入的 helper（分頁、查詢參數、更新、`wsIoClient`）；刪除單筆資料直接用 `Model.findByRouteIdOrThrowNotFoundError(ctx)` 後 `deleteOne()`。
+- 圖片上傳回傳 `{ id, path }`。只存 File id 的欄位（例如列表縮圖）以 `/api/file/redirect/<id>` 顯示，301 轉到 `/files/<key>` 並可被瀏覽器快取；富文字等直接寫進內容的網址存回傳的 `path`，不經過 redirect。
+- `routes/api/internal/ws-io/` 是 ws.io-server 呼叫的內部路由（見 main 的 docs），gateway 不對外開放；以 `x-ws-io-introspection-token` 標頭比對 `WS_IO_INTROSPECTION_TOKEN`，不經平台 IP 存取規則。
+- 平台 IP 存取規則的 middleware 只查 system scope，各 realm 驗證工作階段時另查自己的。
+- 管理員權限快取（Redis versioned cache）：變更管理員的身分組或刪除管理員時要清除該管理員的快取，更新身分組時要清除全部。
 
 ## 新增路由與權限
 
@@ -48,7 +42,7 @@ async (ctx) => {
 使用 pack 的 auth（[pack docs/auth.md](https://github.com/kiki-core-stack/pack/blob/main/docs/auth.md)），本 repo 只定義 realm 與轉接路由：
 
 - `adminAuthRealm`（`constants/admin/auth.ts`）：origin 取自 `ADMIN_AUTH_ORIGIN`；工作階段被撤銷時以 `wsIoClient` 通知 ws.io-server 讓對應連線登出。沒有寄送通道（`messenger`）：不支援驗證碼與未登入的重設密碼（未轉接 `passwordReset`；`verification/send-code` 回 `verificationCodeUnavailable`，補上 `messenger` 即可使用），變更密碼必須輸入目前密碼。
-- 路由檔只有一行轉接，例如 `export default defineAdminAuthRoute(adminAuth.routes.logout)`；權限預設 `'ignore'`。
+- 轉接路由（`defineAdminAuthRoute`）的權限預設 `'ignore'`。
 - 管理管理員安全性的路由（`routes/api/admin/admin/[id]/security/`，用 `defineAdminAuthManagementRoute`）需要 `admin.account.manageSecurity`，對象可以是自己；操作者需在自己的工作階段驗證身分；非 unrestricted 的管理員不能管理超級管理員（找不到時回 `notFound`）。
 - 安全性紀錄列表（兩個 `security/event/list.get.ts`）是本 repo 自己的路由，查詢條件強制限定為目標管理員的事件。
 - `profile` 回傳 `restricted`，前端據此在受限工作階段（需要雙重驗證但尚未綁定）只顯示綁定畫面。

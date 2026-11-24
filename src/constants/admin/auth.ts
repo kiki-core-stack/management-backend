@@ -26,9 +26,6 @@ export const adminAuthRealm = defineAuthRealm<AdminDocument>({
 
 export const adminAuth = createHonoAuth(adminAuthRealm, { getClientIp });
 
-/**
- * Routes for admins managing admins' security; see `getSecurityManageableAdminId` for the manageable ones.
- */
 export const adminAuthManagementRoutes = adminAuth.createManagementRoutes({
     assertActorVerification: adminAuth.assertVerification,
     getActor: (ctx) => ({

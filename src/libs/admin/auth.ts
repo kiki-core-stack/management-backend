@@ -12,9 +12,6 @@ export function defineAdminAuthManagementRoute(route: AuthRouteDefinition) {
     return defineAdminAuthRoute(route, adminPermissions.admin.account.manageSecurity);
 }
 
-/**
- * Forwards a pack auth route from a route file: `export default defineAdminAuthRoute(adminAuth.routes.logout)`.
- */
 export function defineAdminAuthRoute(route: AuthRouteDefinition, permission: RouteMeta['permission'] = 'ignore') {
     return defineRoute({
         ...route.meta,
