@@ -1,9 +1,7 @@
-import type {
-    BaseMongoosePaginateModel,
-    MongooseHydratedDocument,
-} from '@kikiutils/mongoose/types';
+import type { BaseMongoosePaginateModel } from '@kikiutils/mongoose/types';
 import type { PaginateOptions } from '@kikiutils/mongoose/types/paginate';
 import type { Context } from 'hono';
+import type { HydratedDocFromModel } from 'mongoose';
 import {
     objectEntries,
     objectKeys,
@@ -28,10 +26,13 @@ function buildSort(sort: GetListQuery['sort'], defaultSort: PaginateOptions['sor
 /**
  * Paginates the model by the request's list query (parsed here unless given). When `fields` is requested, only the
  * populates of the requested paths (and of their sub-paths) are kept.
+ *
+ * Generic over the model itself: inferring the document type from the model's structure costs each distinct model
+ * hundreds of MB during typecheck.
  */
-export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
+export async function paginateModelData<Model extends BaseMongoosePaginateModel<any, any, any>>(
     ctx: Context,
-    model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
+    model: Model,
     query?: GetListQuery,
     paginateOptions?: PaginateOptions,
 ) {
@@ -76,8 +77,6 @@ export async function paginateModelData<RawDocType, QueryHelpers, InstanceMethod
 
     return {
         count: paginatedResult.totalDocs,
-        list: paginatedResult.docs as Array<
-            MongooseHydratedDocument<RawDocType, InstanceMethodsAndOverrides, QueryHelpers>
-        >,
+        list: paginatedResult.docs as Array<HydratedDocFromModel<Model>>,
     };
 }

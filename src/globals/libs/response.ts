@@ -4,9 +4,9 @@ import type { Context } from 'hono';
 
 import type { GetListQuery } from '@/globals/libs/get-list-query';
 
-export async function paginateModelDataWithApiResponse<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>(
+export async function paginateModelDataWithApiResponse<Model extends BaseMongoosePaginateModel<any, any, any>>(
     ctx: Context,
-    model: BaseMongoosePaginateModel<RawDocType, QueryHelpers, InstanceMethodsAndOverrides>,
+    model: Model,
     query?: GetListQuery,
     paginateOptions?: PaginateOptions,
 ) {
