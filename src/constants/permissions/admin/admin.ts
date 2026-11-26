@@ -22,7 +22,7 @@ export const admin = {
                 },
             },
         },
-        log: { children: { list: {} } },
+        log: { children: { list: { requires: ['admin.account.list'] } } },
         role: {
             children: {
                 create: { requires: ['list'] },
