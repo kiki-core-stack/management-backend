@@ -4,7 +4,7 @@ import { defineAuthRealm } from '@kcs-project/pack/libs/auth/realm';
 import { AdminModel } from '@kcs-project/pack/models/admin';
 import type { AdminDocument } from '@kcs-project/pack/models/admin';
 
-import { getSecurityManageableAdminId } from '@/libs/admin/auth';
+import { findManageableAdminOrThrow } from '@/libs/admin/auth';
 
 // Constants
 export const adminAuthRealm = defineAuthRealm<AdminDocument>({
@@ -32,5 +32,5 @@ export const adminAuthManagementRoutes = adminAuth.createManagementRoutes({
         principalId: ctx.adminId!.toHexString(),
         realm: adminAuthRealm.name,
     }),
-    getTargetPrincipalId: getSecurityManageableAdminId,
+    getTargetPrincipalId: async (ctx) => (await findManageableAdminOrThrow(ctx)).id,
 });

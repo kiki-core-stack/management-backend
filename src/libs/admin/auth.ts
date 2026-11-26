@@ -20,11 +20,11 @@ export function defineAdminAuthRoute(route: AuthRouteDefinition, permission: Rou
 }
 
 /**
- * Resolves the admin of the route param `id` whose security the current admin may manage, their own included; only
- * unrestricted admins may manage super admins.
+ * Finds the admin of the route param `id` that the current admin may manage, their own included; only unrestricted
+ * admins may manage super admins.
  */
-export async function getSecurityManageableAdminId(ctx: Context) {
+export async function findManageableAdminOrThrow(ctx: Context) {
     const filter: QueryFilter<Admin> = {};
     if (!(await getAdminPermission(ctx.adminId!)).unrestricted) filter.isSuperAdmin = false;
-    return (await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter)).id;
+    return await AdminModel.findByRouteIdOrThrowNotFoundError(ctx, filter);
 }
